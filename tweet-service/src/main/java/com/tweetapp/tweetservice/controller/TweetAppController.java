@@ -1,4 +1,4 @@
-package com.fse1.tweetservice.controller;
+package com.tweetapp.tweetservice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fse1.tweetservice.dto.TweetDto;
-import com.fse1.tweetservice.service.TweetService;
+import com.tweetapp.tweetservice.dto.TweetDto;
+import com.tweetapp.tweetservice.service.TweetService;
 
 @RequestMapping("/tweets")
 @RestController

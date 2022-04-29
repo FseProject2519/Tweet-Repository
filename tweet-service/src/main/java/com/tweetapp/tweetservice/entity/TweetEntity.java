@@ -1,35 +1,48 @@
-package com.fse1.tweetservice.dto;
+package com.tweetapp.tweetservice.entity;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import lombok.AllArgsConstructor;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.mongodb.core.mapping.MongoId;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+@Document("TweetCollection")
 @Slf4j
 @Builder
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class TweetDto {
+public class TweetEntity {
 
+	@MongoId(FieldType.OBJECT_ID)
 	private String id;
 
+	@Indexed(unique = true)
+	@Field(name = "tweet_message")
 	private String tweetMessage;
 
+	@Field(name = "tweet_topic")
 	private String tweetTopic;
 
+	@Field(name = "created_by")
 	private String createdBy;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss[.SSS][.SS][.S]")
+	@Field(name = "created_date_time")
 	private LocalDateTime createdDateTime;
 
+	@Field(name = "replied_to_tweet")
 	private String repliedToTweet;
 
+	@Field(name = "tag")
 	private String tag;
 
+	@Field(name = "liked_by")
 	private Set<String> likedBy;
 
 	public String getId() {

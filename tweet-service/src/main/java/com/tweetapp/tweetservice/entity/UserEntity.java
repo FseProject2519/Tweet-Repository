@@ -1,30 +1,40 @@
-package com.fse1.tweetservice.dto;
+package com.tweetapp.tweetservice.entity;
 
-import lombok.AllArgsConstructor;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.mongodb.core.mapping.MongoId;
+
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+@Document("UserCollection")
 @Slf4j
 @Builder
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class UserDto {
+public class UserEntity {
 
+	@MongoId(FieldType.OBJECT_ID)
 	private String id;
 
+	@Indexed(unique = true)
+	@Field(name = "user_id")
 	private String userId;
 
+	@Field(name = "password")
 	private String password;
 
+	@Field(name = "first_name")
 	private String firstName;
 
+	@Field(name = "last_name")
 	private String lastName;
 
+	@Indexed(unique = true)
+	@Field(name = "email")
 	private String email;
 
+	@Field(name = "contact_number")
 	private String contactNumber;
 
 	public String getId() {

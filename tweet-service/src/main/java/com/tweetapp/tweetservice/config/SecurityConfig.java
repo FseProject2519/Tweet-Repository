@@ -1,4 +1,4 @@
-package com.fse1.tweetservice.config;
+package com.tweetapp.tweetservice.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

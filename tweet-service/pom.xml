@@ -9,7 +9,7 @@
 		<version>2.6.7</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.fse1</groupId>
+	<groupId>com.tweetapp</groupId>
 	<artifactId>tweet-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>tweet-service</name>

@@ -1,4 +1,4 @@
-package com.fse1.tweetservice;
+package com.tweetapp.tweetservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

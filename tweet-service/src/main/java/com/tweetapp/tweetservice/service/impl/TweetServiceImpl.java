@@ -1,13 +1,13 @@
-package com.fse1.tweetservice.service.impl;
+package com.tweetapp.tweetservice.service.impl;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.fse1.tweetservice.dto.TweetDto;
-import com.fse1.tweetservice.entity.TweetEntity;
-import com.fse1.tweetservice.repository.TweetRepository;
-import com.fse1.tweetservice.service.TweetService;
+import com.tweetapp.tweetservice.dto.TweetDto;
+import com.tweetapp.tweetservice.entity.TweetEntity;
+import com.tweetapp.tweetservice.repository.TweetRepository;
+import com.tweetapp.tweetservice.service.TweetService;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,4 +1,4 @@
-package com.fse1.tweetservice;
+package com.tweetapp.tweetservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,7 +12,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "com.fse1.tweetservice" })
+@ComponentScan(basePackages = { "com.tweetapp.tweetservice" })
 @EnableMongoRepositories
 @EnableSwagger2
 public class TweetServiceApplication {
@@ -24,6 +24,6 @@ public class TweetServiceApplication {
 	@Bean
 	public Docket productApi() {
 		return new Docket(DocumentationType.SWAGGER_2).select()
-				.apis(RequestHandlerSelectors.basePackage("com.fse1.tweetservice")).build();
+				.apis(RequestHandlerSelectors.basePackage("com.tweetapp.tweetservice")).build();
 	}
 }

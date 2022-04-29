@@ -1,8 +1,8 @@
-package com.fse1.tweetservice.service;
+package com.tweetapp.tweetservice.service;
 
 import org.springframework.stereotype.Service;
 
-import com.fse1.tweetservice.dto.UserDto;
+import com.tweetapp.tweetservice.dto.UserDto;
 
 @Service
 public interface UserService {

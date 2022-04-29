@@ -1,4 +1,4 @@
-package com.fse1.tweetservice.config;
+package com.tweetapp.tweetservice.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

@@ -7,10 +7,8 @@ import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import lombok.Builder;
-import lombok.extern.slf4j.Slf4j;
 
 @Document("UserCollection")
-@Slf4j
 @Builder
 public class UserEntity {
 

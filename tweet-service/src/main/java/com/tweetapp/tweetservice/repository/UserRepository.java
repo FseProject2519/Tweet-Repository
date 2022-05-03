@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.tweetapp.tweetservice.entity.UserEntity;
 
 @Repository
-public interface UserRepository extends MongoRepository<UserEntity, String> {
+public interface UserRepository extends MongoRepository<UserEntity, String>, UserCriteriaRepository {
 
 }

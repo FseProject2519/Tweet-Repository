@@ -9,13 +9,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
-
-	private String id;
+public class UserSearchDto {
 
 	private String userId;
-
-	private String password;
 
 	private String firstName;
 
@@ -23,15 +19,9 @@ public class UserDto {
 
 	private String email;
 
-	private String contactNumber;
+	private String sortField;
 
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
+	private String sortOrder;
 
 	public String getUserId() {
 		return userId;
@@ -39,14 +29,6 @@ public class UserDto {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	public String getFirstName() {
@@ -73,12 +55,20 @@ public class UserDto {
 		this.email = email;
 	}
 
-	public String getContactNumber() {
-		return contactNumber;
+	public String getSortField() {
+		return sortField;
 	}
 
-	public void setContactNumber(String contactNumber) {
-		this.contactNumber = contactNumber;
+	public void setSortField(String sortField) {
+		this.sortField = sortField;
+	}
+
+	public String getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(String sortOrder) {
+		this.sortOrder = sortOrder;
 	}
 
 }

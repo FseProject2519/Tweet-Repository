@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.tweetapp.tweetservice.entity.TweetEntity;
 
 @Repository
-public interface TweetRepository extends MongoRepository<TweetEntity, String> {
+public interface TweetRepository extends MongoRepository<TweetEntity, String>, TweetCriteriaRepository {
 
 }

@@ -12,9 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TweetDto {
-
-	private String id;
+public class TweetSearchDto {
 
 	private String tweetMessage;
 
@@ -22,7 +20,9 @@ public class TweetDto {
 
 	private String createdBy;
 
-	private LocalDateTime createdDateTime;
+	private LocalDateTime startDateTime;
+
+	private LocalDateTime endDateTime;
 
 	private String repliedToTweet;
 
@@ -30,13 +30,9 @@ public class TweetDto {
 
 	private Set<String> likedBy;
 
-	public String getId() {
-		return id;
-	}
+	private String sortField;
 
-	public void setId(String id) {
-		this.id = id;
-	}
+	private String sortOrder;
 
 	public String getTweetMessage() {
 		return tweetMessage;
@@ -62,12 +58,20 @@ public class TweetDto {
 		this.createdBy = createdBy;
 	}
 
-	public LocalDateTime getCreatedDateTime() {
-		return createdDateTime;
+	public LocalDateTime getStartDateTime() {
+		return startDateTime;
 	}
 
-	public void setCreatedDateTime(LocalDateTime createdDateTime) {
-		this.createdDateTime = createdDateTime;
+	public void setStartDateTime(LocalDateTime startDateTime) {
+		this.startDateTime = startDateTime;
+	}
+
+	public LocalDateTime getEndDateTime() {
+		return endDateTime;
+	}
+
+	public void setEndDateTime(LocalDateTime endDateTime) {
+		this.endDateTime = endDateTime;
 	}
 
 	public String getRepliedToTweet() {
@@ -92,6 +96,22 @@ public class TweetDto {
 
 	public void setLikedBy(Set<String> likedBy) {
 		this.likedBy = likedBy;
+	}
+
+	public String getSortField() {
+		return sortField;
+	}
+
+	public void setSortField(String sortField) {
+		this.sortField = sortField;
+	}
+
+	public String getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(String sortOrder) {
+		this.sortOrder = sortOrder;
 	}
 
 }

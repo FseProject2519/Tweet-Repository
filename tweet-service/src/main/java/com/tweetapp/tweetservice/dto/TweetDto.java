@@ -3,95 +3,44 @@ package com.tweetapp.tweetservice.dto;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class TweetDto {
 
 	private String id;
 
+	@NotBlank(message = "Message cannot be empty")
+	@Size(max = 144, message = "Message cannot exceed 144 characters")
 	private String tweetMessage;
 
+	@NotBlank(message = "Tweet Topic cannot be empty")
 	private String tweetTopic;
 
+	@NotBlank(message = "Created By cannot be empty")
 	private String createdBy;
 
 	private LocalDateTime createdDateTime;
 
+	private LocalDateTime lastModifiedDateTime;
+
 	private String repliedToTweet;
 
+	@Size(max = 50, message = "Tag cannot exceed 50 characters")
 	private String tag;
 
 	private Set<String> likedBy;
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getTweetMessage() {
-		return tweetMessage;
-	}
-
-	public void setTweetMessage(String tweetMessage) {
-		this.tweetMessage = tweetMessage;
-	}
-
-	public String getTweetTopic() {
-		return tweetTopic;
-	}
-
-	public void setTweetTopic(String tweetTopic) {
-		this.tweetTopic = tweetTopic;
-	}
-
-	public String getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public LocalDateTime getCreatedDateTime() {
-		return createdDateTime;
-	}
-
-	public void setCreatedDateTime(LocalDateTime createdDateTime) {
-		this.createdDateTime = createdDateTime;
-	}
-
-	public String getRepliedToTweet() {
-		return repliedToTweet;
-	}
-
-	public void setRepliedToTweet(String repliedToTweet) {
-		this.repliedToTweet = repliedToTweet;
-	}
-
-	public String getTag() {
-		return tag;
-	}
-
-	public void setTag(String tag) {
-		this.tag = tag;
-	}
-
-	public Set<String> getLikedBy() {
-		return likedBy;
-	}
-
-	public void setLikedBy(Set<String> likedBy) {
-		this.likedBy = likedBy;
-	}
-
 }

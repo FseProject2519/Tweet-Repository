@@ -1,0 +1,27 @@
+package com.tweetapp.tweetservice;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+
+@SpringBootApplication
+@ComponentScan(basePackages = { "com.tweetapp.tweetservice" })
+@EnableMongoRepositories
+
+public class TweetServiceApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(TweetServiceApplication.class, args);
+	}
+
+	@Bean
+	public OpenAPI springShopOpenAPI() {
+		return new OpenAPI()
+				.info(new Info().title("Tweet Service API").description("Tweet application").version("v0.0.1"));
+	}
+}

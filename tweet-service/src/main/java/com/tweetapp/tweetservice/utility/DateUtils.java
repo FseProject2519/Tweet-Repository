@@ -9,6 +9,10 @@ import com.tweetapp.tweetservice.constants.TweetAppConstants;
 
 public class DateUtils {
 
+	private DateUtils() {
+		throw new IllegalStateException("Utility class");
+	}
+
 	public static LocalDateTime processDateTime(String startDateTime) {
 		return startDateTime != null
 				? convertToUtcDateTime(LocalDateTime.parse(startDateTime,
@@ -23,5 +27,10 @@ public class DateUtils {
 	public static Date getDate(LocalDateTime localDateTime) {
 
 		return Date.from(localDateTime.atZone(ZoneId.of("UTC")).toInstant());
+	}
+
+	public static String userFriendlyFormat(LocalDateTime now) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+		return now.format(formatter);
 	}
 }

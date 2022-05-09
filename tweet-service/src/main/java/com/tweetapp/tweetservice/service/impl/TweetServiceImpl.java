@@ -1,6 +1,7 @@
 package com.tweetapp.tweetservice.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.tweetapp.tweetservice.dto.TweetDto;
+import com.tweetapp.tweetservice.dto.TweetExportDto;
 import com.tweetapp.tweetservice.dto.TweetSearchDto;
 import com.tweetapp.tweetservice.entity.TweetEntity;
 import com.tweetapp.tweetservice.entity.TweetTrendEntity;
@@ -22,6 +24,8 @@ import com.tweetapp.tweetservice.service.TweetService;
 
 @Component
 public class TweetServiceImpl implements TweetService {
+
+	private static final String TWEET_NOT_FOUND = "Tweet Not Found";
 
 	@Autowired
 	private TweetRepository tweetRepository;
@@ -36,7 +40,7 @@ public class TweetServiceImpl implements TweetService {
 			tweetEntity.setCreatedBy(username);
 			tweetEntity.setCreatedDateTime(LocalDateTime.now());
 			tweetEntity.setLastModifiedDateTime(LocalDateTime.now());
-			return tweetRepository.save(tweetEntity) != null ? "Tweet Posted Successfully" : "Tweet Post Failed";
+			return tweetRepository.save(tweetEntity).getId() != null ? "Tweet Posted Successfully" : "Tweet Post Failed";
 
 		} catch (Exception e) {
 			throw new TweetServiceException(e.getMessage());
@@ -51,9 +55,9 @@ public class TweetServiceImpl implements TweetService {
 			if (tweet.isPresent()) {
 				tweetEntity.setId(tweetId);
 				tweetEntity.setLastModifiedDateTime(LocalDateTime.now());
-				return tweetRepository.save(tweetEntity) != null ? "Tweet Updated Successfully" : "Tweet Update Failed";
+				return tweetRepository.save(tweetEntity).getId() != null ? "Tweet Updated Successfully" : "Tweet Update Failed";
 			} else {
-				return "Tweet Not Found";
+				return TWEET_NOT_FOUND;
 			}
 
 		} catch (Exception e) {
@@ -69,7 +73,7 @@ public class TweetServiceImpl implements TweetService {
 				tweetRepository.deleteById(tweetId);
 				return "Tweet deleted Successfully";
 			} else {
-				return "Tweet Not Found";
+				return TWEET_NOT_FOUND;
 			}
 
 		} catch (Exception e) {
@@ -83,9 +87,9 @@ public class TweetServiceImpl implements TweetService {
 			Optional<TweetEntity> tweet = tweetRepository.findById(tweetId);
 			if (tweet.isPresent()) {
 				tweet.get().getLikedBy().add(username);
-				return tweetRepository.save(tweet.get()) != null ? "Tweet Liked Successfully" : "Tweet Like Failed";
+				return tweetRepository.save(tweet.get()).getId() != null ? "Tweet Liked Successfully" : "Tweet Like Failed";
 			} else {
-				return "Tweet Not Found";
+				return TWEET_NOT_FOUND;
 			}
 
 		} catch (Exception e) {
@@ -101,7 +105,7 @@ public class TweetServiceImpl implements TweetService {
 			tweetEntity.setRepliedToTweet(tweetId);
 			tweetEntity.setCreatedDateTime(LocalDateTime.now());
 			tweetEntity.setLastModifiedDateTime(LocalDateTime.now());
-			return tweetRepository.save(tweetEntity) != null ? "Replied to TweetId: " + tweetId + " Successfully"
+			return tweetRepository.save(tweetEntity).getId() != null ? "Replied to TweetId: " + tweetId + " Successfully"
 					: "Replied to TweetId: " + tweetId + " Failed";
 
 		} catch (Exception e) {
@@ -142,6 +146,46 @@ public class TweetServiceImpl implements TweetService {
 		} catch (Exception e) {
 			throw new TweetServiceException(e.getMessage());
 
+		}
+	}
+
+	@Override
+	public List<TweetExportDto> getExportData(String username) throws TweetServiceException {
+		try {
+			List<TweetExportDto> tweetExportList = new ArrayList<>();
+			List<TweetEntity> tweetEntityList = tweetRepository.getExportData(username);
+
+			if (!tweetEntityList.isEmpty()) {
+
+				tweetEntityList.forEach(tweetEntity -> {
+
+					String repliedToTweetMsg = null;
+					String repliedToTweetUser = null;
+					String likedBy = null;
+
+					if (tweetEntity.getRepliedToTweet() != null) {
+						Optional<TweetEntity> replyTweetOriginalOptional = tweetRepository
+								.findById(tweetEntity.getRepliedToTweet());
+						if (replyTweetOriginalOptional.isPresent()) {
+							repliedToTweetMsg = replyTweetOriginalOptional.get().getTweetMessage();
+							repliedToTweetUser = replyTweetOriginalOptional.get().getCreatedBy();
+						}
+					}
+					if (tweetEntity.getLikedBy() != null) {
+						likedBy = String.join(",", tweetEntity.getLikedBy());
+
+					}
+					tweetExportList.add(TweetExportDto.builder().tweetMessage(tweetEntity.getTweetMessage())
+							.tweetTopic(tweetEntity.getTweetTopic()).createdDateTime(tweetEntity.getCreatedDateTime())
+							.lastModifiedDateTime(tweetEntity.getLastModifiedDateTime()).likedBy(likedBy)
+							.repliedToTweetMsg(repliedToTweetMsg).repliedToTweetUser(repliedToTweetUser)
+							.tag(tweetEntity.getTag()).build());
+
+				});
+			}
+			return tweetExportList;
+		} catch (Exception e) {
+			throw new TweetServiceException(e.getMessage());
 		}
 	}
 

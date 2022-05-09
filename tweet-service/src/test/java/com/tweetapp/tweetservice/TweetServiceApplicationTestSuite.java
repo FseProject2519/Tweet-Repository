@@ -5,5 +5,5 @@ import org.junit.platform.suite.api.Suite;
 
 @Suite
 @SelectPackages({ "com.tweetapp.tweetservice.controller", "com.tweetapp.tweetservice.service.impl" })
-class TweetServiceApplicationTests {
+class TweetServiceApplicationTestSuite {
 }

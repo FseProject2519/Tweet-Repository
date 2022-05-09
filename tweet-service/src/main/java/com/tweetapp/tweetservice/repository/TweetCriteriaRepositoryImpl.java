@@ -24,6 +24,9 @@ import com.tweetapp.tweetservice.entity.TweetTrendEntity;
 import com.tweetapp.tweetservice.utility.DateUtils;
 
 public class TweetCriteriaRepositoryImpl implements TweetCriteriaRepository {
+	private static final String CREATED_DATE_TIME_SPACED = "created_date_time";
+	private static final String CREATED_DATE_TIME = "createdDateTime";
+	private static final String COUNT = "count";
 	private final MongoTemplate mongoTemplate;
 
 	public TweetCriteriaRepositoryImpl(MongoTemplate mongoTemplate) {
@@ -48,14 +51,14 @@ public class TweetCriteriaRepositoryImpl implements TweetCriteriaRepository {
 			criteria.add(Criteria.where("tag").regex(tweetSearchDto.getTag(), "i"));
 
 		if (tweetSearchDto.getStartDateTime() != null && tweetSearchDto.getEndDateTime() != null)
-			criteria.add(Criteria.where("createdDateTime").gte(tweetSearchDto.getStartDateTime())
+			criteria.add(Criteria.where(CREATED_DATE_TIME).gte(tweetSearchDto.getStartDateTime())
 					.lte(tweetSearchDto.getEndDateTime()));
 
 		if (tweetSearchDto.getStartDateTime() == null && tweetSearchDto.getEndDateTime() != null)
-			criteria.add(Criteria.where("createdDateTime").lte(tweetSearchDto.getEndDateTime()));
+			criteria.add(Criteria.where(CREATED_DATE_TIME).lte(tweetSearchDto.getEndDateTime()));
 
 		if (tweetSearchDto.getStartDateTime() != null && tweetSearchDto.getEndDateTime() == null)
-			criteria.add(Criteria.where("createdDateTime").gte(tweetSearchDto.getStartDateTime()));
+			criteria.add(Criteria.where(CREATED_DATE_TIME).gte(tweetSearchDto.getStartDateTime()));
 
 		if (tweetSearchDto.getLikedBy() != null && !tweetSearchDto.getLikedBy().isEmpty())
 			criteria.add(Criteria.where("likedBy").all(tweetSearchDto.getLikedBy()));
@@ -84,19 +87,19 @@ public class TweetCriteriaRepositoryImpl implements TweetCriteriaRepository {
 		Criteria criteria = new Criteria();
 
 		if (tweetSearchDto.getStartDateTime() != null && tweetSearchDto.getEndDateTime() != null)
-			criteria = Criteria.where("created_date_time").gte(DateUtils.getDate(tweetSearchDto.getStartDateTime()))
+			criteria = Criteria.where(CREATED_DATE_TIME_SPACED).gte(DateUtils.getDate(tweetSearchDto.getStartDateTime()))
 					.lte(DateUtils.getDate(tweetSearchDto.getEndDateTime()));
 
 		if (tweetSearchDto.getStartDateTime() == null && tweetSearchDto.getEndDateTime() != null)
-			criteria = Criteria.where("created_date_time").lte(DateUtils.getDate(tweetSearchDto.getEndDateTime()));
+			criteria = Criteria.where(CREATED_DATE_TIME_SPACED).lte(DateUtils.getDate(tweetSearchDto.getEndDateTime()));
 
 		if (tweetSearchDto.getStartDateTime() != null && tweetSearchDto.getEndDateTime() == null)
-			criteria = Criteria.where("created_date_time").gte(DateUtils.getDate(tweetSearchDto.getStartDateTime()));
+			criteria = Criteria.where(CREATED_DATE_TIME_SPACED).gte(DateUtils.getDate(tweetSearchDto.getStartDateTime()));
 
 		MatchOperation matchOperation = Aggregation.match(criteria);
-		GroupOperation groupOperation = Aggregation.group("tweet_topic").count().as("count");
-		ProjectionOperation projectionOperation = Aggregation.project("count").and("tweetTopic").previousOperation();
-		SortOperation sortOperation = Aggregation.sort(Sort.by(Sort.Direction.DESC, "count"));
+		GroupOperation groupOperation = Aggregation.group("tweet_topic").count().as(COUNT);
+		ProjectionOperation projectionOperation = Aggregation.project(COUNT).and("tweetTopic").previousOperation();
+		SortOperation sortOperation = Aggregation.sort(Sort.by(Sort.Direction.DESC, COUNT));
 		Aggregation aggregation = Aggregation.newAggregation(matchOperation, groupOperation, projectionOperation,
 				sortOperation);
 		AggregationResults<TweetTrendEntity> result = mongoTemplate.aggregate(aggregation, "TweetCollection",

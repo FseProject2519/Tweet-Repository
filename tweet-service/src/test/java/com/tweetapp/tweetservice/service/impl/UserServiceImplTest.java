@@ -24,7 +24,7 @@ import com.tweetapp.tweetservice.exception.TweetServiceException;
 import com.tweetapp.tweetservice.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceImplTest {
+class UserServiceImplTest {
 
 	@InjectMocks
 	UserServiceImpl userServiceImpl;
@@ -33,7 +33,7 @@ public class UserServiceImplTest {
 	UserRepository userRepository;
 
 	@Test
-	public void testGetAllUsersSuccess() throws TweetServiceException {
+	void testGetAllUsersSuccess() throws TweetServiceException {
 		UserSearchDto userSearchDto = buildUserSearchDto("firstName", "asc");
 		when(userRepository.findAll(isA(Pageable.class))).thenReturn(getUserEntity());
 		assertEquals("TEST", userServiceImpl.getAllUsers(userSearchDto, 0, 1).getContent().get(0).getUserId());
@@ -41,7 +41,7 @@ public class UserServiceImplTest {
 	}
 
 	@Test
-	public void testGetAllUsersSuccessWithNullSortParams() throws TweetServiceException {
+	void testGetAllUsersSuccessWithNullSortParams() throws TweetServiceException {
 		UserSearchDto userSearchDto = buildUserSearchDto(null, null);
 		when(userRepository.findAll(isA(Pageable.class))).thenReturn(getUserEntity());
 		assertEquals("TEST", userServiceImpl.getAllUsers(userSearchDto, null, null).getContent().get(0).getUserId());
@@ -49,7 +49,7 @@ public class UserServiceImplTest {
 	}
 
 	@Test
-	public void testGetAllUsersException() throws TweetServiceException {
+	void testGetAllUsersException() throws TweetServiceException {
 		UserSearchDto userSearchDto = null;
 		assertThrows(TweetServiceException.class, () -> {
 			userServiceImpl.getAllUsers(userSearchDto, null, null);
@@ -57,7 +57,7 @@ public class UserServiceImplTest {
 	}
 
 	@Test
-	public void testSearchUsersSuccess() throws TweetServiceException {
+	void testSearchUsersSuccess() throws TweetServiceException {
 		UserSearchDto userSearchDto = buildUserSearchDto("createdBy", "desc");
 		when(userRepository.searchUsers(any(), isA(Pageable.class))).thenReturn(getUserEntity());
 		assertEquals("TEST", userServiceImpl.searchUsers(userSearchDto, 0, 1).getContent().get(0).getUserId());
@@ -65,7 +65,7 @@ public class UserServiceImplTest {
 	}
 
 	@Test
-	public void testSearchUsersSuccessWithNullSortField() throws TweetServiceException {
+	void testSearchUsersSuccessWithNullSortField() throws TweetServiceException {
 		UserSearchDto userSearchDto = buildUserSearchDto(null, "desc");
 		when(userRepository.searchUsers(any(), isA(Pageable.class))).thenReturn(getUserEntity());
 		assertEquals("TEST", userServiceImpl.searchUsers(userSearchDto, 0, 1).getContent().get(0).getUserId());
@@ -73,7 +73,7 @@ public class UserServiceImplTest {
 	}
 
 	@Test
-	public void testSearchUsersSuccessWithNullSortOrder() throws TweetServiceException {
+	void testSearchUsersSuccessWithNullSortOrder() throws TweetServiceException {
 		UserSearchDto userSearchDto = buildUserSearchDto("firstName", null);
 		when(userRepository.searchUsers(any(), isA(Pageable.class))).thenReturn(getUserEntity());
 		assertEquals("TEST", userServiceImpl.searchUsers(userSearchDto, null, null).getContent().get(0).getUserId());
@@ -81,7 +81,7 @@ public class UserServiceImplTest {
 	}
 
 	@Test
-	public void testSearchUsersException() throws TweetServiceException {
+	void testSearchUsersException() throws TweetServiceException {
 		UserSearchDto userSearchDto = null;
 		assertThrows(TweetServiceException.class, () -> {
 			userServiceImpl.searchUsers(userSearchDto, null, null);

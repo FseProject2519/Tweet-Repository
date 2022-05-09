@@ -30,7 +30,7 @@ import com.tweetapp.tweetservice.exception.TweetServiceException;
 import com.tweetapp.tweetservice.repository.TweetRepository;
 
 @ExtendWith(MockitoExtension.class)
-public class TweetServiceImplTest {
+class TweetServiceImplTest {
 
 	@InjectMocks
 	TweetServiceImpl tweetServiceImpl;
@@ -42,7 +42,7 @@ public class TweetServiceImplTest {
 	ModelMapper modelMapper;
 
 	@Test
-	public void testGetAllTweetsSuccess() throws TweetServiceException {
+	void testGetAllTweetsSuccess() throws TweetServiceException {
 		TweetSearchDto tweetSearchDto = buildTweetSearchDto("createdBy", "asc");
 		when(tweetRepository.findAll(isA(Pageable.class))).thenReturn(getTweetEntityPage());
 		assertEquals("TEST", tweetServiceImpl.getAllTweets(tweetSearchDto, 0, 1).getContent().get(0).getTweetMessage());
@@ -50,7 +50,7 @@ public class TweetServiceImplTest {
 	}
 
 	@Test
-	public void testGetAllTweetsSuccessWithNullSortParams() throws TweetServiceException {
+	void testGetAllTweetsSuccessWithNullSortParams() throws TweetServiceException {
 		TweetSearchDto tweetSearchDto = buildTweetSearchDto(null, null);
 		when(tweetRepository.findAll(isA(Pageable.class))).thenReturn(getTweetEntityPage());
 		assertEquals("TEST",
@@ -59,7 +59,7 @@ public class TweetServiceImplTest {
 	}
 
 	@Test
-	public void testGetAllTweetsException() throws TweetServiceException {
+	void testGetAllTweetsException() throws TweetServiceException {
 		TweetSearchDto tweetSearchDto = null;
 		assertThrows(TweetServiceException.class, () -> {
 			tweetServiceImpl.getAllTweets(tweetSearchDto, null, null);
@@ -67,7 +67,7 @@ public class TweetServiceImplTest {
 	}
 
 	@Test
-	public void testSearchTweetsSuccess() throws TweetServiceException {
+	void testSearchTweetsSuccess() throws TweetServiceException {
 		TweetSearchDto tweetSearchDto = buildTweetSearchDto("createdBy", "desc");
 		when(tweetRepository.searchTweets(any(), isA(Pageable.class))).thenReturn(getTweetEntityPage());
 		assertEquals("TEST", tweetServiceImpl.searchTweets(tweetSearchDto, 0, 1).getContent().get(0).getTweetMessage());
@@ -75,7 +75,7 @@ public class TweetServiceImplTest {
 	}
 
 	@Test
-	public void testSearchTweetsSuccessWithNullSortField() throws TweetServiceException {
+	void testSearchTweetsSuccessWithNullSortField() throws TweetServiceException {
 		TweetSearchDto tweetSearchDto = buildTweetSearchDto(null, "desc");
 		when(tweetRepository.searchTweets(any(), isA(Pageable.class))).thenReturn(getTweetEntityPage());
 		assertEquals("TEST", tweetServiceImpl.searchTweets(tweetSearchDto, 0, 1).getContent().get(0).getTweetMessage());
@@ -83,7 +83,7 @@ public class TweetServiceImplTest {
 	}
 
 	@Test
-	public void testSearchTweetsSuccessWithNullSortOrder() throws TweetServiceException {
+	void testSearchTweetsSuccessWithNullSortOrder() throws TweetServiceException {
 		TweetSearchDto tweetSearchDto = buildTweetSearchDto("createdBy", null);
 		when(tweetRepository.searchTweets(any(), isA(Pageable.class))).thenReturn(getTweetEntityPage());
 		assertEquals("TEST",
@@ -92,7 +92,7 @@ public class TweetServiceImplTest {
 	}
 
 	@Test
-	public void testSearchTweetsException() throws TweetServiceException {
+	void testSearchTweetsException() throws TweetServiceException {
 		TweetSearchDto tweetSearchDto = null;
 		assertThrows(TweetServiceException.class, () -> {
 			tweetServiceImpl.searchTweets(tweetSearchDto, null, null);
@@ -100,7 +100,7 @@ public class TweetServiceImplTest {
 	}
 
 	@Test
-	public void testPostTweetSuccess() throws TweetServiceException {
+	void testPostTweetSuccess() throws TweetServiceException {
 		TweetDto tweetDto = getTweetDto();
 		String username = "TEST";
 		when(modelMapper.map(tweetDto, TweetEntity.class)).thenReturn(getTweetEntity());
@@ -110,16 +110,19 @@ public class TweetServiceImplTest {
 	}
 
 	@Test
-	public void testPostTweetFailure() throws TweetServiceException {
+	void testPostTweetFailure() throws TweetServiceException {
 		TweetDto tweetDto = getTweetDto();
 		String username = "TEST";
 		when(modelMapper.map(tweetDto, TweetEntity.class)).thenReturn(getTweetEntity());
+		TweetEntity tweetEntity = getTweetEntity();
+		tweetEntity.setId(null);
+		when(tweetRepository.save(any())).thenReturn(tweetEntity);
 		assertEquals("Tweet Post Failed", tweetServiceImpl.postTweet(username, tweetDto));
 
 	}
 
 	@Test
-	public void testPostTweetException() throws TweetServiceException {
+	void testPostTweetException() throws TweetServiceException {
 		TweetDto tweetDto = getTweetDto();
 		String username = "TEST";
 		when(modelMapper.map(tweetDto, TweetEntity.class)).thenThrow(new RuntimeException());
@@ -129,7 +132,7 @@ public class TweetServiceImplTest {
 	}
 
 	@Test
-	public void testUpdateTweetSuccess() throws TweetServiceException {
+	void testUpdateTweetSuccess() throws TweetServiceException {
 		TweetDto tweetDto = getTweetDto();
 		String tweetId = "TEST";
 		when(modelMapper.map(tweetDto, TweetEntity.class)).thenReturn(getTweetEntity());
@@ -141,18 +144,20 @@ public class TweetServiceImplTest {
 	}
 
 	@Test
-	public void testUpdateTweetFailure() throws TweetServiceException {
+	void testUpdateTweetFailure() throws TweetServiceException {
 		TweetDto tweetDto = getTweetDto();
 		String tweetId = "TEST";
 		when(modelMapper.map(tweetDto, TweetEntity.class)).thenReturn(getTweetEntity());
 		when(tweetRepository.findById(any())).thenReturn(Optional.of(getTweetEntity()));
-
+		TweetEntity tweetEntity = getTweetEntity();
+		tweetEntity.setId(null);
+		when(tweetRepository.save(any())).thenReturn(tweetEntity);
 		assertEquals("Tweet Update Failed", tweetServiceImpl.updateTweet(tweetDto, tweetId));
 
 	}
 
 	@Test
-	public void testUpdateTweetNotFoundFailure() throws TweetServiceException {
+	void testUpdateTweetNotFoundFailure() throws TweetServiceException {
 		TweetDto tweetDto = getTweetDto();
 		String tweetId = "TEST";
 		when(modelMapper.map(tweetDto, TweetEntity.class)).thenReturn(getTweetEntity());
@@ -162,7 +167,7 @@ public class TweetServiceImplTest {
 	}
 
 	@Test
-	public void testUpdateTweetException() throws TweetServiceException {
+	void testUpdateTweetException() throws TweetServiceException {
 		TweetDto tweetDto = getTweetDto();
 		String tweetId = "TEST";
 		when(modelMapper.map(tweetDto, TweetEntity.class)).thenThrow(new RuntimeException());
@@ -172,7 +177,7 @@ public class TweetServiceImplTest {
 	}
 
 	@Test
-	public void testDeleteTweetSuccess() throws TweetServiceException {
+	void testDeleteTweetSuccess() throws TweetServiceException {
 		String tweetId = "TEST";
 		when(tweetRepository.findById(any())).thenReturn(Optional.of(getTweetEntity()));
 
@@ -181,7 +186,7 @@ public class TweetServiceImplTest {
 	}
 
 	@Test
-	public void testDeleteTweetNotFoundFailure() throws TweetServiceException {
+	void testDeleteTweetNotFoundFailure() throws TweetServiceException {
 		String tweetId = "TEST";
 
 		assertEquals("Tweet Not Found", tweetServiceImpl.deleteTweet(tweetId));
@@ -189,7 +194,7 @@ public class TweetServiceImplTest {
 	}
 
 	@Test
-	public void testDeleteTweetException() throws TweetServiceException {
+	void testDeleteTweetException() throws TweetServiceException {
 		String tweetId = "TEST";
 		when(tweetRepository.findById(any())).thenThrow(new RuntimeException());
 		assertThrows(TweetServiceException.class, () -> {
@@ -198,7 +203,7 @@ public class TweetServiceImplTest {
 	}
 
 	@Test
-	public void testLikeTweetSuccess() throws TweetServiceException {
+	void testLikeTweetSuccess() throws TweetServiceException {
 		String tweetId = "TEST";
 		String username = "TEST";
 		when(tweetRepository.findById(any())).thenReturn(Optional.of(getTweetEntity()));
@@ -209,17 +214,19 @@ public class TweetServiceImplTest {
 	}
 
 	@Test
-	public void testLikeTweetFailure() throws TweetServiceException {
+	void testLikeTweetFailure() throws TweetServiceException {
 		String tweetId = "TEST";
 		String username = "TEST";
 		when(tweetRepository.findById(any())).thenReturn(Optional.of(getTweetEntity()));
-
+		TweetEntity tweetEntity = getTweetEntity();
+		tweetEntity.setId(null);
+		when(tweetRepository.save(any())).thenReturn(tweetEntity);
 		assertEquals("Tweet Like Failed", tweetServiceImpl.likeTweet(tweetId, username));
 
 	}
 
 	@Test
-	public void testLikeTweetNotFoundFailure() throws TweetServiceException {
+	void testLikeTweetNotFoundFailure() throws TweetServiceException {
 		String tweetId = "TEST";
 		String username = "TEST";
 
@@ -228,7 +235,7 @@ public class TweetServiceImplTest {
 	}
 
 	@Test
-	public void testLikeTweetException() throws TweetServiceException {
+	void testLikeTweetException() throws TweetServiceException {
 		String tweetId = "TEST";
 		String username = "TEST";
 		when(tweetRepository.findById(any())).thenThrow(new RuntimeException());
@@ -239,7 +246,7 @@ public class TweetServiceImplTest {
 	}
 
 	@Test
-	public void testReplyToTweetSuccess() throws TweetServiceException {
+	void testReplyToTweetSuccess() throws TweetServiceException {
 		TweetDto tweetDto = getTweetDto();
 		String username = "TEST";
 		String tweetId = "TEST";
@@ -253,19 +260,21 @@ public class TweetServiceImplTest {
 	}
 
 	@Test
-	public void testReplyToTweetFailure() throws TweetServiceException {
+	void testReplyToTweetFailure() throws TweetServiceException {
 		TweetDto tweetDto = getTweetDto();
 		String username = "TEST";
 		String tweetId = "TEST";
 
 		when(modelMapper.map(tweetDto, TweetEntity.class)).thenReturn(getTweetEntity());
-
+		TweetEntity tweetEntity = getTweetEntity();
+		tweetEntity.setId(null);
+		when(tweetRepository.save(any())).thenReturn(tweetEntity);
 		assertEquals("Replied to TweetId: TEST Failed", tweetServiceImpl.replyToTweet(username, tweetDto, tweetId));
 
 	}
 
 	@Test
-	public void testReplyToTweetException() throws TweetServiceException {
+	void testReplyToTweetException() throws TweetServiceException {
 		TweetDto tweetDto = getTweetDto();
 		String username = "TEST";
 		String tweetId = "TEST";
@@ -278,7 +287,7 @@ public class TweetServiceImplTest {
 	}
 
 	@Test
-	public void testGetTrendingTopicsSuccess() throws TweetServiceException {
+	void testGetTrendingTopicsSuccess() throws TweetServiceException {
 
 		when(tweetRepository.getTrendingTopics(any())).thenReturn(getTrendingTopics());
 
@@ -287,7 +296,7 @@ public class TweetServiceImplTest {
 	}
 
 	@Test
-	public void testGetTrendingTopicsException() throws TweetServiceException {
+	void testGetTrendingTopicsException() throws TweetServiceException {
 
 		when(tweetRepository.getTrendingTopics(any())).thenThrow(new RuntimeException());
 
@@ -319,7 +328,7 @@ public class TweetServiceImplTest {
 	}
 
 	private TweetEntity getTweetEntity() {
-		TweetEntity tweetEntity = TweetEntity.builder().createdBy("TEST").tweetMessage("TEST")
+		TweetEntity tweetEntity = TweetEntity.builder().id("TEST").createdBy("TEST").tweetMessage("TEST")
 				.createdDateTime(LocalDateTime.now()).likedBy(new HashSet<>()).tweetTopic("TEST").build();
 		return tweetEntity;
 	}

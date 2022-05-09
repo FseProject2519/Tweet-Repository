@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.tweetapp.tweetservice.dto.TweetDto;
+import com.tweetapp.tweetservice.dto.TweetExportDto;
 import com.tweetapp.tweetservice.dto.TweetSearchDto;
 import com.tweetapp.tweetservice.entity.TweetEntity;
 import com.tweetapp.tweetservice.entity.TweetTrendEntity;
@@ -31,5 +32,7 @@ public interface TweetService {
 			throws TweetServiceException;
 
 	List<TweetTrendEntity> getTrendingTopics(TweetSearchDto tweetSearchDto) throws TweetServiceException;
+
+	List<TweetExportDto> getExportData(String username) throws TweetServiceException;
 
 }

@@ -2,10 +2,7 @@ name: Build
 on:
   push:
     branches:
-      - integration # or the name of your main branch
-  pull_request:
-    branches:
-      - integration
+      - master # or the name of your main branch
 
 jobs:
   build:
@@ -36,4 +33,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: mvn -f tweet-service/pom.xml -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Tweet-App-Fse-1
+        run: mvn -f tweet-service/pom.xml -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Tweet-App

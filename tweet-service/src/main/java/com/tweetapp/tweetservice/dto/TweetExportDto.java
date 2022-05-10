@@ -1,7 +1,6 @@
 package com.tweetapp.tweetservice.dto;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,26 +15,21 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class TweetSearchDto {
+public class TweetExportDto {
 
 	private String tweetMessage;
 
 	private String tweetTopic;
 
-	private String createdBy;
+	private String repliedToTweetMsg;
 
-	private LocalDateTime startDateTime;
-
-	private LocalDateTime endDateTime;
-
-	private String repliedToTweet;
+	private String repliedToTweetUser;
 
 	private String tag;
 
-	private Set<String> likedBy;
+	private String likedBy;
 
-	private String sortField;
+	private LocalDateTime createdDateTime;
 
-	private String sortOrder;
-
+	private LocalDateTime lastModifiedDateTime;
 }

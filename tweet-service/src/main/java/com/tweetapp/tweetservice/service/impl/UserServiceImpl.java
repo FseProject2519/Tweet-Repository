@@ -5,11 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import com.tweetapp.tweetservice.dto.UserDto;
 import com.tweetapp.tweetservice.dto.UserSearchDto;
 import com.tweetapp.tweetservice.entity.UserEntity;
 import com.tweetapp.tweetservice.exception.TweetServiceException;
@@ -23,17 +20,12 @@ public class UserServiceImpl implements UserService {
 	private UserRepository userRepository;
 
 	@Override
-	public String createUser(UserDto userDto) {
-		return "";
-	}
-
-	@Override
-	public ResponseEntity<Page<UserEntity>> getAllUsers(UserSearchDto userSearchDto, Integer page, Integer size)
+	public Page<UserEntity> getAllUsers(UserSearchDto userSearchDto, Integer page, Integer size)
 			throws TweetServiceException {
 		try {
 			Sort sort = getUserSort(userSearchDto);
 			Pageable pageable = PageRequest.of(page != null ? page : 0, size != null ? size : 10, sort);
-			return new ResponseEntity<>(userRepository.findAll(pageable), HttpStatus.OK);
+			return userRepository.findAll(pageable);
 
 		} catch (Exception e) {
 			throw new TweetServiceException(e.getMessage());
@@ -42,12 +34,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public ResponseEntity<Page<UserEntity>> searchUsers(UserSearchDto userSearchDto, Integer page, Integer size)
+	public Page<UserEntity> searchUsers(UserSearchDto userSearchDto, Integer page, Integer size)
 			throws TweetServiceException {
 		try {
 			Sort sort = getUserSort(userSearchDto);
 			Pageable pageable = PageRequest.of(page != null ? page : 0, size != null ? size : 10, sort);
-			return new ResponseEntity<>(userRepository.searchUsers(userSearchDto, pageable), HttpStatus.OK);
+			return userRepository.searchUsers(userSearchDto, pageable);
 		} catch (Exception e) {
 			throw new TweetServiceException(e.getMessage());
 

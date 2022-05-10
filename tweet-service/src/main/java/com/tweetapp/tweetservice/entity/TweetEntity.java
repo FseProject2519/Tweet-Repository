@@ -10,11 +10,22 @@ import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tweetapp.tweetservice.constants.TweetAppConstants;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Document("TweetCollection")
 @Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class TweetEntity {
 
 	@MongoId(FieldType.OBJECT_ID)
@@ -30,9 +41,13 @@ public class TweetEntity {
 	@Field(name = "created_by")
 	private String createdBy;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss[.SSS][.SS][.S]")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TweetAppConstants.DATE_TIME_PATTERN)
 	@Field(name = "created_date_time")
 	private LocalDateTime createdDateTime;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TweetAppConstants.DATE_TIME_PATTERN)
+	@Field(name = "last_modified_date_time")
+	private LocalDateTime lastModifiedDateTime;
 
 	@Field(name = "replied_to_tweet")
 	private String repliedToTweet;
@@ -42,69 +57,5 @@ public class TweetEntity {
 
 	@Field(name = "liked_by")
 	private Set<String> likedBy;
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getTweetMessage() {
-		return tweetMessage;
-	}
-
-	public void setTweetMessage(String tweetMessage) {
-		this.tweetMessage = tweetMessage;
-	}
-
-	public String getTweetTopic() {
-		return tweetTopic;
-	}
-
-	public void setTweetTopic(String tweetTopic) {
-		this.tweetTopic = tweetTopic;
-	}
-
-	public String getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public LocalDateTime getCreatedDateTime() {
-		return createdDateTime;
-	}
-
-	public void setCreatedDateTime(LocalDateTime createdDateTime) {
-		this.createdDateTime = createdDateTime;
-	}
-
-	public String getRepliedToTweet() {
-		return repliedToTweet;
-	}
-
-	public void setRepliedToTweet(String repliedToTweet) {
-		this.repliedToTweet = repliedToTweet;
-	}
-
-	public String getTag() {
-		return tag;
-	}
-
-	public void setTag(String tag) {
-		this.tag = tag;
-	}
-
-	public Set<String> getLikedBy() {
-		return likedBy;
-	}
-
-	public void setLikedBy(Set<String> likedBy) {
-		this.likedBy = likedBy;
-	}
 
 }

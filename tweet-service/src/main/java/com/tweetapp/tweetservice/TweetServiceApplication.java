@@ -6,15 +6,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
 
 @SpringBootApplication
 @ComponentScan(basePackages = { "com.tweetapp.tweetservice" })
 @EnableMongoRepositories
-@EnableSwagger2
+
 public class TweetServiceApplication {
 
 	public static void main(String[] args) {
@@ -22,8 +20,8 @@ public class TweetServiceApplication {
 	}
 
 	@Bean
-	public Docket productApi() {
-		return new Docket(DocumentationType.SWAGGER_2).select()
-				.apis(RequestHandlerSelectors.basePackage("com.tweetapp.tweetservice")).build();
+	public OpenAPI springShopOpenAPI() {
+		return new OpenAPI()
+				.info(new Info().title("Tweet Service API").description("Tweet application").version("v0.0.1"));
 	}
 }

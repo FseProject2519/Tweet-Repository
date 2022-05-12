@@ -39,8 +39,7 @@ public class TweetDto {
 
 	private String repliedToTweet;
 
-	@Size(max = 50, message = "Tag cannot exceed 50 characters")
-	private String tag;
+	private Set<@Size(max = 50, message = "Tag cannot exceed 50 characters") String> tag;
 
 	private Set<String> likedBy;
 }

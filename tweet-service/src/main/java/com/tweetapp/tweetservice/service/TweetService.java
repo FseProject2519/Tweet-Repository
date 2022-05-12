@@ -25,14 +25,20 @@ public interface TweetService {
 
 	String replyToTweet(String username, TweetDto tweetDto, String tweedId) throws TweetServiceException;
 
-	Page<TweetEntity> getAllTweets(TweetSearchDto tweetSearchDto, Integer page, Integer size)
+	Page<TweetEntity> getAllTweetsPaged(TweetSearchDto tweetSearchDto, Integer page, Integer size)
 			throws TweetServiceException;
 
-	Page<TweetEntity> searchTweets(TweetSearchDto tweetSearchDto, Integer page, Integer size)
+	List<TweetEntity> getAllTweets(TweetSearchDto tweetSearchDto) throws TweetServiceException;
+
+	Page<TweetEntity> searchTweetsPaged(TweetSearchDto tweetSearchDto, Integer page, Integer size)
 			throws TweetServiceException;
 
 	List<TweetTrendEntity> getTrendingTopics(TweetSearchDto tweetSearchDto) throws TweetServiceException;
 
 	List<TweetExportDto> getExportData(String username) throws TweetServiceException;
+
+	List<String> getHashtags() throws TweetServiceException;
+
+	List<TweetEntity> searchTweets(TweetSearchDto tweetSearchDto) throws TweetServiceException;
 
 }

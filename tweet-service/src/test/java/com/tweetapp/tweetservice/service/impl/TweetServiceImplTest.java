@@ -45,7 +45,7 @@ class TweetServiceImplTest {
 	void testGetAllTweetsSuccess() throws TweetServiceException {
 		TweetSearchDto tweetSearchDto = buildTweetSearchDto("createdBy", "asc");
 		when(tweetRepository.findAll(isA(Pageable.class))).thenReturn(getTweetEntityPage());
-		assertEquals("TEST", tweetServiceImpl.getAllTweets(tweetSearchDto, 0, 1).getContent().get(0).getTweetMessage());
+		assertEquals("TEST", tweetServiceImpl.getAllTweetsPaged(tweetSearchDto, 0, 1).getContent().get(0).getTweetMessage());
 
 	}
 
@@ -54,7 +54,7 @@ class TweetServiceImplTest {
 		TweetSearchDto tweetSearchDto = buildTweetSearchDto(null, null);
 		when(tweetRepository.findAll(isA(Pageable.class))).thenReturn(getTweetEntityPage());
 		assertEquals("TEST",
-				tweetServiceImpl.getAllTweets(tweetSearchDto, null, null).getContent().get(0).getTweetMessage());
+				tweetServiceImpl.getAllTweetsPaged(tweetSearchDto, null, null).getContent().get(0).getTweetMessage());
 
 	}
 
@@ -62,32 +62,32 @@ class TweetServiceImplTest {
 	void testGetAllTweetsException() throws TweetServiceException {
 		TweetSearchDto tweetSearchDto = null;
 		assertThrows(TweetServiceException.class, () -> {
-			tweetServiceImpl.getAllTweets(tweetSearchDto, null, null);
+			tweetServiceImpl.getAllTweetsPaged(tweetSearchDto, null, null);
 		});
 	}
 
 	@Test
 	void testSearchTweetsSuccess() throws TweetServiceException {
 		TweetSearchDto tweetSearchDto = buildTweetSearchDto("createdBy", "desc");
-		when(tweetRepository.searchTweets(any(), isA(Pageable.class))).thenReturn(getTweetEntityPage());
-		assertEquals("TEST", tweetServiceImpl.searchTweets(tweetSearchDto, 0, 1).getContent().get(0).getTweetMessage());
+		when(tweetRepository.searchTweetsPaged(any(), isA(Pageable.class))).thenReturn(getTweetEntityPage());
+		assertEquals("TEST", tweetServiceImpl.searchTweetsPaged(tweetSearchDto, 0, 1).getContent().get(0).getTweetMessage());
 
 	}
 
 	@Test
 	void testSearchTweetsSuccessWithNullSortField() throws TweetServiceException {
 		TweetSearchDto tweetSearchDto = buildTweetSearchDto(null, "desc");
-		when(tweetRepository.searchTweets(any(), isA(Pageable.class))).thenReturn(getTweetEntityPage());
-		assertEquals("TEST", tweetServiceImpl.searchTweets(tweetSearchDto, 0, 1).getContent().get(0).getTweetMessage());
+		when(tweetRepository.searchTweetsPaged(any(), isA(Pageable.class))).thenReturn(getTweetEntityPage());
+		assertEquals("TEST", tweetServiceImpl.searchTweetsPaged(tweetSearchDto, 0, 1).getContent().get(0).getTweetMessage());
 
 	}
 
 	@Test
 	void testSearchTweetsSuccessWithNullSortOrder() throws TweetServiceException {
 		TweetSearchDto tweetSearchDto = buildTweetSearchDto("createdBy", null);
-		when(tweetRepository.searchTweets(any(), isA(Pageable.class))).thenReturn(getTweetEntityPage());
+		when(tweetRepository.searchTweetsPaged(any(), isA(Pageable.class))).thenReturn(getTweetEntityPage());
 		assertEquals("TEST",
-				tweetServiceImpl.searchTweets(tweetSearchDto, null, null).getContent().get(0).getTweetMessage());
+				tweetServiceImpl.searchTweetsPaged(tweetSearchDto, null, null).getContent().get(0).getTweetMessage());
 
 	}
 
@@ -95,7 +95,7 @@ class TweetServiceImplTest {
 	void testSearchTweetsException() throws TweetServiceException {
 		TweetSearchDto tweetSearchDto = null;
 		assertThrows(TweetServiceException.class, () -> {
-			tweetServiceImpl.searchTweets(tweetSearchDto, null, null);
+			tweetServiceImpl.searchTweetsPaged(tweetSearchDto, null, null);
 		});
 	}
 

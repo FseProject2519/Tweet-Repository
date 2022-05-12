@@ -11,10 +11,14 @@ import com.tweetapp.tweetservice.entity.TweetTrendEntity;
 
 public interface TweetCriteriaRepository {
 
-	Page<TweetEntity> searchTweets(TweetSearchDto tweetSearchDto, Pageable pageable);
+	Page<TweetEntity> searchTweetsPaged(TweetSearchDto tweetSearchDto, Pageable pageable);
 
 	Page<TweetEntity> findAll(Pageable pageable);
 
 	List<TweetTrendEntity> getTrendingTopics(TweetSearchDto tweetSearchDto);
+
+	List<List<String>> getHashtags();
+
+	List<TweetEntity> searchTweets(TweetSearchDto tweetSearchDto);
 
 }

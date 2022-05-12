@@ -1,5 +1,8 @@
 package com.tweetapp.tweetservice.service.impl;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,7 +23,7 @@ public class UserServiceImpl implements UserService {
 	private UserRepository userRepository;
 
 	@Override
-	public Page<UserEntity> getAllUsers(UserSearchDto userSearchDto, Integer page, Integer size)
+	public Page<UserEntity> getAllUsersPaged(UserSearchDto userSearchDto, Integer page, Integer size)
 			throws TweetServiceException {
 		try {
 			Sort sort = getUserSort(userSearchDto);
@@ -34,12 +37,47 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Page<UserEntity> searchUsers(UserSearchDto userSearchDto, Integer page, Integer size)
+	public List<UserEntity> getAllUsers(UserSearchDto userSearchDto) throws TweetServiceException {
+		try {
+			return userRepository.findAllByOrderByUserId();
+
+		} catch (Exception e) {
+			throw new TweetServiceException(e.getMessage());
+
+		}
+	}
+
+	@Override
+	public Page<UserEntity> searchUsersPaged(UserSearchDto userSearchDto, Integer page, Integer size)
 			throws TweetServiceException {
 		try {
 			Sort sort = getUserSort(userSearchDto);
 			Pageable pageable = PageRequest.of(page != null ? page : 0, size != null ? size : 10, sort);
-			return userRepository.searchUsers(userSearchDto, pageable);
+			return userRepository.searchUsersPaged(userSearchDto, pageable);
+		} catch (Exception e) {
+			throw new TweetServiceException(e.getMessage());
+
+		}
+	}
+
+	@Override
+	public List<UserEntity> searchUsers(UserSearchDto userSearchDto) throws TweetServiceException {
+		try {
+			return userRepository.searchUsers(userSearchDto);
+		} catch (Exception e) {
+			throw new TweetServiceException(e.getMessage());
+
+		}
+	}
+
+	@Override
+	public List<String> getUsertags() throws TweetServiceException {
+		try {
+			List<String> userIdList = userRepository.getUserIds();
+
+			Collections.sort(userIdList);
+			return userIdList;
+
 		} catch (Exception e) {
 			throw new TweetServiceException(e.getMessage());
 

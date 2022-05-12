@@ -2,9 +2,14 @@ package com.tweetapp.tweetservice.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -40,7 +45,10 @@ public class TweetServiceImpl implements TweetService {
 			tweetEntity.setCreatedBy(username);
 			tweetEntity.setCreatedDateTime(LocalDateTime.now());
 			tweetEntity.setLastModifiedDateTime(LocalDateTime.now());
-			return tweetRepository.save(tweetEntity).getId() != null ? "Tweet Posted Successfully" : "Tweet Post Failed";
+			tweetEntity.setHashtags(parseMessageForTags(tweetEntity.getTweetMessage(), "#"));
+			tweetEntity.setUsertags(parseMessageForTags(tweetEntity.getTweetMessage(), "@"));
+			return tweetRepository.save(tweetEntity).getId() != null ? "Tweet Posted Successfully"
+					: "Tweet Post Failed";
 
 		} catch (Exception e) {
 			throw new TweetServiceException(e.getMessage());
@@ -55,7 +63,10 @@ public class TweetServiceImpl implements TweetService {
 			if (tweet.isPresent()) {
 				tweetEntity.setId(tweetId);
 				tweetEntity.setLastModifiedDateTime(LocalDateTime.now());
-				return tweetRepository.save(tweetEntity).getId() != null ? "Tweet Updated Successfully" : "Tweet Update Failed";
+				tweetEntity.setHashtags(parseMessageForTags(tweetEntity.getTweetMessage(), "#"));
+				tweetEntity.setUsertags(parseMessageForTags(tweetEntity.getTweetMessage(), "@"));
+				return tweetRepository.save(tweetEntity).getId() != null ? "Tweet Updated Successfully"
+						: "Tweet Update Failed";
 			} else {
 				return TWEET_NOT_FOUND;
 			}
@@ -87,7 +98,8 @@ public class TweetServiceImpl implements TweetService {
 			Optional<TweetEntity> tweet = tweetRepository.findById(tweetId);
 			if (tweet.isPresent()) {
 				tweet.get().getLikedBy().add(username);
-				return tweetRepository.save(tweet.get()).getId() != null ? "Tweet Liked Successfully" : "Tweet Like Failed";
+				return tweetRepository.save(tweet.get()).getId() != null ? "Tweet Liked Successfully"
+						: "Tweet Like Failed";
 			} else {
 				return TWEET_NOT_FOUND;
 			}
@@ -105,7 +117,10 @@ public class TweetServiceImpl implements TweetService {
 			tweetEntity.setRepliedToTweet(tweetId);
 			tweetEntity.setCreatedDateTime(LocalDateTime.now());
 			tweetEntity.setLastModifiedDateTime(LocalDateTime.now());
-			return tweetRepository.save(tweetEntity).getId() != null ? "Replied to TweetId: " + tweetId + " Successfully"
+			tweetEntity.setHashtags(parseMessageForTags(tweetEntity.getTweetMessage(), "#"));
+			tweetEntity.setUsertags(parseMessageForTags(tweetEntity.getTweetMessage(), "@"));
+			return tweetRepository.save(tweetEntity).getId() != null
+					? "Replied to TweetId: " + tweetId + " Successfully"
 					: "Replied to TweetId: " + tweetId + " Failed";
 
 		} catch (Exception e) {
@@ -114,7 +129,7 @@ public class TweetServiceImpl implements TweetService {
 	}
 
 	@Override
-	public Page<TweetEntity> getAllTweets(TweetSearchDto tweetSearchDto, Integer page, Integer size)
+	public Page<TweetEntity> getAllTweetsPaged(TweetSearchDto tweetSearchDto, Integer page, Integer size)
 			throws TweetServiceException {
 		try {
 			Sort sort = getTweetSort(tweetSearchDto);
@@ -127,12 +142,33 @@ public class TweetServiceImpl implements TweetService {
 	}
 
 	@Override
-	public Page<TweetEntity> searchTweets(TweetSearchDto tweetSearchDto, Integer page, Integer size)
+	public List<TweetEntity> getAllTweets(TweetSearchDto tweetSearchDto) throws TweetServiceException {
+		try {
+			return tweetRepository.findAllByOrderById();
+
+		} catch (Exception e) {
+			throw new TweetServiceException(e.getMessage());
+
+		}
+	}
+
+	@Override
+	public Page<TweetEntity> searchTweetsPaged(TweetSearchDto tweetSearchDto, Integer page, Integer size)
 			throws TweetServiceException {
 		try {
 			Sort sort = getTweetSort(tweetSearchDto);
 			Pageable pageable = PageRequest.of(page != null ? page : 0, size != null ? size : 10, sort);
-			return tweetRepository.searchTweets(tweetSearchDto, pageable);
+			return tweetRepository.searchTweetsPaged(tweetSearchDto, pageable);
+		} catch (Exception e) {
+			throw new TweetServiceException(e.getMessage());
+
+		}
+	}
+
+	@Override
+	public List<TweetEntity> searchTweets(TweetSearchDto tweetSearchDto) throws TweetServiceException {
+		try {
+			return tweetRepository.searchTweets(tweetSearchDto);
 		} catch (Exception e) {
 			throw new TweetServiceException(e.getMessage());
 
@@ -143,6 +179,24 @@ public class TweetServiceImpl implements TweetService {
 	public List<TweetTrendEntity> getTrendingTopics(TweetSearchDto tweetSearchDto) throws TweetServiceException {
 		try {
 			return tweetRepository.getTrendingTopics(tweetSearchDto);
+		} catch (Exception e) {
+			throw new TweetServiceException(e.getMessage());
+
+		}
+	}
+
+	@Override
+	public List<String> getHashtags() throws TweetServiceException {
+		try {
+			List<List<String>> hashtagList = tweetRepository.getHashtags();
+
+			Set<String> hashtagsSet = hashtagList.stream().flatMap(List::stream).collect(Collectors.toList())
+					.stream().filter(hashtag -> !StringUtils.isEmpty(hashtag)).map(hashtag -> hashtag.substring(1))
+					.collect(Collectors.toSet());
+			List<String> hashtags = new ArrayList<>(hashtagsSet);
+			Collections.sort(hashtags);
+			return hashtags;
+
 		} catch (Exception e) {
 			throw new TweetServiceException(e.getMessage());
 
@@ -178,8 +232,7 @@ public class TweetServiceImpl implements TweetService {
 					tweetExportList.add(TweetExportDto.builder().tweetMessage(tweetEntity.getTweetMessage())
 							.tweetTopic(tweetEntity.getTweetTopic()).createdDateTime(tweetEntity.getCreatedDateTime())
 							.lastModifiedDateTime(tweetEntity.getLastModifiedDateTime()).likedBy(likedBy)
-							.repliedToTweetMsg(repliedToTweetMsg).repliedToTweetUser(repliedToTweetUser)
-							.tag(tweetEntity.getTag()).build());
+							.repliedToTweetMsg(repliedToTweetMsg).repliedToTweetUser(repliedToTweetUser).build());
 
 				});
 			}
@@ -205,6 +258,12 @@ public class TweetServiceImpl implements TweetService {
 		} catch (Exception e) {
 			throw new TweetServiceException(e.getMessage());
 		}
+	}
+
+	private Set<String> parseMessageForTags(String tweetMessage, String delimiter) {
+		List<String> tweetWordList = Arrays.asList(tweetMessage.split(" "));
+		return tweetWordList.stream().filter(word -> word.matches(delimiter + "[a-zA-Z0-9_]+") && word.length() <= 50)
+				.collect(Collectors.toSet());
 	}
 
 }

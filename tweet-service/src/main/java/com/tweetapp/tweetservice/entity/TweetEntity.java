@@ -52,8 +52,11 @@ public class TweetEntity {
 	@Field(name = "replied_to_tweet")
 	private String repliedToTweet;
 
-	@Field(name = "tag")
-	private String tag;
+	@Field(name = "hashtags")
+	private Set<String> hashtags;
+
+	@Field(name = "usertags")
+	private Set<String> usertags;
 
 	@Field(name = "liked_by")
 	private Set<String> likedBy;

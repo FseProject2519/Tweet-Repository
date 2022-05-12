@@ -30,7 +30,7 @@ public class TweetSearchDto {
 
 	private String repliedToTweet;
 
-	private String tag;
+	private Set<String> tag;
 
 	private Set<String> likedBy;
 

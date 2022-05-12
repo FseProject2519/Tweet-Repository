@@ -63,7 +63,6 @@ public class TweetPdfExportUtil {
 			iterationCount++;
 			addRecordCell(exportData.getTweetMessage(), cell, table, font);
 			addRecordCell(exportData.getTweetTopic(), cell, table, font);
-			addRecordCell(exportData.getTag(), cell, table, font);
 			addRecordCell(exportData.getLikedBy(), cell, table, font);
 			addRecordCell(exportData.getRepliedToTweetMsg(), cell, table, font);
 			addRecordCell(exportData.getRepliedToTweetUser(), cell, table, font);
@@ -97,9 +96,9 @@ public class TweetPdfExportUtil {
 			p.setAlignment(Element.ALIGN_CENTER);
 			document.add(p);
 
-			PdfPTable table = new PdfPTable(8);
+			PdfPTable table = new PdfPTable(7);
 			table.setWidthPercentage(100f);
-			table.setWidths(new float[] { 3.5f, 1.5f, 1.5f, 1.5f, 3.5f, 2f, 2f, 2f });
+			table.setWidths(new float[] { 3.5f, 1.5f, 1.5f, 3.5f, 2f, 2f, 2f });
 			table.setSpacingBefore(10);
 
 			writeTableHeader(table);

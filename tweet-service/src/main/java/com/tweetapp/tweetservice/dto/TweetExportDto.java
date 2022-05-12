@@ -25,8 +25,6 @@ public class TweetExportDto {
 
 	private String repliedToTweetUser;
 
-	private String tag;
-
 	private String likedBy;
 
 	private LocalDateTime createdDateTime;

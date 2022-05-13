@@ -46,8 +46,13 @@ public class TweetAppController {
 	@Autowired
 	TweetService tweetService;
 
-	@Autowired
 	UserService userService;
+
+	// Example for setter based injection
+	@Autowired
+	void setUserService(UserService userService) {
+		this.userService = userService;
+	}
 
 	// Tweet related methods
 

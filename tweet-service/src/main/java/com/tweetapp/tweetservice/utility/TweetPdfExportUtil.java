@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
@@ -26,6 +28,7 @@ public class TweetPdfExportUtil {
 
 	private static final Color[] COLORS = { Color.WHITE, new Color(226, 246, 249, 50) };
 
+	@Autowired
 	public TweetPdfExportUtil(List<TweetExportDto> exportDataList) {
 		this.exportDataList = exportDataList;
 	}

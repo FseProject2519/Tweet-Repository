@@ -26,17 +26,25 @@ import com.tweetapp.tweetservice.entity.TweetTrendEntity;
 import com.tweetapp.tweetservice.exception.TweetServiceException;
 import com.tweetapp.tweetservice.repository.TweetRepository;
 import com.tweetapp.tweetservice.service.TweetService;
+import com.tweetapp.tweetservice.service.UserService;
 
 @Component
 public class TweetServiceImpl implements TweetService {
 
 	private static final String TWEET_NOT_FOUND = "Tweet Not Found";
 
-	@Autowired
 	private TweetRepository tweetRepository;
 
 	@Autowired
 	ModelMapper modelMapper;
+
+	UserService userService;
+
+	// Example for setter based injection
+	@Autowired
+	void setTweetRepository(TweetRepository tweetRepository) {
+		this.tweetRepository = tweetRepository;
+	}
 
 	@Override
 	public String postTweet(String username, TweetDto tweetDto) throws TweetServiceException {
@@ -190,8 +198,8 @@ public class TweetServiceImpl implements TweetService {
 		try {
 			List<List<String>> hashtagList = tweetRepository.getHashtags();
 
-			Set<String> hashtagsSet = hashtagList.stream().flatMap(List::stream).collect(Collectors.toList())
-					.stream().filter(hashtag -> !StringUtils.isEmpty(hashtag)).map(hashtag -> hashtag.substring(1))
+			Set<String> hashtagsSet = hashtagList.stream().flatMap(List::stream).collect(Collectors.toList()).stream()
+					.filter(hashtag -> !StringUtils.isEmpty(hashtag)).map(hashtag -> hashtag.substring(1))
 					.collect(Collectors.toSet());
 			List<String> hashtags = new ArrayList<>(hashtagsSet);
 			Collections.sort(hashtags);
@@ -263,7 +271,7 @@ public class TweetServiceImpl implements TweetService {
 	private Set<String> parseMessageForTags(String tweetMessage, String delimiter) {
 		List<String> tweetWordList = Arrays.asList(tweetMessage.split(" "));
 		return tweetWordList.stream().filter(word -> word.matches(delimiter + "[a-zA-Z0-9_]+") && word.length() <= 50)
-				.collect(Collectors.toSet());
+				.map(word -> word.substring(1)).collect(Collectors.toSet());
 	}
 
 }

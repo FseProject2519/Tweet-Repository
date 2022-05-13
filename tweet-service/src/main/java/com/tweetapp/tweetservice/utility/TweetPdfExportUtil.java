@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
@@ -26,6 +28,7 @@ public class TweetPdfExportUtil {
 
 	private static final Color[] COLORS = { Color.WHITE, new Color(226, 246, 249, 50) };
 
+	@Autowired
 	public TweetPdfExportUtil(List<TweetExportDto> exportDataList) {
 		this.exportDataList = exportDataList;
 	}
@@ -63,7 +66,6 @@ public class TweetPdfExportUtil {
 			iterationCount++;
 			addRecordCell(exportData.getTweetMessage(), cell, table, font);
 			addRecordCell(exportData.getTweetTopic(), cell, table, font);
-			addRecordCell(exportData.getTag(), cell, table, font);
 			addRecordCell(exportData.getLikedBy(), cell, table, font);
 			addRecordCell(exportData.getRepliedToTweetMsg(), cell, table, font);
 			addRecordCell(exportData.getRepliedToTweetUser(), cell, table, font);
@@ -97,9 +99,9 @@ public class TweetPdfExportUtil {
 			p.setAlignment(Element.ALIGN_CENTER);
 			document.add(p);
 
-			PdfPTable table = new PdfPTable(8);
+			PdfPTable table = new PdfPTable(7);
 			table.setWidthPercentage(100f);
-			table.setWidths(new float[] { 3.5f, 1.5f, 1.5f, 1.5f, 3.5f, 2f, 2f, 2f });
+			table.setWidths(new float[] { 3.5f, 1.5f, 1.5f, 3.5f, 2f, 2f, 2f });
 			table.setSpacingBefore(10);
 
 			writeTableHeader(table);

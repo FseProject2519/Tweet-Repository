@@ -15,4 +15,5 @@ public interface TweetRepository extends MongoRepository<TweetEntity, String>, T
 	@Query("{'created_by' : :#{#username}}")
 	List<TweetEntity> getExportData(@Param("username") String username);
 
+	List<TweetEntity> findAllByOrderById();
 }

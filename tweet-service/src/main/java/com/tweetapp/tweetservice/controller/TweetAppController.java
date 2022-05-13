@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -45,8 +46,13 @@ public class TweetAppController {
 	@Autowired
 	TweetService tweetService;
 
-	@Autowired
 	UserService userService;
+
+	// Example for setter based injection
+	@Autowired
+	void setUserService(UserService userService) {
+		this.userService = userService;
+	}
 
 	// Tweet related methods
 
@@ -86,7 +92,7 @@ public class TweetAppController {
 		}
 	}
 
-	@PutMapping("/{username}/like/{tweetId}")
+	@PatchMapping("/{username}/like/{tweetId}")
 	public ResponseEntity<?> likeTweet(@PathVariable String tweetId, @PathVariable String username) {
 		try {
 			log.info("Start - likeTweet");

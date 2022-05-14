@@ -1,11 +1,17 @@
 package com.tweetapp.authorization.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,8 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tweetapp.authorization.dto.AuthResponse;
 import com.tweetapp.authorization.dto.UserCredentials;
+import com.tweetapp.authorization.dto.UserDetailsErrors;
+import com.tweetapp.authorization.dto.UserDto;
+import com.tweetapp.authorization.exception.TweetServiceException;
 import com.tweetapp.authorization.service.DetailsService;
 import com.tweetapp.authorization.service.JwtUtil;
+import com.tweetapp.authorization.service.RegisterService;
 
 @RestController
 public class AuthController {
@@ -26,6 +36,38 @@ public class AuthController {
 	
 	@Autowired
 	private DetailsService detailsService;
+	
+	@Autowired
+	private RegisterService registerService;
+	
+	@PostMapping("/register")
+	public ResponseEntity<?> registerUser(@RequestBody @Valid UserDto userDto,BindingResult bindingResult) {
+
+		LOGGER.info("Start- User Registration");
+		try {
+			if (bindingResult.hasErrors()) {
+				LOGGER.info("Validation errors encountered when registering user");
+				return new ResponseEntity<>(extractErrors(bindingResult), HttpStatus.BAD_REQUEST);
+			}
+			return new ResponseEntity<>(registerService.registerUser(userDto), HttpStatus.CREATED);
+
+		}
+		catch(TweetServiceException e){
+			LOGGER.info("Exception encountered in user registeration:{}",e.getMessage());
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	private List<UserDetailsErrors> extractErrors(BindingResult bindingResult) {
+		List<UserDetailsErrors> errorList = new ArrayList<>();
+		bindingResult.getFieldErrors().forEach(error -> {
+			UserDetailsErrors err = UserDetailsErrors.builder().fieldName(error.getField())
+					.message(error.getDefaultMessage()).build();
+			errorList.add(err);
+		});
+		return errorList;
+	}
+	
 
 	@PostMapping("/userlogin")
 	public ResponseEntity<?> userlogin(@RequestBody UserCredentials userlogincredentials) {
@@ -35,7 +77,7 @@ public class AuthController {
 
 			String uname = "";
 			String generateToken = "";
-			String role = "";
+			
 			if (userdetails.getPassword().equals(userlogincredentials.getPassword()))
 					{
 				uname = userlogincredentials.getUserId();

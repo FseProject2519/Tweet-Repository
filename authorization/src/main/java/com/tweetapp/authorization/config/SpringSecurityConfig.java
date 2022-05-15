@@ -10,12 +10,15 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 
 import com.tweetapp.authorization.service.DetailsService;
+import com.tweetapp.authorization.service.RegisterService;
 
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	DetailsService detailsService;
+	
+	
 
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
@@ -28,8 +31,15 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 
-		web.ignoring().antMatchers("/uservalidate", "/adminvalidate", "/userlogin", "/adminlogin", "/h2-console/**",
-				"/v2/api-docs", "/configuration/ui", "/configuration/security", "/webjars/**");
+		web.ignoring().antMatchers("/api/v1.0/tweets/uservalidate");
+		web.ignoring().antMatchers("/api/v1.0/tweets/userlogin");
+		web.ignoring().antMatchers("/v2/api-docs/**");
+		web.ignoring().antMatchers("/swagger-resouces/**");
+		web.ignoring().antMatchers("/api/v1.0/tweets/register");
+		web.ignoring().antMatchers("/swagger-ui.html");
+		web.ignoring().antMatchers("/configuration/ui");
+		web.ignoring().antMatchers("/configuration/security");
+		web.ignoring().antMatchers("/webjars/**");
 
 	}
 
@@ -38,6 +48,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		super.configure(auth);
 		auth.userDetailsService(detailsService);
+		
 
 	}
 

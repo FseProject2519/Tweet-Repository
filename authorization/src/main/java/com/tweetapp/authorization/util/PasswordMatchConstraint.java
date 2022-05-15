@@ -14,7 +14,8 @@ import com.tweetapp.authorization.validator.PasswordMatchValidator;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PasswordMatchConstraint {
 	String message() default "Password and confirmed password do not match";
-	
+	 Class<?>[] groups() default {};
+	   Class<?>[] payload() default {};
 	String password();
 	String confirmPassword();
 	 @Target({ ElementType.TYPE })

@@ -1,15 +1,22 @@
 package com.tweetapp.authorization.entity;
 
+
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Document("UserCollection")
 @Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserEntity {
 
 	@MongoId(FieldType.OBJECT_ID)

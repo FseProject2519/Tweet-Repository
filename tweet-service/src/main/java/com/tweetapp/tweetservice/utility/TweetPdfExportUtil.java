@@ -70,10 +70,10 @@ public class TweetPdfExportUtil {
 			addRecordCell(exportData.getRepliedToTweetMsg(), cell, table, font);
 			addRecordCell(exportData.getRepliedToTweetUser(), cell, table, font);
 			addRecordCell(exportData.getCreatedDateTime() != null
-					? DateUtils.userFriendlyFormat(exportData.getCreatedDateTime())
+					? DateUtils.userFriendlyDateFormat(exportData.getCreatedDateTime())
 					: "-", cell, table, font);
 			addRecordCell(exportData.getLastModifiedDateTime() != null
-					? DateUtils.userFriendlyFormat(exportData.getLastModifiedDateTime())
+					? DateUtils.userFriendlyDateFormat(exportData.getLastModifiedDateTime())
 					: "-", cell, table, font);
 
 		}
@@ -94,7 +94,7 @@ public class TweetPdfExportUtil {
 			font.setSize(12);
 			font.setColor(Color.BLACK);
 
-			String title = "Tweet History - (As of " + DateUtils.userFriendlyFormat(LocalDateTime.now()) + ")";
+			String title = "Tweet History - (As of " + DateUtils.userFriendlyDateFormat(LocalDateTime.now()) + ")";
 			Paragraph p = new Paragraph(title, font);
 			p.setAlignment(Element.ALIGN_CENTER);
 			document.add(p);

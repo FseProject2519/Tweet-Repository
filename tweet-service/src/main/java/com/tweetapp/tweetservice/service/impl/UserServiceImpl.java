@@ -43,10 +43,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserEntity> getAllUsers(UserSearchDto userSearchDto) throws TweetServiceException {
+	public List<UserEntity> getAllUsers() throws TweetServiceException {
 		try {
 
-			log.info("Finding User With The Criteria - {}", userSearchDto);
+			log.info("Finding All Users");
 			return userRepository.findAllByOrderByUserId();
 
 		} catch (Exception e) {

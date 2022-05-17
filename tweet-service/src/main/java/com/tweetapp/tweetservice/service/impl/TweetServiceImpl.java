@@ -123,7 +123,9 @@ public class TweetServiceImpl implements TweetService {
 			if (tweet.isPresent()) {
 				tweet.get().getLikedBy().add(username);
 
+
 				log.info("Liking Tweet - {}", tweet);
+				tweet.get().setLastModifiedDateTime(LocalDateTime.now());
 
 				return tweetRepository.save(tweet.get()).getId() != null ? "Tweet Liked Successfully"
 						: "Tweet Like Failed";

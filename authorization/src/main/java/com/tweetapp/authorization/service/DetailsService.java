@@ -28,7 +28,7 @@ public class DetailsService implements UserDetailsService{
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		LOGGER.info("Start - loadUserByUsername");
 		try {
-			UserEntity userData = userRepository.findById(username).orElse(null);
+			UserEntity userData = userRepository.findByUserId(username).orElse(null);
 			if (userData != null) {
 				userData.getUserId();
 				List<GrantedAuthority> list = new ArrayList<GrantedAuthority>();

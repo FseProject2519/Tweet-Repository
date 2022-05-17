@@ -28,7 +28,7 @@ public interface TweetService {
 	Page<TweetEntity> getAllTweetsPaged(TweetSearchDto tweetSearchDto, Integer page, Integer size)
 			throws TweetServiceException;
 
-	List<TweetEntity> getAllTweets(TweetSearchDto tweetSearchDto) throws TweetServiceException;
+	List<TweetEntity> getAllTweets() throws TweetServiceException;
 
 	Page<TweetEntity> searchTweetsPaged(TweetSearchDto tweetSearchDto, Integer page, Integer size)
 			throws TweetServiceException;

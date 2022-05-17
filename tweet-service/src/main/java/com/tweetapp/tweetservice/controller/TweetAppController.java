@@ -139,7 +139,7 @@ public class TweetAppController {
 			TweetSearchDto tweetSearchDto = TweetSearchDto.builder().sortField(sortField).sortOrder(sortOrder).build();
 			return isPaged
 					? new ResponseEntity<>(tweetService.getAllTweetsPaged(tweetSearchDto, page, size), HttpStatus.OK)
-					: new ResponseEntity<>(tweetService.getAllTweets(tweetSearchDto), HttpStatus.OK);
+					: new ResponseEntity<>(tweetService.getAllTweets(), HttpStatus.OK);
 		} catch (TweetServiceException e) {
 			log.info(TweetAppConstants.EXCEPTION, e.getMessage());
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -305,9 +305,11 @@ public class TweetAppController {
 	@GetMapping("/{username}/export")
 	public void exportCSV(HttpServletResponse response, @PathVariable("username") String username) throws IOException {
 		try {
+			log.info("Start - exportCSV");
+
 			response.setContentType("application/pdf");
 
-			String filename = username + "_" + DateUtils.userFriendlyFormat(LocalDateTime.now());
+			String filename = username + "_" + DateUtils.userFriendlyDateFormat(LocalDateTime.now());
 			filename = filename.replaceAll("[^a-zA-Z0-9]", "_") + ".pdf";
 
 			String headerKey = "Content-Disposition";
@@ -317,6 +319,7 @@ public class TweetAppController {
 			TweetPdfExportUtil exporter = new TweetPdfExportUtil(tweetService.getExportData(username));
 			exporter.export(response);
 		} catch (TweetServiceException e) {
+			log.info(TweetAppConstants.EXCEPTION, e.getMessage());
 			response.sendError(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
 		}
 

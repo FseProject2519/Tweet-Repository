@@ -9,5 +9,7 @@ public interface RegisterService {
 
 	String registerUser(UserDto userDto) throws TweetServiceException;
 	
+	String forgotPassword(String username) throws TweetServiceException;
+	
 	
 }

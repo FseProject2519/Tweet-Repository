@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -29,7 +30,7 @@ import com.tweetapp.authorization.service.JwtUtil;
 import com.tweetapp.authorization.service.RegisterService;
 
 @RestController
-@RequestMapping("api/v1.0/tweets")
+@RequestMapping("api/v1.0/authorization/tweets")
 public class AuthController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AuthController.class);
 
@@ -59,7 +60,7 @@ public class AuthController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
+	
 	private List<UserDetailsErrors> extractErrors(BindingResult bindingResult) {
 		List<UserDetailsErrors> errorList = new ArrayList<>();
 		bindingResult.getFieldErrors().forEach(error -> {
@@ -69,7 +70,21 @@ public class AuthController {
 		});
 		return errorList;
 	}
-	
+	@GetMapping("/{username}/forgot")
+	public ResponseEntity<?> forgotPassword(@PathVariable("username") String username){
+		try {
+			LOGGER.info("Start- Forgot Password");
+			return new ResponseEntity<>(registerService.forgotPassword(username), HttpStatus.OK);
+
+		}
+		catch(TweetServiceException e) {
+			LOGGER.info("Exception occurred when resetting password", e.getMessage());
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+
+		}
+		
+		
+	}
 
 	@PostMapping("/userlogin")
 	public ResponseEntity<?> userlogin(@RequestBody UserCredentials userlogincredentials) {

@@ -48,6 +48,10 @@ public class TweetServiceImpl implements TweetService {
 	void setTweetRepository(TweetRepository tweetRepository) {
 		this.tweetRepository = tweetRepository;
 	}
+	
+	TweetRepository getTweetRepository() {
+		return this.tweetRepository;
+	}
 
 	@Override
 	public String postTweet(String username, TweetDto tweetDto) throws TweetServiceException {
@@ -102,7 +106,7 @@ public class TweetServiceImpl implements TweetService {
 				log.info("Deleting Tweet With Id - {}", tweetId);
 
 				tweetRepository.deleteById(tweetId);
-				return "Tweet deleted Successfully";
+				return "Tweet Deleted Successfully";
 			} else {
 				return TWEET_NOT_FOUND;
 			}
@@ -237,8 +241,7 @@ public class TweetServiceImpl implements TweetService {
 			log.info("Found hashtags - {}", hashtagList.toString());
 
 			Set<String> hashtagsSet = hashtagList.stream().flatMap(List::stream).collect(Collectors.toList()).stream()
-					.filter(hashtag -> !StringUtils.isEmpty(hashtag)).map(hashtag -> hashtag.substring(1))
-					.collect(Collectors.toSet());
+					.filter(hashtag -> !StringUtils.isEmpty(hashtag)).collect(Collectors.toSet());
 			List<String> hashtags = new ArrayList<>(hashtagsSet);
 			Collections.sort(hashtags);
 

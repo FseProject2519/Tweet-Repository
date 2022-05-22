@@ -89,6 +89,15 @@ class TweetServiceImplTest {
 		return tweetEntityList;
 	}
 
+	private List<List<String>> getHashtags() {
+		List<String> hashtags = new ArrayList<>();
+		hashtags.add(TEST);
+		hashtags.add("");
+		List<List<String>> hashtagList = new ArrayList<>();
+		hashtagList.add(hashtags);
+		return hashtagList;
+	}
+
 	@Test
 	void testSetterSuccess() throws TweetServiceException {
 		tweetServiceImpl.setTweetRepository(tweetRepository);
@@ -301,7 +310,7 @@ class TweetServiceImplTest {
 		String tweetId = TEST;
 		when(tweetRepository.findById(any())).thenReturn(Optional.of(getTweetEntity()));
 
-		assertEquals("Tweet deleted Successfully", tweetServiceImpl.deleteTweet(tweetId));
+		assertEquals("Tweet Deleted Successfully", tweetServiceImpl.deleteTweet(tweetId));
 
 	}
 
@@ -428,13 +437,7 @@ class TweetServiceImplTest {
 	@Test
 	void testGetHashtagsSuccess() throws TweetServiceException {
 
-		List<String> hashtags = new ArrayList<>();
-		hashtags.add(TEST);
-		hashtags.add("");
-		List<List<String>> hashtagList = new ArrayList<>();
-		hashtagList.add(hashtags);
-
-		when(tweetRepository.getHashtags()).thenReturn(hashtagList);
+		when(tweetRepository.getHashtags()).thenReturn(getHashtags());
 
 		assertEquals(TEST, tweetServiceImpl.getHashtags().get(0));
 

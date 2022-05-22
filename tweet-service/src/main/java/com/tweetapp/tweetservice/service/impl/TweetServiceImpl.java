@@ -106,7 +106,7 @@ public class TweetServiceImpl implements TweetService {
 				log.info("Deleting Tweet With Id - {}", tweetId);
 
 				tweetRepository.deleteById(tweetId);
-				return "Tweet deleted Successfully";
+				return "Tweet Deleted Successfully";
 			} else {
 				return TWEET_NOT_FOUND;
 			}

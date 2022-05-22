@@ -252,8 +252,7 @@ public class TweetAppController {
 		} catch (DateTimeParseException e) {
 			log.info(TweetAppConstants.EXCEPTION, e.getMessage());
 
-			tweetResponseDto.setResponseMessage(e.getMessage());
-			return new ResponseEntity<>(tweetResponseDto, HttpStatus.BAD_REQUEST);
+			return returnBadRequestResponse(tweetResponseDto, e);
 
 		}
 	}
@@ -279,8 +278,7 @@ public class TweetAppController {
 		} catch (DateTimeParseException e) {
 			log.info(TweetAppConstants.EXCEPTION, e.getMessage());
 
-			tweetResponseDto.setResponseMessage(e.getMessage());
-			return new ResponseEntity<>(tweetResponseDto, HttpStatus.BAD_REQUEST);
+			return returnBadRequestResponse(tweetResponseDto, e);
 
 		}
 	}
@@ -299,6 +297,12 @@ public class TweetAppController {
 			return new ResponseEntity<>(tweetResponseDto, HttpStatus.INTERNAL_SERVER_ERROR);
 
 		}
+	}
+
+	private ResponseEntity<TweetResponseDto> returnBadRequestResponse(TweetResponseDto tweetResponseDto,
+			DateTimeParseException e) {
+		tweetResponseDto.setResponseMessage(e.getMessage());
+		return new ResponseEntity<>(tweetResponseDto, HttpStatus.BAD_REQUEST);
 	}
 
 	// User related methods
@@ -324,8 +328,7 @@ public class TweetAppController {
 		} catch (TweetServiceException e) {
 			log.info(TweetAppConstants.EXCEPTION, e.getMessage());
 
-			userResponseDto.setResponseMessage(e.getMessage());
-			return new ResponseEntity<>(userResponseDto, HttpStatus.INTERNAL_SERVER_ERROR);
+			return sendExceptionResponse(userResponseDto, e);
 		}
 	}
 
@@ -353,8 +356,7 @@ public class TweetAppController {
 
 		} catch (TweetServiceException e) {
 			log.info(TweetAppConstants.EXCEPTION, e.getMessage());
-			userResponseDto.setResponseMessage(e.getMessage());
-			return new ResponseEntity<>(userResponseDto, HttpStatus.INTERNAL_SERVER_ERROR);
+			return sendExceptionResponse(userResponseDto, e);
 		}
 	}
 
@@ -383,8 +385,7 @@ public class TweetAppController {
 
 		} catch (TweetServiceException e) {
 			log.info(TweetAppConstants.EXCEPTION, e.getMessage());
-			userResponseDto.setResponseMessage(e.getMessage());
-			return new ResponseEntity<>(userResponseDto, HttpStatus.INTERNAL_SERVER_ERROR);
+			return sendExceptionResponse(userResponseDto, e);
 		}
 	}
 
@@ -399,8 +400,7 @@ public class TweetAppController {
 			return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
 		} catch (TweetServiceException e) {
 			log.info(TweetAppConstants.EXCEPTION, e.getMessage());
-			userResponseDto.setResponseMessage(e.getMessage());
-			return new ResponseEntity<>(userResponseDto, HttpStatus.INTERNAL_SERVER_ERROR);
+			return sendExceptionResponse(userResponseDto, e);
 		}
 	}
 
@@ -435,6 +435,12 @@ public class TweetAppController {
 			errorList.add(tweetAppError);
 		});
 		return errorList;
+	}
+
+	private ResponseEntity<UserResponseDto> sendExceptionResponse(UserResponseDto userResponseDto,
+			TweetServiceException e) {
+		userResponseDto.setResponseMessage(e.getMessage());
+		return new ResponseEntity<>(userResponseDto, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 }

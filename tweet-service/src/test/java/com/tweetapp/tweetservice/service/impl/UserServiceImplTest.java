@@ -125,18 +125,22 @@ class UserServiceImplTest {
 	@Test
 	void testGetUsertagsSuccess() throws TweetServiceException {
 
-		List<String> usertags = new ArrayList<>();
-		usertags.add("TEST");
+		List<String> usertags = getUsertags();
 		when(userRepository.getUserIds()).thenReturn(usertags);
 		assertEquals("TEST", userServiceImpl.getUsertags().get(0));
 
 	}
 
+	private List<String> getUsertags() {
+		List<String> usertags = new ArrayList<>();
+		usertags.add("TEST");
+		return usertags;
+	}
+
 	@Test
 	void testGetUsertagsException() throws TweetServiceException {
 
-		List<String> usertags = new ArrayList<>();
-		usertags.add("TEST");
+		List<String> usertags = getUsertags();
 		when(userRepository.getUserIds()).thenThrow(new RuntimeException());
 		assertThrows(TweetServiceException.class, () -> {
 			userServiceImpl.getUsertags();

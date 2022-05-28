@@ -47,8 +47,8 @@ public class UserEntity {
 	@Field(name = "contact_number")
 	private String contactNumber;
 	
-	@Field(name = "forgot_pwd_token")
-	private String forgotPwdToken;
+	@Field(name = "forgot_pwd_otp")
+	private String forgotPwdOtp;
 	
 	@Field(name="last_modified_date")
 	private LocalDateTime lastModifiedDate;

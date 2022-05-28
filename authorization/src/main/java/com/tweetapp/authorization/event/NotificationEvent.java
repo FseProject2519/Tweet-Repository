@@ -15,7 +15,7 @@ public class NotificationEvent {
 	
 	private String lastName;
 	
-	private String token;
+	private String otp;
 	
 	private String email;
 }

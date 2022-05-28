@@ -45,8 +45,8 @@ public class UserEntity {
 	@Field(name = "contact_number")
 	private String contactNumber;
 	
-	@Field(name = "forgot_pwd_token")
-	private String forgotPwdToken;
+	@Field(name = "forgot_pwd_otp")
+	private String forgotPwdOtp;
 	
 	@Field(name="last_modified_date")
 	private LocalDateTime lastModifiedDate;
@@ -108,12 +108,12 @@ public class UserEntity {
 		this.contactNumber = contactNumber;
 	}
 
-	public String getForgotPwdToken() {
-		return forgotPwdToken;
+	public String getForgotPwdOtp() {
+		return forgotPwdOtp;
 	}
 
-	public void setForgotPwdToken(String forgotPwdToken) {
-		this.forgotPwdToken = forgotPwdToken;
+	public void setForgotPwdOtp(String forgotPwdOtp) {
+		this.forgotPwdOtp = forgotPwdOtp;
 	}
 	
 	public LocalDateTime getLastModifiedDate() {

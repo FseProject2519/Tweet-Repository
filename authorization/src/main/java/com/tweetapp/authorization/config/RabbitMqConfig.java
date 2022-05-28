@@ -3,11 +3,12 @@ package com.tweetapp.authorization.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 
-import com.rabbitmq.client.ConnectionFactory;
+
 
 @Configuration
 public class RabbitMqConfig {
@@ -17,7 +18,7 @@ private String notificationDetailsQueue;
 
 @Bean
 public RabbitTemplate messageTemplate(ConnectionFactory connectionFactory) {
-	RabbitTemplate rabbitTemplate=new RabbitTemplate();
+	RabbitTemplate rabbitTemplate=new RabbitTemplate(connectionFactory);
 	rabbitTemplate.setChannelTransacted(true);
 	rabbitTemplate.setMessageConverter(converter());
 	return rabbitTemplate;

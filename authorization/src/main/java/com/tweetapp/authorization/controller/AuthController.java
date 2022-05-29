@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tweetapp.authorization.dto.AuthResponse;
+import com.tweetapp.authorization.dto.OtpDto;
+import com.tweetapp.authorization.dto.PasswordDto;
 import com.tweetapp.authorization.dto.UserCredentials;
 import com.tweetapp.authorization.dto.UserDetailsErrors;
 import com.tweetapp.authorization.dto.UserDto;
@@ -90,6 +92,42 @@ public class AuthController {
 		
 		
 	}
+
+	@PostMapping("/{username}/verifyOtp")
+	public ResponseEntity<?> verifyOtp(@PathVariable("username") String username, @RequestBody OtpDto otp) {
+		
+			try {
+				LOGGER.info("Start- Verify OTP");
+				return new ResponseEntity<>(registerService.verifyOtp(username, otp), HttpStatus.OK);
+
+			} catch (TweetServiceException e) {
+				LOGGER.info("Exception occurred when verifying Otp", e.getMessage());
+				return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+
+			}
+		
+
+	}
+	@PostMapping("/{username}/resetpassword")
+	public ResponseEntity<?> resetPassword(@PathVariable("username") String username,@RequestBody PasswordDto password,BindingResult bindingResult) {
+		
+			try {
+				LOGGER.info("Start- Password Reset");
+				if (bindingResult.hasErrors()) {
+					LOGGER.info("Validation errors encountered when resetting password");
+					return new ResponseEntity<>(extractErrors(bindingResult), HttpStatus.BAD_REQUEST);
+				}
+				return new ResponseEntity<>(registerService.resetPassword(username, password), HttpStatus.OK);
+
+			} catch (TweetServiceException e) {
+				LOGGER.info("Exception occurred when resetting password", e.getMessage());
+				return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+
+			}
+		
+
+	}
+	
 
 	@PostMapping("/userlogin")
 	public ResponseEntity<?> userlogin(@RequestBody UserCredentials userlogincredentials) {

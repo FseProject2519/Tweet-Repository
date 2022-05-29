@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import com.tweetapp.authorization.dto.OtpDto;
+import com.tweetapp.authorization.dto.PasswordDto;
 import com.tweetapp.authorization.dto.UserDto;
 import com.tweetapp.authorization.entity.UserEntity;
 import com.tweetapp.authorization.event.NotificationEvent;
@@ -50,6 +52,8 @@ public class RegisterServiceImpl implements RegisterService{
 			userDto.setPassword(encodedPwd);
 			userDto.setConfirmPassword(encodedPwd);
 			UserEntity user=modelMapper.map(userDto, UserEntity.class);
+			user.setLastModifiedDate(LocalDateTime.now());
+			user.setValidOtp(false);
 			return userRepository.save(user).getId()!=null?"User Registered Successfully":"User Registration Failed";
 		}
 		catch(Exception e){
@@ -95,6 +99,68 @@ public class RegisterServiceImpl implements RegisterService{
 
 		}
 	}
-	
+
+	@Override
+	public String verifyOtp(String username, OtpDto otp) throws TweetServiceException {
+		try {
+			Optional<UserEntity> user = userRepository.findByUserId(username);
+
+			if (user.isPresent()) {
+
+				if (user.get().getLastModifiedDate().plusMinutes(5).isBefore(LocalDateTime.now())) {
+					user.get().setForgotPwdOtp("");
+					userRepository.save(user.get());
+					LOGGER.info("Otp expired please click resend OTP link to get a new OTP");
+					return "Otp expired please click resend OTP link to get a new OTP";
+				} else {
+					if (null != user.get().getForgotPwdOtp()
+							&& passwordEncoder.matches(otp.getOtp(), user.get().getForgotPwdOtp())) {
+						user.get().setForgotPwdOtp("");
+						user.get().setValidOtp(true);
+						userRepository.save(user.get());
+						LOGGER.info("OTP verification done successfully");
+						return "OTP verification done successfully";
+					} else {
+						LOGGER.info("Invalid OTP");
+						return "Invalid OTP";
+					}
+				}
+			} else {
+				LOGGER.info("User not found");
+				return "User not found";
+			}
+		} catch (Exception e) {
+			throw new TweetServiceException(e.getMessage());
+
+		}
+	}
+
+	@Override
+	public String resetPassword(String username, PasswordDto password) throws TweetServiceException {
+		try {
+			String encodedPwd=passwordEncoder.encode(password.getPassword());
+			Optional<UserEntity> user = userRepository.findByUserId(username);
+			
+			if (user.isPresent()) {
+				if(user.get().getValidOtp()) {
+				user.get().setPassword(encodedPwd);
+				user.get().setLastModifiedDate(LocalDateTime.now());
+				user.get().setValidOtp(false);
+				userRepository.save(user.get());
+				return "Password resetted Successfully";
+				}
+				else {
+					return "Unauthorised Request";
+				}
+			}
+				
+			else {
+				return "User Not found";
+			}
+		}
+		catch(Exception e) {
+			throw new TweetServiceException(e.getMessage());
+		}
+	}
 
 }

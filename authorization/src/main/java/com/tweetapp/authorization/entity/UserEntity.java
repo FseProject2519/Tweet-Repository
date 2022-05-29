@@ -50,6 +50,9 @@ public class UserEntity {
 	
 	@Field(name="last_modified_date")
 	private LocalDateTime lastModifiedDate;
+	
+	@Field(name="valid_otp")
+	private boolean validOtp;
 
 
 	public String getId() {
@@ -123,6 +126,14 @@ public class UserEntity {
 	public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
 		this.lastModifiedDate=lastModifiedDate;
 	}
+	public boolean getValidOtp() {
+		return validOtp;
+	}
+	
+	public void setValidOtp(boolean validOtp) {
+		this.validOtp=validOtp;
+	}
+	
 	
 
 }

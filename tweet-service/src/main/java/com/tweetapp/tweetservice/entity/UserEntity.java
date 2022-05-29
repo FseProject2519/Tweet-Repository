@@ -52,5 +52,8 @@ public class UserEntity {
 	
 	@Field(name="last_modified_date")
 	private LocalDateTime lastModifiedDate;
+	
+	@Field(name="valid_otp")
+	private boolean validOtp;
 
 }

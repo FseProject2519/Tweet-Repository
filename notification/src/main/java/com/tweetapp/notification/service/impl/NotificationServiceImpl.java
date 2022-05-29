@@ -32,9 +32,7 @@ public class NotificationServiceImpl implements NotificationService {
 	  
 	@Override
 	public void sendEmail(NotificationEvent event)  throws UnsupportedEncodingException, MessagingException {
-		LOGGER.info("Sending notification to reset password to" + event.getFirstName() + " " + event.getLastName()+" "
-							+ "registered email is " + event.getEmail() + "." + event.getOtp() + "is the OTP");
-		 MimeMessage message = mailSender.createMimeMessage();              
+			 MimeMessage message = mailSender.createMimeMessage();              
 		    MimeMessageHelper helper = new MimeMessageHelper(message);
 		     LOGGER.info("From email {} ,personal value {}",email,personal);
 		    helper.setFrom(email, personal);
@@ -58,6 +56,9 @@ public class NotificationServiceImpl implements NotificationService {
 		    helper.setText(content, true);
 		     
 		    mailSender.send(message);      
+		    LOGGER.info("Sending notification to reset password to" + event.getFirstName() + " " + event.getLastName()+" "
+					+ "registered email is " + event.getEmail() + "." + event.getOtp() + "is the OTP");
+
 			}
 
 }

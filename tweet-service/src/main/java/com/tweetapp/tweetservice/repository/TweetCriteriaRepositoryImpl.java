@@ -120,7 +120,7 @@ public class TweetCriteriaRepositoryImpl implements TweetCriteriaRepository {
 			criteria.add(Criteria.where("tweetTopic").regex(tweetSearchDto.getTweetTopic(), "i"));
 
 		if (tweetSearchDto.getTag() != null && !tweetSearchDto.getTag().isEmpty())
-			criteria.add(Criteria.where("tag").all(tweetSearchDto.getTag()));
+			criteria.add(Criteria.where("hashtags").all(tweetSearchDto.getTag()));
 
 		if (tweetSearchDto.getStartDateTime() != null && tweetSearchDto.getEndDateTime() != null)
 			criteria.add(Criteria.where(CREATED_DATE_TIME).gte(tweetSearchDto.getStartDateTime())

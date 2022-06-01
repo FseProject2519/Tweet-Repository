@@ -1,6 +1,9 @@
 package com.tweetapp.authorization.entity;
 
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -41,6 +44,16 @@ public class UserEntity {
 
 	@Field(name = "contact_number")
 	private String contactNumber;
+	
+	@Field(name = "forgot_pwd_otp")
+	private String forgotPwdOtp;
+	
+	@Field(name="last_modified_date")
+	private LocalDateTime lastModifiedDate;
+	
+	@Field(name="valid_otp")
+	private boolean validOtp;
+
 
 	public String getId() {
 		return id;
@@ -97,5 +110,30 @@ public class UserEntity {
 	public void setContactNumber(String contactNumber) {
 		this.contactNumber = contactNumber;
 	}
+
+	public String getForgotPwdOtp() {
+		return forgotPwdOtp;
+	}
+
+	public void setForgotPwdOtp(String forgotPwdOtp) {
+		this.forgotPwdOtp = forgotPwdOtp;
+	}
+	
+	public LocalDateTime getLastModifiedDate() {
+		return lastModifiedDate;
+	}
+	
+	public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+		this.lastModifiedDate=lastModifiedDate;
+	}
+	public boolean getValidOtp() {
+		return validOtp;
+	}
+	
+	public void setValidOtp(boolean validOtp) {
+		this.validOtp=validOtp;
+	}
+	
+	
 
 }

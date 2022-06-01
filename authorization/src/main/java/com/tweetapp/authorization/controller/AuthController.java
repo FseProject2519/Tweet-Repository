@@ -11,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tweetapp.authorization.dto.AuthResponse;
+import com.tweetapp.authorization.dto.OtpDto;
+import com.tweetapp.authorization.dto.PasswordDto;
 import com.tweetapp.authorization.dto.UserCredentials;
 import com.tweetapp.authorization.dto.UserDetailsErrors;
 import com.tweetapp.authorization.dto.UserDto;
@@ -29,7 +33,7 @@ import com.tweetapp.authorization.service.JwtUtil;
 import com.tweetapp.authorization.service.RegisterService;
 
 @RestController
-@RequestMapping("api/v1.0/tweets")
+@RequestMapping("api/v1.0/authorization/tweets")
 public class AuthController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AuthController.class);
 
@@ -41,6 +45,10 @@ public class AuthController {
 	
 	@Autowired
 	private RegisterService registerService;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	
 	@PostMapping("/register")
 	public ResponseEntity<?> registerUser(@RequestBody @Valid UserDto userDto,BindingResult bindingResult) {
@@ -59,7 +67,7 @@ public class AuthController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
+	
 	private List<UserDetailsErrors> extractErrors(BindingResult bindingResult) {
 		List<UserDetailsErrors> errorList = new ArrayList<>();
 		bindingResult.getFieldErrors().forEach(error -> {
@@ -68,6 +76,56 @@ public class AuthController {
 			errorList.add(err);
 		});
 		return errorList;
+	}
+	@GetMapping("/{username}/forgot")
+	public ResponseEntity<?> forgotPassword(@PathVariable("username") String username){
+		try {
+			LOGGER.info("Start- Forgot Password");
+			return new ResponseEntity<>(registerService.forgotPassword(username), HttpStatus.OK);
+
+		}
+		catch(TweetServiceException e) {
+			LOGGER.info("Exception occurred when resetting password", e.getMessage());
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+
+		}
+		
+		
+	}
+
+	@PostMapping("/{username}/verifyOtp")
+	public ResponseEntity<?> verifyOtp(@PathVariable("username") String username, @RequestBody OtpDto otp) {
+		
+			try {
+				LOGGER.info("Start- Verify OTP");
+				return new ResponseEntity<>(registerService.verifyOtp(username, otp), HttpStatus.OK);
+
+			} catch (TweetServiceException e) {
+				LOGGER.info("Exception occurred when verifying Otp", e.getMessage());
+				return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+
+			}
+		
+
+	}
+	@PostMapping("/{username}/resetpassword")
+	public ResponseEntity<?> resetPassword(@PathVariable("username") String username,@RequestBody PasswordDto password,BindingResult bindingResult) {
+		
+			try {
+				LOGGER.info("Start- Password Reset");
+				if (bindingResult.hasErrors()) {
+					LOGGER.info("Validation errors encountered when resetting password");
+					return new ResponseEntity<>(extractErrors(bindingResult), HttpStatus.BAD_REQUEST);
+				}
+				return new ResponseEntity<>(registerService.resetPassword(username, password), HttpStatus.OK);
+
+			} catch (TweetServiceException e) {
+				LOGGER.info("Exception occurred when resetting password", e.getMessage());
+				return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+
+			}
+		
+
 	}
 	
 
@@ -79,8 +137,8 @@ public class AuthController {
 
 			String uname = "";
 			String generateToken = "";
-			
-			if (userdetails.getPassword().equals(userlogincredentials.getPassword()))
+			String encodedPwd=passwordEncoder.encode(userdetails.getPassword());
+			if (encodedPwd.equals(userlogincredentials.getPassword()))
 					{
 				uname = userlogincredentials.getUserId();
 				generateToken = jwtutil.generateToken(userdetails);

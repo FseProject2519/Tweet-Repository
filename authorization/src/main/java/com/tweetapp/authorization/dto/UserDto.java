@@ -7,6 +7,8 @@ import javax.validation.constraints.Size;
 import com.tweetapp.authorization.util.EmailConstraint;
 import com.tweetapp.authorization.util.PasswordMatchConstraint;
 import com.tweetapp.authorization.util.UserIdConstraint;
+
+
 @PasswordMatchConstraint.List({ 
     @PasswordMatchConstraint(
       password = "password", 

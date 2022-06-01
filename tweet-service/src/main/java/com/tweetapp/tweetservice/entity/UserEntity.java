@@ -1,5 +1,7 @@
 package com.tweetapp.tweetservice.entity;
 
+import java.time.LocalDateTime;
+
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -44,5 +46,14 @@ public class UserEntity {
 
 	@Field(name = "contact_number")
 	private String contactNumber;
+	
+	@Field(name = "forgot_pwd_otp")
+	private String forgotPwdOtp;
+	
+	@Field(name="last_modified_date")
+	private LocalDateTime lastModifiedDate;
+	
+	@Field(name="valid_otp")
+	private boolean validOtp;
 
 }

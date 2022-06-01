@@ -31,15 +31,20 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 
-		web.ignoring().antMatchers("/api/v1.0/tweets/uservalidate");
-		web.ignoring().antMatchers("/api/v1.0/tweets/userlogin");
+		web.ignoring().antMatchers("/api/v1.0/authorization/tweets/uservalidate");
+		web.ignoring().antMatchers("/api/v1.0/authorization/tweets/userlogin");
 		web.ignoring().antMatchers("/v2/api-docs/**");
 		web.ignoring().antMatchers("/swagger-resouces/**");
-		web.ignoring().antMatchers("/api/v1.0/tweets/register");
+		web.ignoring().antMatchers("/api/v1.0/authorization/tweets/register");
 		web.ignoring().antMatchers("/swagger-ui.html");
 		web.ignoring().antMatchers("/configuration/ui");
 		web.ignoring().antMatchers("/configuration/security");
 		web.ignoring().antMatchers("/webjars/**");
+		web.ignoring().antMatchers("/swagger-ui/index.html");
+		web.ignoring().antMatchers("/api/v1.0/authorization/tweets/**");
+
+
+		
 
 	}
 

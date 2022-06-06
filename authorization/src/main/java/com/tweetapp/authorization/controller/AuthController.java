@@ -137,18 +137,17 @@ public class AuthController {
 
 			String uname = "";
 			String generateToken = "";
-			String encodedPwd=passwordEncoder.encode(userdetails.getPassword());
-			if (encodedPwd.equals(userlogincredentials.getPassword()))
+			if (passwordEncoder.matches(userlogincredentials.getPassword(), userdetails.getPassword()))
 					{
 				uname = userlogincredentials.getUserId();
 				generateToken = jwtutil.generateToken(userdetails);
 				LOGGER.info("End - userlogin - Successful");
 
 				return new ResponseEntity<>(new UserCredentials(uname, null, generateToken), HttpStatus.OK);
-			} else {
+			} 
 				LOGGER.info("End - userlogin - Wrong Credentials");
 				return new ResponseEntity<>("Not Accesible", HttpStatus.FORBIDDEN);
-			}
+			
 		} catch (Exception e) {
 			LOGGER.info("End - userlogin - Username Not Found");
 

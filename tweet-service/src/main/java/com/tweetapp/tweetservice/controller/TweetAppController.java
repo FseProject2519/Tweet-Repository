@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -59,8 +60,8 @@ public class TweetAppController {
 	// Tweet related methods
 
 	@PostMapping("/{username}/add")
-	public ResponseEntity<TweetResponseDto> postNewTweet(@PathVariable String username,
-			@RequestBody @Valid TweetDto tweetDto, BindingResult bindingResult) {
+	public ResponseEntity<TweetResponseDto> postNewTweet(@RequestHeader("Authorization") String token,
+			@PathVariable String username, @RequestBody @Valid TweetDto tweetDto, BindingResult bindingResult) {
 		TweetResponseDto tweetResponseDto = new TweetResponseDto();
 
 		try {
@@ -83,8 +84,9 @@ public class TweetAppController {
 	}
 
 	@PutMapping("/{username}/update/{tweetId}")
-	public ResponseEntity<TweetResponseDto> updateTweet(@PathVariable String tweetId,
-			@RequestBody @Valid TweetDto tweetDto, BindingResult bindingResult, @PathVariable String username) {
+	public ResponseEntity<TweetResponseDto> updateTweet(@RequestHeader("Authorization") String token,
+			@PathVariable String tweetId, @RequestBody @Valid TweetDto tweetDto, BindingResult bindingResult,
+			@PathVariable String username) {
 
 		TweetResponseDto tweetResponseDto = new TweetResponseDto();
 
@@ -109,7 +111,8 @@ public class TweetAppController {
 	}
 
 	@PatchMapping("/{username}/like/{tweetId}")
-	public ResponseEntity<TweetResponseDto> likeTweet(@PathVariable String tweetId, @PathVariable String username) {
+	public ResponseEntity<TweetResponseDto> likeTweet(@RequestHeader("Authorization") String token,
+			@PathVariable String tweetId, @PathVariable String username) {
 
 		TweetResponseDto tweetResponseDto = new TweetResponseDto();
 
@@ -126,7 +129,8 @@ public class TweetAppController {
 	}
 
 	@DeleteMapping("/{username}/delete/{tweetId}")
-	public ResponseEntity<TweetResponseDto> deleteTweet(@PathVariable String tweetId) {
+	public ResponseEntity<TweetResponseDto> deleteTweet(@RequestHeader("Authorization") String token,
+			@PathVariable String tweetId) {
 
 		TweetResponseDto tweetResponseDto = new TweetResponseDto();
 
@@ -145,8 +149,8 @@ public class TweetAppController {
 	}
 
 	@PostMapping("/{username}/reply/{tweetId}")
-	public ResponseEntity<TweetResponseDto> replyToTweet(@PathVariable String username, @PathVariable String tweetId,
-			@RequestBody @Valid TweetDto tweetDto) {
+	public ResponseEntity<TweetResponseDto> replyToTweet(@RequestHeader("Authorization") String token,
+			@PathVariable String username, @PathVariable String tweetId, @RequestBody @Valid TweetDto tweetDto) {
 
 		TweetResponseDto tweetResponseDto = new TweetResponseDto();
 
@@ -165,9 +169,10 @@ public class TweetAppController {
 	}
 
 	@GetMapping("/all")
-	public ResponseEntity<TweetResponseDto> getAllTweets(@RequestParam(required = false) String sortField,
-			@RequestParam(required = false) String sortOrder, @RequestParam(required = false) Integer page,
-			@RequestParam(required = false) Integer size, @RequestParam(required = false) boolean isPaged) {
+	public ResponseEntity<TweetResponseDto> getAllTweets(@RequestHeader("Authorization") String token,
+			@RequestParam(required = false) String sortField, @RequestParam(required = false) String sortOrder,
+			@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size,
+			@RequestParam(required = false) boolean isPaged) {
 
 		TweetResponseDto tweetResponseDto = new TweetResponseDto();
 
@@ -191,10 +196,10 @@ public class TweetAppController {
 	}
 
 	@GetMapping("/{username}")
-	public ResponseEntity<TweetResponseDto> getUserTweets(@PathVariable("username") String createdBy,
-			@RequestParam(required = false) String sortField, @RequestParam(required = false) String sortOrder,
-			@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size,
-			@RequestParam(required = false) boolean isPaged) {
+	public ResponseEntity<TweetResponseDto> getUserTweets(@RequestHeader("Authorization") String token,
+			@PathVariable("username") String createdBy, @RequestParam(required = false) String sortField,
+			@RequestParam(required = false) String sortOrder, @RequestParam(required = false) Integer page,
+			@RequestParam(required = false) Integer size, @RequestParam(required = false) boolean isPaged) {
 
 		TweetResponseDto tweetResponseDto = new TweetResponseDto();
 
@@ -220,13 +225,14 @@ public class TweetAppController {
 	}
 
 	@GetMapping("/search")
-	public ResponseEntity<TweetResponseDto> searchTweets(@RequestParam(required = false) String tweetMessage,
-			@RequestParam(required = false) String tweetTopic, @RequestParam(required = false) String createdBy,
-			@RequestParam(required = false) String startDateTime, @RequestParam(required = false) String endDateTime,
-			@RequestParam(required = false) Set<String> tag, @RequestParam(required = false) String repliedToTweet,
-			@RequestParam(required = false) Set<String> likedBy, @RequestParam(required = false) String sortField,
-			@RequestParam(required = false) String sortOrder, @RequestParam(required = false) Integer page,
-			@RequestParam(required = false) Integer size, @RequestParam(required = false) boolean isPaged) {
+	public ResponseEntity<TweetResponseDto> searchTweets(@RequestHeader("Authorization") String token,
+			@RequestParam(required = false) String tweetMessage, @RequestParam(required = false) String tweetTopic,
+			@RequestParam(required = false) String createdBy, @RequestParam(required = false) String startDateTime,
+			@RequestParam(required = false) String endDateTime, @RequestParam(required = false) Set<String> tag,
+			@RequestParam(required = false) String repliedToTweet, @RequestParam(required = false) Set<String> likedBy,
+			@RequestParam(required = false) String sortField, @RequestParam(required = false) String sortOrder,
+			@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size,
+			@RequestParam(required = false) boolean isPaged) {
 		TweetResponseDto tweetResponseDto = new TweetResponseDto();
 
 		try {
@@ -258,8 +264,8 @@ public class TweetAppController {
 	}
 
 	@GetMapping("/trend")
-	public ResponseEntity<TweetResponseDto> getTrendingTopics(@RequestParam(required = false) String startDateTime,
-			@RequestParam(required = false) String endDateTime) {
+	public ResponseEntity<TweetResponseDto> getTrendingTopics(@RequestHeader("Authorization") String token,
+			@RequestParam(required = false) String startDateTime, @RequestParam(required = false) String endDateTime) {
 
 		TweetResponseDto tweetResponseDto = new TweetResponseDto();
 		try {
@@ -284,7 +290,7 @@ public class TweetAppController {
 	}
 
 	@GetMapping("/all/hashtags")
-	public ResponseEntity<TweetResponseDto> getHashtags() {
+	public ResponseEntity<TweetResponseDto> getHashtags(@RequestHeader("Authorization") String token) {
 		TweetResponseDto tweetResponseDto = new TweetResponseDto();
 
 		try {
@@ -308,10 +314,10 @@ public class TweetAppController {
 	// User related methods
 
 	@GetMapping("/users/all")
-	public ResponseEntity<UserResponseDto> getAllUsers(@RequestParam(required = false) String sortField,
-			@RequestParam(required = false) String sortOrder, @RequestParam(required = false) Integer page,
-			@RequestParam(required = false) Integer size, @RequestParam(required = false) boolean isPaged)
-			throws TweetServiceException {
+	public ResponseEntity<UserResponseDto> getAllUsers(@RequestHeader("Authorization") String token,
+			@RequestParam(required = false) String sortField, @RequestParam(required = false) String sortOrder,
+			@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size,
+			@RequestParam(required = false) boolean isPaged) throws TweetServiceException {
 
 		UserResponseDto userResponseDto = new UserResponseDto();
 		try {
@@ -333,10 +339,11 @@ public class TweetAppController {
 	}
 
 	@GetMapping("/users/search/{username}")
-	public ResponseEntity<UserResponseDto> getUser(@PathVariable("username") String userId,
-			@RequestParam(required = false) String sortField, @RequestParam(required = false) String sortOrder,
-			@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size,
-			@RequestParam(required = false) boolean isPaged) throws TweetServiceException {
+	public ResponseEntity<UserResponseDto> getUser(@RequestHeader("Authorization") String token,
+			@PathVariable("username") String userId, @RequestParam(required = false) String sortField,
+			@RequestParam(required = false) String sortOrder, @RequestParam(required = false) Integer page,
+			@RequestParam(required = false) Integer size, @RequestParam(required = false) boolean isPaged)
+			throws TweetServiceException {
 
 		UserResponseDto userResponseDto = new UserResponseDto();
 
@@ -361,12 +368,12 @@ public class TweetAppController {
 	}
 
 	@GetMapping("/users/search")
-	public ResponseEntity<UserResponseDto> searchUsers(@RequestParam(required = false) String userId,
-			@RequestParam(required = false) String firstName, @RequestParam(required = false) String lastName,
-			@RequestParam(required = false) String email, @RequestParam(required = false) String sortField,
-			@RequestParam(required = false) String sortOrder, @RequestParam(required = false) Integer page,
-			@RequestParam(required = false) Integer size, @RequestParam(required = false) boolean isPaged)
-			throws TweetServiceException {
+	public ResponseEntity<UserResponseDto> searchUsers(@RequestHeader("Authorization") String token,
+			@RequestParam(required = false) String userId, @RequestParam(required = false) String firstName,
+			@RequestParam(required = false) String lastName, @RequestParam(required = false) String email,
+			@RequestParam(required = false) String sortField, @RequestParam(required = false) String sortOrder,
+			@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size,
+			@RequestParam(required = false) boolean isPaged) throws TweetServiceException {
 
 		UserResponseDto userResponseDto = new UserResponseDto();
 
@@ -390,8 +397,8 @@ public class TweetAppController {
 	}
 
 	@GetMapping("/users/usertags")
-	public ResponseEntity<UserResponseDto> getUsertags(@RequestParam(required = false) String userId)
-			throws TweetServiceException {
+	public ResponseEntity<UserResponseDto> getUsertags(@RequestHeader("Authorization") String token,
+			@RequestParam(required = false) String userId) throws TweetServiceException {
 		UserResponseDto userResponseDto = new UserResponseDto();
 
 		try {
@@ -405,7 +412,8 @@ public class TweetAppController {
 	}
 
 	@GetMapping("/{username}/export")
-	public void exportCSV(HttpServletResponse response, @PathVariable("username") String username) throws IOException {
+	public void exportCSV(@RequestHeader("Authorization") String token, HttpServletResponse response,
+			@PathVariable("username") String username) throws IOException {
 		try {
 			log.info("Start - exportCSV");
 

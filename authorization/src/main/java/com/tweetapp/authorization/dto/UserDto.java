@@ -40,7 +40,7 @@ public class UserDto {
 	private String firstName;
 	
 	@NotBlank(message = "Last name is mandatory, please provide a valid last name")
-	@Size(min=2)
+	@Size(min=1)
 	@Pattern(regexp="^[a-zA-Z]*",message="Please enter a valid last name")
 	private String lastName;
 	

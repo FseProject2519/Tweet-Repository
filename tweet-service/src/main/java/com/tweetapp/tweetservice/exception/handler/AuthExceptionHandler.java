@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.tweetapp.tweetservice.exception.AuthException;
 
 @ControllerAdvice
-public class MyExceptionHandler {
+public class AuthExceptionHandler {
 	@ExceptionHandler(AuthException.class)
 	@ResponseBody
 	public Map<String, Object> handler() {

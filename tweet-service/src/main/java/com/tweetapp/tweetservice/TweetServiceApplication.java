@@ -9,7 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.web.servlet.handler.MappedInterceptor;
 
-import com.tweetapp.tweetservice.exception.handler.MyHandlerInterceptor;
+import com.tweetapp.tweetservice.exception.handler.AuthHandlerInterceptor;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -32,7 +32,7 @@ public class TweetServiceApplication {
 
 	@Bean
 	@Autowired
-	public MappedInterceptor getMappedInterceptor(MyHandlerInterceptor myHandlerInterceptor) {
+	public MappedInterceptor getMappedInterceptor(AuthHandlerInterceptor myHandlerInterceptor) {
 		return new MappedInterceptor(new String[] { "/api/v1.0/tweets/**" }, myHandlerInterceptor);
 	}
 }

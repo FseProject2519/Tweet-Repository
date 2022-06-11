@@ -10,7 +10,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import com.tweetapp.tweetservice.utility.AuthUtil;
 
 @Component
-public class MyHandlerInterceptor implements HandlerInterceptor {
+public class AuthHandlerInterceptor implements HandlerInterceptor {
 
 	@Autowired
 	AuthUtil authUtil;

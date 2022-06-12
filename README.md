@@ -55,11 +55,13 @@ PROMETHEUS:
 1. Enter <Your IP address>:port in /tweet-service/src/main/resources/prometheus.yml  
 2. Start the application in STS - SECTION C or through Docker - SECTION D (preferred)  
 3. Open http://localhost:8090/actuator/prometheus in a browser to verify if data is getting generated  
+  ![image](https://user-images.githubusercontent.com/104539687/173221594-ab002ef9-c9e0-40a3-9be4-1b1dc756da79.png)  
 4. docker run -d -p 9090:9090 -v <complete path to the prometheus.yml file>:/etc/prometheus/prometheus.yml prom/prometheus  
   (Eg.: docker run -d -p 9090:9090 -v D:/mydisk/monitoring/src/main/resources/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus)  
 5. Open http://localhost:9090/  
 6. Go to: Status -> Targets and check if all statuses are UP  
-  
+![image](https://user-images.githubusercontent.com/104539687/173221655-d10a8c40-fca4-4fee-9eac-61417593688a.png)  
+
 GRAFANA:  
 1. docker run -d -p 3000:3000 grafana/grafana  
 2. Open http://localhost:3000/login  
@@ -67,5 +69,6 @@ GRAFANA:
 4. Go to: Configuration -> Data sources -> Add data source -> Prometheus  
 5. Enter URL: http://<Your IP address>:9090 and click 'Save & Test'    
 6. Go to: Create -> Import -> Enter 4701 (in Import via grafana.com text box) -> Click Load -> Select 'Prometheus' in the Prometheus drop down list -> Click Import  
-7. Wait for sometime and perform some api calls to see the statistics in the Grafana dashboard  
+7. Wait for around 20 mins and perform some api calls to see the statistics in the Grafana dashboard  
+![image](https://user-images.githubusercontent.com/104539687/173221548-0d68c973-bf5e-43d1-912f-9617303149ac.png)  
 

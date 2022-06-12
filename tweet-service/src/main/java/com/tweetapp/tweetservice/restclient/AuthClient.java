@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import com.tweetapp.tweetservice.dto.AuthResponse;
 
-@FeignClient(name = "authorization-service", url = "http://localhost:8085/api/v1.0/authorization/tweets")
+@FeignClient(name = "${auth.client.name}", url = "${auth.client.url}")
 public interface AuthClient {
 
 	@GetMapping("/uservalidate")

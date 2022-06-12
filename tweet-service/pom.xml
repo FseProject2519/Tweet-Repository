@@ -185,6 +185,7 @@
 				</executions>
 			</plugin>
 		</plugins>
+		<finalName>tweet-service</finalName>
 		<pluginManagement>
 			<plugins>
 				<plugin>

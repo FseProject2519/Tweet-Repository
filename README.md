@@ -71,4 +71,20 @@ GRAFANA:
 6. Go to: Create -> Import -> Enter 4701 (in Import via grafana.com text box) -> Click Load -> Select 'Prometheus' in the Prometheus drop down list -> Click Import  
 7. Wait for around 20 mins and perform some api calls to see the statistics in the Grafana dashboard  
 ![image](https://user-images.githubusercontent.com/104539687/173221548-0d68c973-bf5e-43d1-912f-9617303149ac.png)  
-
+  
+## SECTION H - Setting up ELK:  
+1. Run  bin\elasticsearch.bat  
+2. Copy the generated password and enrollment token and save them in a secure location. These values are shown only when you start Elasticsearch for the first time  
+3. Open http://localhost:9200/ to check if elasticsearch is up  
+4. Run  bin\kibana.bat  
+5. In your terminal, click the generated link to open Kibana in your browser.  
+6. In your browser, paste the enrollment token that you copied and click the button to connect your Kibana instance with Elasticsearch.  
+7. Prepare a logstash.conf file as shown in the example template below and paste it in the parent logstash folder (outside bin)  
+  ![image](https://user-images.githubusercontent.com/104539687/173227033-38ca5e4c-080e-4b66-894c-b020930f34ae.png)  
+8. Run bin/logstash -f logstash.conf  
+[  
+Steps 2, 6 and 7 are required only for the first time.  
+References:  
+  a. https://www.elastic.co/guide/en/elasticsearch/reference/current/configuring-stack-security.html ('Start Elasticsearch and enroll Kibana with security enabled' subheading)  
+  b. https://www.elastic.co/downloads/logstash  
+]  

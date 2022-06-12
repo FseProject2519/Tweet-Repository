@@ -13,3 +13,12 @@ docker run -d -p 9090:9090 -v <absolute_path_to_your_prometheus_file>:/etc/prome
 example: docker run -d -p 9090:9090 -v /mydisk/monitoring/src/main/resources/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus  
 
 docker run -d -p 3000:3000 grafana/grafana  
+
+Docker Steps:  
+1. Perform Maven clean and build all the services  
+2. Run the following commands in the respective service folders:  
+      a. docker build --tag=tweet-service .  
+      b. docker build --tag=authorization .  
+3. Run the following command in the outermost TweetRepository folder where docker-compose.yml is present:  
+      a. docker compose up  
+      b. To Stop: Ctrl + C (and/or) docker compose down  

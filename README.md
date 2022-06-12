@@ -15,7 +15,7 @@ example: docker run -d -p 9090:9090 -v /mydisk/monitoring/src/main/resources/pro
 docker run -d -p 3000:3000 grafana/grafana  
 
 Docker Steps:  
-1. Perform Maven clean and build all the services  
+1. Perform Maven clean and build for all the services  
 2. Run the following commands in the respective service folders:  
       a. docker build --tag=tweet-service .  
       b. docker build --tag=authorization .  

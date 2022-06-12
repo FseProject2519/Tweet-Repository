@@ -1,0 +1,33 @@
+version: "3"
+services:
+  authorization:
+      build: .
+      restart: always
+      image: authorization
+      container_name: authorization
+      networks:
+         - micro-service-network
+      ports:
+         - 8085:8085
+      expose:
+         - 8085
+      networks:
+         - micro-service-network
+  tweet-service:
+      build: .
+      restart: always
+      image: tweet-service
+      container_name: tweet-service
+      networks:
+         - micro-service-network
+      ports:
+         - 8090:8090
+      expose:
+         - 8090
+      depends_on:
+         - authorization
+      environment:
+         WAIT_HOSTS: authorization:8085      
+networks:
+    micro-service-network:
+      driver: bridge

@@ -53,8 +53,7 @@ services:
          - 8085:8085
       expose:
          - 8085
-      networks:
-         - micro-service-network
+         
   tweet-service:
       build: tweet-service/
       restart: always

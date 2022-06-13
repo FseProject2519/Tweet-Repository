@@ -28,13 +28,17 @@
   
 ## SECTION D - Running the services with Docker:  
 1. Update auth.client.url in the tweet service application.properties  
-2. Perform Maven clean and build for all the services as shown in SECTION B  
-3. Run the following commands in the respective service folders:  
-      a. docker build --tag=tweet-service .  
-      b. docker build --tag=authorization .  
-4. Run the following command in the outermost TweetRepository folder where docker-compose.yml is present:  
-      a. docker compose up  
-      b. To Stop: Ctrl + C (and/or) docker compose down  
+2. Perform Maven clean and build for all the services as shown in SECTION B   
+3. Run the following command in the outermost TweetRepository folder where docker-compose.yml is present:  
+      a. docker-compose build  
+      b. docker compose up  
+      c. To Stop: Ctrl + C (and/or) docker compose down  
+ [  
+ Note: If you get this error: Elasticsearch: Max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]  
+ Open Windows Powershell and enter the following commands:  
+ a. wsl -d docker-desktop  
+ b. sysctl -w vm.max_map_count=262144  
+ ]  
   
 ## SECTION E - Checking Sonar Report:  
 1. Go to StartSonar.bat location ( Eg. C:\Program Files\sonarqube-9.4.0.54424\bin\windows-x86-64)  
@@ -71,4 +75,13 @@ GRAFANA:
 6. Go to: Create -> Import -> Enter 4701 (in Import via grafana.com text box) -> Click Load -> Select 'Prometheus' in the Prometheus drop down list -> Click Import  
 7. Wait for around 20 mins and perform some api calls to see the statistics in the Grafana dashboard  
 ![image](https://user-images.githubusercontent.com/104539687/173221548-0d68c973-bf5e-43d1-912f-9617303149ac.png)  
-
+  
+## SECTION H - Setting up ELK:  
+1. Start the Docker containers as given in SECTON D
+2. Open http://localhost:5601 to view the Kibana console in the browser  
+3. Go to: Management -> Index Patterns -> Create Index Pattern  
+4. Enter 'logstash-*' in the Index Pattern field and click Next step  
+5. Select @timestamp in time filter field name and click Create Index Pattern  
+6. Go to: Discover (to see the logs)  
+7. On the left hand side under 'Available Fields' add 'message' field to get the logged messages as follows  
+  ![image](https://user-images.githubusercontent.com/104539687/173272560-cf882511-3021-4ceb-b829-e959e19b03dc.png)  

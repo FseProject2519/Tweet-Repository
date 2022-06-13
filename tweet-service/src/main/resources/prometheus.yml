@@ -11,6 +11,6 @@ scrape_configs:
     metrics_path: '/actuator/prometheus' # Job to scrape application metrics
     scrape_interval: 5s
     static_configs:
-      - targets: [''] #Enter IP address
+      - targets: [''] #Enter IP address:tweet service port (Eg. 192.168.1.1:8090)
     tls_config:
       insecure_skip_verify: true

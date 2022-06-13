@@ -16,6 +16,9 @@ import com.tweetapp.tweetservice.exception.TweetServiceException;
 import com.tweetapp.tweetservice.repository.UserRepository;
 import com.tweetapp.tweetservice.service.UserService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
 public class UserServiceImpl implements UserService {
 
@@ -27,6 +30,9 @@ public class UserServiceImpl implements UserService {
 			throws TweetServiceException {
 		try {
 			Sort sort = getUserSort(userSearchDto);
+
+			log.info("Finding User With The Criteria - {} and Sort Criteria - {}", userSearchDto, sort);
+
 			Pageable pageable = PageRequest.of(page != null ? page : 0, size != null ? size : 10, sort);
 			return userRepository.findAll(pageable);
 
@@ -37,8 +43,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserEntity> getAllUsers(UserSearchDto userSearchDto) throws TweetServiceException {
+	public List<UserEntity> getAllUsers() throws TweetServiceException {
 		try {
+
+			log.info("Finding All Users");
 			return userRepository.findAllByOrderByUserId();
 
 		} catch (Exception e) {
@@ -52,6 +60,9 @@ public class UserServiceImpl implements UserService {
 			throws TweetServiceException {
 		try {
 			Sort sort = getUserSort(userSearchDto);
+
+			log.info("Finding User With The Criteria - {} and Sort Criteria - {}", userSearchDto, sort);
+
 			Pageable pageable = PageRequest.of(page != null ? page : 0, size != null ? size : 10, sort);
 			return userRepository.searchUsersPaged(userSearchDto, pageable);
 		} catch (Exception e) {
@@ -63,6 +74,9 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<UserEntity> searchUsers(UserSearchDto userSearchDto) throws TweetServiceException {
 		try {
+
+			log.info("Finding User With The Criteria - {}", userSearchDto);
+
 			return userRepository.searchUsers(userSearchDto);
 		} catch (Exception e) {
 			throw new TweetServiceException(e.getMessage());
@@ -76,6 +90,9 @@ public class UserServiceImpl implements UserService {
 			List<String> userIdList = userRepository.getUserIds();
 
 			Collections.sort(userIdList);
+
+			log.info("Returning User tags - {}", userIdList.toString());
+
 			return userIdList;
 
 		} catch (Exception e) {

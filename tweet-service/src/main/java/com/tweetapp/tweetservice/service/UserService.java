@@ -18,7 +18,7 @@ public interface UserService {
 	Page<UserEntity> getAllUsersPaged(UserSearchDto userSearchDto, Integer page, Integer size)
 			throws TweetServiceException;
 
-	List<UserEntity> getAllUsers(UserSearchDto userSearchDto) throws TweetServiceException;
+	List<UserEntity> getAllUsers() throws TweetServiceException;
 
 	List<UserEntity> searchUsers(UserSearchDto userSearchDto) throws TweetServiceException;
 

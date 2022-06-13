@@ -28,13 +28,11 @@
   
 ## SECTION D - Running the services with Docker:  
 1. Update auth.client.url in the tweet service application.properties  
-2. Perform Maven clean and build for all the services as shown in SECTION B  
-3. Run the following commands in the respective service folders:  
-      a. docker build --tag=tweet-service .  
-      b. docker build --tag=authorization .  
-4. Run the following command in the outermost TweetRepository folder where docker-compose.yml is present:  
-      a. docker compose up  
-      b. To Stop: Ctrl + C (and/or) docker compose down  
+2. Perform Maven clean and build for all the services as shown in SECTION B   
+3. Run the following command in the outermost TweetRepository folder where docker-compose.yml is present:  
+      a. docker-compose build  
+      b. docker compose up  
+      c. To Stop: Ctrl + C (and/or) docker compose down  
   
 ## SECTION E - Checking Sonar Report:  
 1. Go to StartSonar.bat location ( Eg. C:\Program Files\sonarqube-9.4.0.54424\bin\windows-x86-64)  
@@ -73,18 +71,11 @@ GRAFANA:
 ![image](https://user-images.githubusercontent.com/104539687/173221548-0d68c973-bf5e-43d1-912f-9617303149ac.png)  
   
 ## SECTION H - Setting up ELK:  
-1. Run  bin\elasticsearch.bat  
-2. Copy the generated password and enrollment token and save them in a secure location. These values are shown only when you start Elasticsearch for the first time  
-3. Open http://localhost:9200/ to check if elasticsearch is up  
-4. Run  bin\kibana.bat  
-5. In your terminal, click the generated link to open Kibana in your browser.  
-6. In your browser, paste the enrollment token that you copied and click the button to connect your Kibana instance with Elasticsearch.  
-7. Prepare a logstash.conf file as shown in the example template below and paste it in the parent logstash folder (outside bin)  
-  ![image](https://user-images.githubusercontent.com/104539687/173227033-38ca5e4c-080e-4b66-894c-b020930f34ae.png)  
-8. Run bin/logstash -f logstash.conf  
-[  
-Steps 2, 6 and 7 are required only for the first time.  
-References:  
-  a. https://www.elastic.co/guide/en/elasticsearch/reference/current/configuring-stack-security.html ('Start Elasticsearch and enroll Kibana with security enabled' subheading)  
-  b. https://www.elastic.co/downloads/logstash  
-]  
+1. Start the Docker containers as given in SECTON D
+2. Open http://localhost:5601 to view the Kibana console in the browser  
+3. Go to: Management -> Index Patterns -> Create Index Pattern  
+4. Enter 'logstash-*' in the Index Pattern field and click Next step  
+5. Select @timestamp in time filter field name and click Create Index Pattern  
+6. Go to: Discover (to see the logs)  
+7. On the left hand side under 'Available Fields' add 'message' field to get the logged messages as follows  
+  ![image](https://user-images.githubusercontent.com/104539687/173272560-cf882511-3021-4ceb-b829-e959e19b03dc.png)  

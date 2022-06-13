@@ -75,3 +75,11 @@ buildNumber.properties
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 sonar-build-integration.yml
+
+# Elasticsearch
+.lock
+.st
+.cfe
+.tlog
+.ckp
+.si

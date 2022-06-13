@@ -24,7 +24,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configure(HttpSecurity http) throws Exception {
 
 		http.csrf().disable().authorizeRequests().anyRequest().authenticated().and().exceptionHandling().and()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+		.logout(logout->logout.logoutUrl("/api/v1.0/authorization/tweets/logout")
+				.logoutSuccessUrl("/api/v1.0/authorization/tweets/userlogin")
+				.invalidateHttpSession(true)
+				);
 
 	}
 
@@ -33,6 +37,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		web.ignoring().antMatchers("/api/v1.0/authorization/tweets/uservalidate");
 		web.ignoring().antMatchers("/api/v1.0/authorization/tweets/userlogin");
+		web.ignoring().antMatchers("/api/v1.0/authorization/tweets/logout");
+
 		web.ignoring().antMatchers("/v2/api-docs/**");
 		web.ignoring().antMatchers("/swagger-resouces/**");
 		web.ignoring().antMatchers("/api/v1.0/authorization/tweets/register");

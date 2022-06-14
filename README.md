@@ -1,4 +1,8 @@
 # Tweet-Repository
+## Documents  
+Error/Defect Log - https://fseproject2519.atlassian.net/l/c/70FYSXo7  
+Project Management - JIRA - https://fseproject2519.atlassian.net/jira/software/projects/TWEET/boards/1/roadmap  
+Sonar Report - 
   
 ## SECTION A - Setting up the service in local:  
 1. Clone the project in local using the command : git clone https://github.com/FseProject2519/Tweet-Repository.git   
@@ -33,6 +37,12 @@
       a. docker-compose build  
       b. docker compose up  
       c. To Stop: Ctrl + C (and/or) docker compose down  
+ [  
+ Note: If you get this error: Elasticsearch: Max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]  
+ Open Windows Powershell and enter the following commands:  
+ a. wsl -d docker-desktop  
+ b. sysctl -w vm.max_map_count=262144  
+ ]  
   
 ## SECTION E - Checking Sonar Report:  
 1. Go to StartSonar.bat location ( Eg. C:\Program Files\sonarqube-9.4.0.54424\bin\windows-x86-64)  

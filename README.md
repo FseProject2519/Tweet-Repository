@@ -1,8 +1,12 @@
 # Tweet-Repository
 ## Documents  
+Project Documentation -  
+Surefire Test Report -  
 Error/Defect Log - https://fseproject2519.atlassian.net/l/c/70FYSXo7  
 Project Management - JIRA - https://fseproject2519.atlassian.net/jira/software/projects/TWEET/boards/1/roadmap  
-Sonar Report - 
+Sonar Report -  
+Postman Collection -  
+Screenshots -  
   
 ## SECTION A - Setting up the service in local:  
 1. Clone the project in local using the command : git clone https://github.com/FseProject2519/Tweet-Repository.git   

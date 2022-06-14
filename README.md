@@ -1,12 +1,15 @@
 # Tweet-Repository
 ## Documents  
-Project Documentation -  
-Surefire Test Report -  
-Error/Defect Log - https://fseproject2519.atlassian.net/l/c/70FYSXo7  
-Project Management - JIRA - https://fseproject2519.atlassian.net/jira/software/projects/TWEET/boards/1/roadmap  
-Sonar Report -  
-Postman Collection -  
-Screenshots -  
+1. Swagger URLs:  
+    a. Tweet Service - http://localhost:8090/swagger-ui/index.html#/  
+    b. Authorization Service - http://localhost:8085/swagger-ui/index.html#/  
+2. Postman Collection -  
+3. Project Documentation -  
+4. Surefire Test Report -  
+5. Error/Defect Log - https://fseproject2519.atlassian.net/l/c/70FYSXo7  
+6. Project Management - JIRA - https://fseproject2519.atlassian.net/jira/software/projects/TWEET/boards/1/roadmap  
+7. Sonar Report -  
+8. Screenshots -  
   
 ## SECTION A - Setting up the service in local:  
 1. Clone the project in local using the command : git clone https://github.com/FseProject2519/Tweet-Repository.git   

@@ -11,9 +11,11 @@ import com.tweetapp.authorization.dto.PasswordDto;
 import com.tweetapp.authorization.dto.UserDto;
 import com.tweetapp.authorization.entity.UserEntity;
 import com.tweetapp.authorization.event.NotificationEvent;
+import com.tweetapp.authorization.event.OnUserLogoutSuccess;
 import com.tweetapp.authorization.exception.TweetServiceException;
 import com.tweetapp.authorization.repository.UserRepository;
 import com.tweetapp.authorization.service.RegisterService;
+import com.tweetapp.authorization.util.LoggedOutJwtTokenCache;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -41,6 +43,9 @@ public class RegisterServiceImpl implements RegisterService{
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private LoggedOutJwtTokenCache tokenCache;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(RegisterServiceImpl.class);
 
@@ -162,5 +167,29 @@ public class RegisterServiceImpl implements RegisterService{
 			throw new TweetServiceException(e.getMessage());
 		}
 	}
+
+	@Override
+	public void userLogout(OnUserLogoutSuccess onUserLogoutSuccess) {
+		LOGGER.info("Invalidating the token for user logout");
+		tokenCache.markLogoutEventForToken(onUserLogoutSuccess);
+		 
+	}
+	
+	@Override
+	public  boolean validateTokenIsNotForALoggedOut(String authToken) {
+		 LOGGER.info("validateTokenIsNotForALoggedOut checking...");
+	    OnUserLogoutSuccess previouslyLoggedOutEvent = tokenCache.getLogoutEventForToken(authToken);
+	    if (previouslyLoggedOutEvent != null) {
+	        String userName = previouslyLoggedOutEvent.getUserName();
+	        String errorMessage = String.format("Token corresponds to an already logged out user [%s]. Please login again", userName);
+	        LOGGER.info(errorMessage);
+	        return false;
+	    }
+	    else {
+	    	return true;
+	    }
+	
+	}
+	
 
 }

@@ -7,8 +7,12 @@ import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import com.tweetapp.authorization.event.OnUserLogoutSuccess;
+import com.tweetapp.authorization.util.LoggedOutJwtTokenCache;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -19,6 +23,10 @@ public class JwtUtil {
 	private static final Logger LOGGER = LoggerFactory.getLogger(JwtUtil.class);
 
 	private String secretkey = "${jwt.secret}";
+	
+	
+	
+	
 
 	public String extractUsername(String token) {
 		LOGGER.info("Start - extractUsername");
@@ -73,10 +81,14 @@ public class JwtUtil {
 		LOGGER.info("Start - validateToken");
 
 		try {
-			Jwts.parser().setSigningKey(secretkey).parseClaimsJws(token).getBody();
-			LOGGER.info("Start - validateToken - Successful");
 
-			return true;
+			Jwts.parser().setSigningKey(secretkey).parseClaimsJws(token)
+			.getBody();
+			
+				LOGGER.info("Start - validateToken - Successful");
+
+				return true;
+		
 		} catch (Exception e) {
 			LOGGER.info("Start - validateToken - Invalid token");
 
@@ -84,4 +96,18 @@ public class JwtUtil {
 		}
 
 	}
+
+	public Date getTokenExpiryFromJWT(String token) {
+		try {
+		return Jwts.parser().setSigningKey(secretkey).parseClaimsJws(token)
+		.getBody().getExpiration();
+		}
+		catch(Exception e) {
+			LOGGER.info("Exception in getting expiration time of token");
+			
+		}
+		return null;
+	}
+	
+	
 }

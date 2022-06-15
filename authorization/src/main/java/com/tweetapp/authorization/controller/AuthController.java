@@ -27,6 +27,7 @@ import com.tweetapp.authorization.dto.PasswordDto;
 import com.tweetapp.authorization.dto.UserCredentials;
 import com.tweetapp.authorization.dto.UserDetailsErrors;
 import com.tweetapp.authorization.dto.UserDto;
+import com.tweetapp.authorization.event.OnUserLogoutSuccess;
 import com.tweetapp.authorization.exception.TweetServiceException;
 import com.tweetapp.authorization.service.DetailsService;
 import com.tweetapp.authorization.service.JwtUtil;
@@ -48,6 +49,9 @@ public class AuthController {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	
+	
 	
 	
 	@PostMapping("/register")
@@ -168,7 +172,7 @@ public class AuthController {
 			return new ResponseEntity<>(res, HttpStatus.FORBIDDEN);
 		} else {
 			String token1 = token.substring(7);
-			if (jwtutil.validateToken(token1)) {
+			if (jwtutil.validateToken(token1) && registerService.validateTokenIsNotForALoggedOut(token1)) {
 					res.setName(jwtutil.extractUsername(token1));
 					res.setValid(true);
 				
@@ -185,4 +189,30 @@ public class AuthController {
 		return new ResponseEntity<>(res, HttpStatus.OK);
 
 	}
+	@GetMapping("/logout")
+	public ResponseEntity<?> logoutUser(@RequestHeader("Authorization") String token) {
+		LOGGER.info("Start - logoutUser");
+try {
+		AuthResponse res = new AuthResponse();
+		
+		OnUserLogoutSuccess onUserLogoutSuccess=OnUserLogoutSuccess.builder().token(token.substring(7)).userName(jwtutil.extractUsername(token.substring(7))).build();
+
+		registerService.userLogout(onUserLogoutSuccess);
+        LOGGER.info(String.format("Log out success event received for user [%s] ", onUserLogoutSuccess.getUserName()));
+
+		LOGGER.info("End - logoutUser - Successful");
+		res.setName(onUserLogoutSuccess.getUserName());
+		res.setValid(false);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+}
+catch(Exception e) {
+	LOGGER.info("End - logoutUser - Exception");
+
+	return new ResponseEntity<>("Not Accesible", HttpStatus.FORBIDDEN);
+}
+
+	}
+	
+
+	
 }

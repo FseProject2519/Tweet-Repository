@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -48,7 +49,7 @@ public class TweetServiceImpl implements TweetService {
 	void setTweetRepository(TweetRepository tweetRepository) {
 		this.tweetRepository = tweetRepository;
 	}
-	
+
 	TweetRepository getTweetRepository() {
 		return this.tweetRepository;
 	}
@@ -77,16 +78,17 @@ public class TweetServiceImpl implements TweetService {
 	public String updateTweet(TweetDto tweetDto, String tweetId) throws TweetServiceException {
 		try {
 			TweetEntity tweetEntity = modelMapper.map(tweetDto, TweetEntity.class);
-			Optional<TweetEntity> tweet = tweetRepository.findById(tweetId);
-			if (tweet.isPresent()) {
-				tweetEntity.setId(tweetId);
-				tweetEntity.setLastModifiedDateTime(LocalDateTime.now());
-				tweetEntity.setHashtags(parseMessageForTags(tweetEntity.getTweetMessage(), "#"));
-				tweetEntity.setUsertags(parseMessageForTags(tweetEntity.getTweetMessage(), "@"));
+			Optional<TweetEntity> existingTweetOptional = tweetRepository.findById(tweetId);
+			if (existingTweetOptional.isPresent()) {
+				TweetEntity existingTweetEntity = existingTweetOptional.get();
+				existingTweetEntity.setTweetMessage(tweetEntity.getTweetMessage());
+				existingTweetEntity.setLastModifiedDateTime(LocalDateTime.now());
+				existingTweetEntity.setHashtags(parseMessageForTags(tweetEntity.getTweetMessage(), "#"));
+				existingTweetEntity.setUsertags(parseMessageForTags(tweetEntity.getTweetMessage(), "@"));
+				
+				log.info("Updating Tweet - {}", existingTweetEntity);
 
-				log.info("Updating Tweet - {}", tweetEntity);
-
-				return tweetRepository.save(tweetEntity).getId() != null ? "Tweet Updated Successfully"
+				return tweetRepository.save(existingTweetEntity).getId() != null ? "Tweet Updated Successfully"
 						: "Tweet Update Failed";
 			} else {
 				return TWEET_NOT_FOUND;
@@ -118,12 +120,18 @@ public class TweetServiceImpl implements TweetService {
 
 	@Override
 	public String likeTweet(String tweetId, String username) throws TweetServiceException {
+		
 		try {
 			Optional<TweetEntity> tweet = tweetRepository.findById(tweetId);
 			if (tweet.isPresent()) {
-				tweet.get().getLikedBy().add(username);
-
-
+				Set<String> likedBySet = tweet.get().getLikedBy();
+				if (likedBySet == null) {
+					likedBySet = new HashSet<>();
+					likedBySet.add(username);
+					tweet.get().setLikedBy(likedBySet);
+				} else {
+					tweet.get().getLikedBy().add(username);
+				}
 				log.info("Liking Tweet - {}", tweet);
 				tweet.get().setLastModifiedDateTime(LocalDateTime.now());
 

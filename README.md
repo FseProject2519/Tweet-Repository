@@ -40,7 +40,7 @@
 ## SECTION D - Running the services with Docker:  
 1. Update auth.client.url in the tweet service application.properties  
 2. Perform Maven clean and build for all the services as shown in SECTION B   
-3. Run the following command in the outermost TweetRepository folder where docker-compose.yml is present:  
+3. Run the following commands in the outermost TweetRepository folder where docker-compose.yml is present:  
       a. docker-compose build  
       b. docker compose up  
       c. To Stop: Ctrl + C (and/or) docker compose down  
@@ -54,12 +54,12 @@
 ## SECTION E - Checking Sonar Report:  
 1. Go to StartSonar.bat location ( Eg. C:\Program Files\sonarqube-9.4.0.54424\bin\windows-x86-64)  
 2. Run StartSonar.bat  
-3. Go to tweet service folder and run:  
+3. Go to tweet service folder and run the following command:  
    mvn clean verify sonar:sonar -Dsonar.projectKey=TweetAppLocal -Dsonar.host.url=http://localhost:9000 -Dsonar.login=4750b9fc8471246357269fb6aa81ed9e9f9c710d  
 4. Open http://localhost:9000 and enter username = 'guest' and password = 'guest' to see the Sonar Report  
     
 ## SECTION F - Generating Maven surefire report:  
-1. Go to tweet service folder and perform the following commands:  
+1. Go to tweet service folder and run the following commands:  
     a. mvn site  
     b. mvn surefire-report:report  
     c. mvn site -DgenerateReports=false  
@@ -71,14 +71,18 @@ PROMETHEUS:
 2. Start the application in STS - SECTION C or through Docker - SECTION D (preferred)  
 3. Open http://localhost:8090/actuator/prometheus in a browser to verify if data is getting generated  
   ![image](https://user-images.githubusercontent.com/104539687/173221594-ab002ef9-c9e0-40a3-9be4-1b1dc756da79.png)  
-4. docker run -d -p 9090:9090 -v <complete path to the prometheus.yml file>:/etc/prometheus/prometheus.yml prom/prometheus  
+4. Run the following commands:  
+    a. docker pull prom/prometheus (Only for the first time)  
+    b. docker run -d -p 9090:9090 -v <complete path to the prometheus.yml file>:/etc/prometheus/prometheus.yml prom/prometheus  
   (Eg.: docker run -d -p 9090:9090 -v D:/mydisk/monitoring/src/main/resources/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus)  
 5. Open http://localhost:9090/  
 6. Go to: Status -> Targets and check if all statuses are UP  
 ![image](https://user-images.githubusercontent.com/104539687/173221655-d10a8c40-fca4-4fee-9eac-61417593688a.png)  
 
 GRAFANA:  
-1. docker run -d -p 3000:3000 grafana/grafana  
+1. Run the following commands:  
+    a. docker pull grafana/grafana (Only for the first time)  
+    b. docker run -d -p 3000:3000 grafana/grafana  
 2. Open http://localhost:3000/login  
 3. Enter username = 'admin' and password = 'admin'  
 4. Go to: Configuration -> Data sources -> Add data source -> Prometheus  
@@ -88,7 +92,7 @@ GRAFANA:
 ![image](https://user-images.githubusercontent.com/104539687/173221548-0d68c973-bf5e-43d1-912f-9617303149ac.png)  
   
 ## SECTION H - Setting up ELK:  
-1. Start the Docker containers as given in SECTON D
+1. Start the Docker containers as given in SECTON D  
 2. Open http://localhost:5601 to view the Kibana console in the browser  
 3. Go to: Management -> Index Patterns -> Create Index Pattern  
 4. Enter 'logstash-*' in the Index Pattern field and click Next step  

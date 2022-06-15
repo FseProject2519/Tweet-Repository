@@ -4,7 +4,7 @@
     a. Tweet Service - http://localhost:8090/swagger-ui/index.html#/  
     b. Authorization Service - http://localhost:8085/swagger-ui/index.html#/  
 2. Postman Collection - https://github.com/FseProject2519/Tweet-Repository/blob/sam-dev/Project_Documents/Postman_Api_Collection/Fse1_2519_Tweet_App_Collection.postman_collection.json  
-3. Maven Project Documentation - https://github.com/FseProject2519/Tweet-Repository/blob/sam-dev/Project_Documents/Maven_Site/site/index.html   
+3. Maven Project Documentation (Download and open index.html in browser) - https://github.com/FseProject2519/Tweet-Repository/blob/sam-dev/Project_Documents/Maven_Site/site/index.html   
 4. Surefire Test Report - https://github.com/FseProject2519/Tweet-Repository/blob/sam-dev/Project_Documents/Reports/MAVEN_SUREFIRE_TEST_REPORT.pdf  
 5. Unit Test Report - https://github.com/FseProject2519/Tweet-Repository/blob/sam-dev/Project_Documents/Reports/UNIT_TEST_REPORT.pdf  
 6. Error/Defect Log - https://fseproject2519.atlassian.net/l/c/70FYSXo7  

@@ -1,0 +1,634 @@
+{
+	"info": {
+		"_postman_id": "1f64c618-ef0e-4ad1-9665-203c86ee2c05",
+		"name": "Fse1_2519_Tweet_App_Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "authorization_service_endpoints",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "  {\"userId\": \"samyukthas\",\r\n  \"password\": \"Abcd1234!@#$\",\r\n  \"confirmPassword\" : \"Abcd1234!@#$\",\r\n  \"firstName\": \"Sam\",\r\n  \"lastName\": \"S\",\r\n  \"email\": \"25samyu@mail.com\",\r\n  \"contactNumber\": \"1234567890\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8085/api/v1.0/authorization/tweets/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"v1.0",
+								"authorization",
+								"tweets",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "  {\"userId\": \"samyukthas\",\r\n  \"password\": \"Abcd1234!@#$\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8085/api/v1.0/authorization/tweets/userlogin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"v1.0",
+								"authorization",
+								"tweets",
+								"userlogin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Forgot Password",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8085/api/v1.0/authorization/tweets/samyuktha/forgot",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"v1.0",
+								"authorization",
+								"tweets",
+								"samyuktha",
+								"forgot"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify OTP",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"otp\":\"flEXfOo0\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8085/api/v1.0/authorization/tweets/samyuktha/verifyOtp",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"v1.0",
+								"authorization",
+								"tweets",
+								"samyuktha",
+								"verifyOtp"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\":\"Dcba4321$#@!\",\r\n    \"confirmPassword\":\"Dcba4321$#@!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8085/api/v1.0/authorization/tweets/samyuktha/resetpassword",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"v1.0",
+								"authorization",
+								"tweets",
+								"samyuktha",
+								"resetpassword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validate User Token",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": null
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": null
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "tweet_service_endpoints",
+			"item": [
+				{
+					"name": "user_details_endpoints",
+					"item": [
+						{
+							"name": "Get All Users",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYW15dWt0aGFzIiwiZXhwIjoxNjU0NDgxNDIzLCJpYXQiOjE2NTQ0Nzk2MjN9.yn8oEQ9WgFtFRf0KSE_2loMmwxbG8Co2g1RI7dXuMgM",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8090/api/v1.0/tweets/users/all?isPaged=false",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8090",
+									"path": [
+										"api",
+										"v1.0",
+										"tweets",
+										"users",
+										"all"
+									],
+									"query": [
+										{
+											"key": "isPaged",
+											"value": "false"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get One User",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYW15dWt0aGFzIiwiZXhwIjoxNjU0NDgxNDIzLCJpYXQiOjE2NTQ0Nzk2MjN9.yn8oEQ9WgFtFRf0KSE_2loMmwxbG8Co2g1RI7dXuMgM",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8090/api/v1.0/tweets/users/search/deep@19?isPaged=false",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8090",
+									"path": [
+										"api",
+										"v1.0",
+										"tweets",
+										"users",
+										"search",
+										"deep@19"
+									],
+									"query": [
+										{
+											"key": "isPaged",
+											"value": "false"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Search User",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYW15dWt0aGFzIiwiZXhwIjoxNjU0NDgxNDIzLCJpYXQiOjE2NTQ0Nzk2MjN9.yn8oEQ9WgFtFRf0KSE_2loMmwxbG8Co2g1RI7dXuMgM",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8090/api/v1.0/tweets/users/search?email=sam@mail.com&isPaged=false",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8090",
+									"path": [
+										"api",
+										"v1.0",
+										"tweets",
+										"users",
+										"search"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "sam@mail.com"
+										},
+										{
+											"key": "isPaged",
+											"value": "false"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Usertags",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8090/api/v1.0/tweets/users/usertags?Authorization=Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYW15dWt0aGFzIiwiZXhwIjoxNjU0NDgxNDIzLCJpYXQiOjE2NTQ0Nzk2MjN9.yn8oEQ9WgFtFRf0KSE_2loMmwxbG8Co2g1RI7dXuMgM",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8090",
+									"path": [
+										"api",
+										"v1.0",
+										"tweets",
+										"users",
+										"usertags"
+									],
+									"query": [
+										{
+											"key": "Authorization",
+											"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYW15dWt0aGFzIiwiZXhwIjoxNjU0NDgxNDIzLCJpYXQiOjE2NTQ0Nzk2MjN9.yn8oEQ9WgFtFRf0KSE_2loMmwxbG8Co2g1RI7dXuMgM"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "tweet_details_endpoints",
+					"item": [
+						{
+							"name": "Post Tweet",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYW15dWt0aGFzIiwiZXhwIjoxNjU0NDgxNDIzLCJpYXQiOjE2NTQ0Nzk2MjN9.yn8oEQ9WgFtFRf0KSE_2loMmwxbG8Co2g1RI7dXuMgM",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"tweetMessage\":\"Hi @sam and #test are escaped\",\"tweetTopic\":\"test\",\"createdBy\":\"sam25\",\"repliedToTweet\":\"\",\"likedBy\":[\"dee@19\",\"sow@21\"]}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8090/api/v1.0/tweets/sam25/add",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8090",
+									"path": [
+										"api",
+										"v1.0",
+										"tweets",
+										"sam25",
+										"add"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Tweet",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": null
+							},
+							"response": []
+						},
+						{
+							"name": "Reply Tweet",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": null
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Tweets",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYW15dWt0aGFzIiwiZXhwIjoxNjU0NDgxNDIzLCJpYXQiOjE2NTQ0Nzk2MjN9.yn8oEQ9WgFtFRf0KSE_2loMmwxbG8Co2g1RI7dXuMgM",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8090/api/v1.0/tweets/all?isPaged=false",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8090",
+									"path": [
+										"api",
+										"v1.0",
+										"tweets",
+										"all"
+									],
+									"query": [
+										{
+											"key": "isPaged",
+											"value": "false"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get User Tweets",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYW15dWt0aGFzIiwiZXhwIjoxNjU0NDgxNDIzLCJpYXQiOjE2NTQ0Nzk2MjN9.yn8oEQ9WgFtFRf0KSE_2loMmwxbG8Co2g1RI7dXuMgM",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8090/api/v1.0/tweets/sam@25?isPaged=false",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8090",
+									"path": [
+										"api",
+										"v1.0",
+										"tweets",
+										"sam@25"
+									],
+									"query": [
+										{
+											"key": "isPaged",
+											"value": "false"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Search Tweets",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYW15dWt0aGFzIiwiZXhwIjoxNjU0NDgxNDIzLCJpYXQiOjE2NTQ0Nzk2MjN9.yn8oEQ9WgFtFRf0KSE_2loMmwxbG8Co2g1RI7dXuMgM",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8090/api/v1.0/tweets/search?tag=test&isPaged=true",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8090",
+									"path": [
+										"api",
+										"v1.0",
+										"tweets",
+										"search"
+									],
+									"query": [
+										{
+											"key": "tag",
+											"value": "test"
+										},
+										{
+											"key": "isPaged",
+											"value": "true"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Like tweet",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYW15dWt0aGFzIiwiZXhwIjoxNjU0NDgxNDIzLCJpYXQiOjE2NTQ0Nzk2MjN9.yn8oEQ9WgFtFRf0KSE_2loMmwxbG8Co2g1RI7dXuMgM",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8090/api/v1.0/tweets/sam@25/like/627c9be48cab047c6f38921f",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8090",
+									"path": [
+										"api",
+										"v1.0",
+										"tweets",
+										"sam@25",
+										"like",
+										"627c9be48cab047c6f38921f"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": "",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Hashtags",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYW15dWt0aGFzIiwiZXhwIjoxNjU0NDgxNDIzLCJpYXQiOjE2NTQ0Nzk2MjN9.yn8oEQ9WgFtFRf0KSE_2loMmwxbG8Co2g1RI7dXuMgM",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8090/api/v1.0/tweets/all/hashtags",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8090",
+									"path": [
+										"api",
+										"v1.0",
+										"tweets",
+										"all",
+										"hashtags"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Tweet Trend",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8090/api/v1.0/tweets/trend?Authorization=Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYW15dWt0aGFzIiwiZXhwIjoxNjU0NDgxNDIzLCJpYXQiOjE2NTQ0Nzk2MjN9.yn8oEQ9WgFtFRf0KSE_2loMmwxbG8Co2g1RI7dXuMgM",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8090",
+									"path": [
+										"api",
+										"v1.0",
+										"tweets",
+										"trend"
+									],
+									"query": [
+										{
+											"key": "Authorization",
+											"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYW15dWt0aGFzIiwiZXhwIjoxNjU0NDgxNDIzLCJpYXQiOjE2NTQ0Nzk2MjN9.yn8oEQ9WgFtFRf0KSE_2loMmwxbG8Co2g1RI7dXuMgM"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Export Tweet",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYW15dWt0aGFzIiwiZXhwIjoxNjU0NDgxNDIzLCJpYXQiOjE2NTQ0Nzk2MjN9.yn8oEQ9WgFtFRf0KSE_2loMmwxbG8Co2g1RI7dXuMgM",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8090/api/v1.0/tweets/sam@25/export",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8090",
+									"path": [
+										"api",
+										"v1.0",
+										"tweets",
+										"sam@25",
+										"export"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Tweet",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": null
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}

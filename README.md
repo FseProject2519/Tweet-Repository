@@ -3,13 +3,14 @@
 1. Swagger URLs:  
     a. Tweet Service - http://localhost:8090/swagger-ui/index.html#/  
     b. Authorization Service - http://localhost:8085/swagger-ui/index.html#/  
-2. Postman Collection -  
-3. Project Documentation -  
-4. Surefire Test Report -  
-5. Error/Defect Log - https://fseproject2519.atlassian.net/l/c/70FYSXo7  
-6. Project Management - JIRA - https://fseproject2519.atlassian.net/jira/software/projects/TWEET/boards/1/roadmap  
-7. Sonar Report -  
-8. Screenshots -  
+2. Postman Collection - https://github.com/FseProject2519/Tweet-Repository/blob/sam-dev/Project_Documents/Postman_Api_Collection/Fse1_2519_Tweet_App_Collection.postman_collection.json  
+3. Maven Project Documentation - https://github.com/FseProject2519/Tweet-Repository/blob/sam-dev/Project_Documents/Maven_Site/site/index.html   
+4. Surefire Test Report - https://github.com/FseProject2519/Tweet-Repository/blob/sam-dev/Project_Documents/Reports/MAVEN_SUREFIRE_TEST_REPORT.pdf  
+5. Unit Test Report - https://github.com/FseProject2519/Tweet-Repository/blob/sam-dev/Project_Documents/Reports/UNIT_TEST_REPORT.pdf  
+6. Error/Defect Log - https://fseproject2519.atlassian.net/l/c/70FYSXo7  
+7. Project Management - JIRA - https://fseproject2519.atlassian.net/jira/software/projects/TWEET/boards/1/roadmap  
+8. Sonar Report - https://github.com/FseProject2519/Tweet-Repository/blob/sam-dev/Project_Documents/Reports/SONAR_REPORT.pdf  
+9. Screenshots - https://github.com/FseProject2519/Tweet-Repository/tree/sam-dev/Project_Documents/Screenshots  
   
 ## SECTION A - Setting up the service in local:  
 1. Clone the project in local using the command : git clone https://github.com/FseProject2519/Tweet-Repository.git   

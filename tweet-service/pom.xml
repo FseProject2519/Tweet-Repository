@@ -13,10 +13,35 @@
 	<artifactId>tweet-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>tweet-service</name>
-	<description>FSE1 Project</description>
+	<description>This is a project for FSE 1 done by Samyuktha S and Deeptha G</description>
+	<url>https://github.com/FseProject2519/Tweet-Repository</url>
+	<developers>
+		<developer>
+			<id>882877</id>
+			<name>Samyuktha S</name>
+			<email>samyuktha.s@cognizant.com</email>
+			<organization>Cognizant</organization>
+			<roles>
+				<role>Junior Software Engineer</role>
+			</roles>
+			<timezone>India</timezone>
+		</developer>
+		<developer>
+			<id>882857</id>
+			<name>Deeptha G</name>
+			<email>deeptha.giridharan@cognizant.com</email>
+			<organization>Cognizant</organization>
+			<roles>
+				<role>Junior Software Engineer</role>
+			</roles>
+			<timezone>India</timezone>
+		</developer>
+	</developers>
 	<properties>
 		<java.version>1.8</java.version>
-		<sonar.organization>fseproject2519</sonar.organization>
+		<sonar.organization>
+			fseproject2519
+		</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<jacoco.version>0.8.6</jacoco.version>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
@@ -215,5 +240,4 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-
 </project>

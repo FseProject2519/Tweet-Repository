@@ -101,3 +101,8 @@ GRAFANA:
 6. Go to: Discover (to see the logs)  
 7. On the left hand side under 'Available Fields' add 'message' field to get the logged messages as follows  
   ![image](https://user-images.githubusercontent.com/104539687/173272560-cf882511-3021-4ceb-b829-e959e19b03dc.png)  
+    
+## SECTION I - Rabbit MQ Setup:  
+1. Start RabbitMQ service in local  
+2. Open http://localhost:15672 to view Rabbit MQ management console  
+3. Go to queues tab to see the created queues  

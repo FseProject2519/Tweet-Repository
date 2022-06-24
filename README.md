@@ -7,8 +7,8 @@
 3. Maven Project Documentation (Download and open index.html in browser) - https://github.com/FseProject2519/Tweet-Repository/blob/sam-dev/Project_Documents/Maven_Site/site/index.html   
 4. Surefire Test Report - https://github.com/FseProject2519/Tweet-Repository/blob/sam-dev/Project_Documents/Reports/MAVEN_SUREFIRE_TEST_REPORT.pdf  
 5. Unit Test Report - https://github.com/FseProject2519/Tweet-Repository/blob/sam-dev/Project_Documents/Reports/UNIT_TEST_REPORT.pdf  
-6. Error/Defect Log - https://fseproject2519.atlassian.net/l/c/70FYSXo7  
-7. Project Management - JIRA - https://fseproject2519.atlassian.net/jira/software/projects/TWEET/boards/1/roadmap  
+6. Error/Defect Log - https://github.com/FseProject2519/Tweet-Repository/blob/main/Project_Documents/Reports/ERROR_DEFECT_REPORT.pdf  
+7. Project Management - JIRA - https://github.com/FseProject2519/Tweet-Repository/blob/main/Project_Documents/Screenshots/PROJECT_MANAGEMENT_JIRA_SCREENSHOTS.pdf  
 8. Sonar Report - https://github.com/FseProject2519/Tweet-Repository/blob/sam-dev/Project_Documents/Reports/SONAR_REPORT.pdf  
 9. Screenshots - https://github.com/FseProject2519/Tweet-Repository/tree/sam-dev/Project_Documents/Screenshots  
   

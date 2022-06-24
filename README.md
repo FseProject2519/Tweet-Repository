@@ -74,7 +74,7 @@ PROMETHEUS:
   ![image](https://user-images.githubusercontent.com/104539687/173221594-ab002ef9-c9e0-40a3-9be4-1b1dc756da79.png)  
 4. Run the following commands:  
     a. docker pull prom/prometheus (Only for the first time)  
-    b. docker run -d -p 9090:9090 -v <complete path to the prometheus.yml file>:/etc/prometheus/prometheus.yml prom/prometheus  
+    b. docker run -d -p 9090:9090 -v (complete path to the prometheus.yml file):/etc/prometheus/prometheus.yml prom/prometheus  
   (Eg.: docker run -d -p 9090:9090 -v D:/mydisk/monitoring/src/main/resources/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus)  
 5. Open http://localhost:9090/  
 6. Go to: Status -> Targets and check if all statuses are UP  
@@ -101,3 +101,8 @@ GRAFANA:
 6. Go to: Discover (to see the logs)  
 7. On the left hand side under 'Available Fields' add 'message' field to get the logged messages as follows  
   ![image](https://user-images.githubusercontent.com/104539687/173272560-cf882511-3021-4ceb-b829-e959e19b03dc.png)  
+    
+## SECTION I - Rabbit MQ Setup:  
+1. Start RabbitMQ service in local  
+2. Open http://localhost:15672 to view Rabbit MQ management console  
+3. Go to queues tab to see the created queues  

@@ -74,7 +74,7 @@ PROMETHEUS:
   ![image](https://user-images.githubusercontent.com/104539687/173221594-ab002ef9-c9e0-40a3-9be4-1b1dc756da79.png)  
 4. Run the following commands:  
     a. docker pull prom/prometheus (Only for the first time)  
-    b. docker run -d -p 9090:9090 -v <complete path to the prometheus.yml file>:/etc/prometheus/prometheus.yml prom/prometheus  
+    b. docker run -d -p 9090:9090 -v (complete path to the prometheus.yml file):/etc/prometheus/prometheus.yml prom/prometheus  
   (Eg.: docker run -d -p 9090:9090 -v D:/mydisk/monitoring/src/main/resources/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus)  
 5. Open http://localhost:9090/  
 6. Go to: Status -> Targets and check if all statuses are UP  

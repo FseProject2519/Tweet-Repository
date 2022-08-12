@@ -85,7 +85,7 @@ public class TweetServiceImpl implements TweetService {
 				existingTweetEntity.setLastModifiedDateTime(LocalDateTime.now());
 				existingTweetEntity.setHashtags(parseMessageForTags(tweetEntity.getTweetMessage(), "#"));
 				existingTweetEntity.setUsertags(parseMessageForTags(tweetEntity.getTweetMessage(), "@"));
-				
+
 				log.info("Updating Tweet - {}", existingTweetEntity);
 
 				return tweetRepository.save(existingTweetEntity).getId() != null ? "Tweet Updated Successfully"
@@ -120,7 +120,7 @@ public class TweetServiceImpl implements TweetService {
 
 	@Override
 	public String likeTweet(String tweetId, String username) throws TweetServiceException {
-		
+
 		try {
 			Optional<TweetEntity> tweet = tweetRepository.findById(tweetId);
 			if (tweet.isPresent()) {
@@ -130,7 +130,12 @@ public class TweetServiceImpl implements TweetService {
 					likedBySet.add(username);
 					tweet.get().setLikedBy(likedBySet);
 				} else {
-					tweet.get().getLikedBy().add(username);
+					if (tweet.get().getLikedBy().contains(username)) {
+						tweet.get().getLikedBy().remove(username);
+					} else {
+						tweet.get().getLikedBy().add(username);
+
+					}
 				}
 				log.info("Liking Tweet - {}", tweet);
 				tweet.get().setLastModifiedDateTime(LocalDateTime.now());
@@ -143,7 +148,9 @@ public class TweetServiceImpl implements TweetService {
 				return TWEET_NOT_FOUND;
 			}
 
-		} catch (Exception e) {
+		} catch (
+
+		Exception e) {
 			throw new TweetServiceException(e.getMessage());
 		}
 	}

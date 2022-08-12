@@ -1,4 +1,5 @@
-# Tweet-Repository
+# Tweet-Repository  
+Github Link -  https://github.com/FseProject2519/Tweet-Repository  
 ## Documents  
 1. Swagger URLs:  
     a. Tweet Service - http://localhost:8090/swagger-ui/index.html#/  
@@ -7,8 +8,8 @@
 3. Maven Project Documentation (Download and open index.html in browser) - https://github.com/FseProject2519/Tweet-Repository/blob/sam-dev/Project_Documents/Maven_Site/site/index.html   
 4. Surefire Test Report - https://github.com/FseProject2519/Tweet-Repository/blob/sam-dev/Project_Documents/Reports/MAVEN_SUREFIRE_TEST_REPORT.pdf  
 5. Unit Test Report - https://github.com/FseProject2519/Tweet-Repository/blob/sam-dev/Project_Documents/Reports/UNIT_TEST_REPORT.pdf  
-6. Error/Defect Log - https://fseproject2519.atlassian.net/l/c/70FYSXo7  
-7. Project Management - JIRA - https://fseproject2519.atlassian.net/jira/software/projects/TWEET/boards/1/roadmap  
+6. Error/Defect Log - https://github.com/FseProject2519/Tweet-Repository/blob/main/Project_Documents/Reports/ERROR_DEFECT_REPORT.pdf  
+7. Project Management - JIRA - https://github.com/FseProject2519/Tweet-Repository/blob/main/Project_Documents/Screenshots/PROJECT_MANAGEMENT_JIRA_SCREENSHOTS.pdf  
 8. Sonar Report - https://github.com/FseProject2519/Tweet-Repository/blob/sam-dev/Project_Documents/Reports/SONAR_REPORT.pdf  
 9. Screenshots - https://github.com/FseProject2519/Tweet-Repository/tree/sam-dev/Project_Documents/Screenshots  
   
@@ -74,7 +75,7 @@ PROMETHEUS:
   ![image](https://user-images.githubusercontent.com/104539687/173221594-ab002ef9-c9e0-40a3-9be4-1b1dc756da79.png)  
 4. Run the following commands:  
     a. docker pull prom/prometheus (Only for the first time)  
-    b. docker run -d -p 9090:9090 -v <complete path to the prometheus.yml file>:/etc/prometheus/prometheus.yml prom/prometheus  
+    b. docker run -d -p 9090:9090 -v (complete path to the prometheus.yml file):/etc/prometheus/prometheus.yml prom/prometheus  
   (Eg.: docker run -d -p 9090:9090 -v D:/mydisk/monitoring/src/main/resources/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus)  
 5. Open http://localhost:9090/  
 6. Go to: Status -> Targets and check if all statuses are UP  
@@ -101,3 +102,8 @@ GRAFANA:
 6. Go to: Discover (to see the logs)  
 7. On the left hand side under 'Available Fields' add 'message' field to get the logged messages as follows  
   ![image](https://user-images.githubusercontent.com/104539687/173272560-cf882511-3021-4ceb-b829-e959e19b03dc.png)  
+    
+## SECTION I - Rabbit MQ Setup:  
+1. Start RabbitMQ service in local  
+2. Open http://localhost:15672 to view Rabbit MQ management console  
+3. Go to queues tab to see the created queues  

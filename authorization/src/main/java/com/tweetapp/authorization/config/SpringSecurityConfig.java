@@ -8,9 +8,9 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 
 import com.tweetapp.authorization.service.DetailsService;
-import com.tweetapp.authorization.service.RegisterService;
 
 @Configuration
 @EnableWebSecurity
@@ -21,17 +21,23 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 
-		http.csrf().disable().authorizeRequests().antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html")
+		http.csrf().disable().authorizeRequests()
+				.antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html",
+						"/api/v1.0/authorization/tweets/uservalidate", "/api/v1.0/authorization/tweets/userlogin",
+						"/api/v1.0/authorization/tweets/register", "/api/v1.0/authorization/tweets/logout",
+						"/api/v1.0/authorization/tweets/**", "/swagger-resouces/**", "/configuration/security",
+						"/webjars/**")
 				.permitAll().anyRequest().authenticated().and().exceptionHandling().and().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.logout(logout -> logout.logoutUrl("/api/v1.0/authorization/tweets/logout")
 						.logoutSuccessUrl("/api/v1.0/authorization/tweets/userlogin").invalidateHttpSession(true));
+		http.addFilterBefore(new CorsFilter(), ChannelProcessingFilter.class);
 
 	}
-	
+
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-				
+
 		web.ignoring().antMatchers("/api/v1.0/authorization/tweets/uservalidate");
 		web.ignoring().antMatchers("/api/v1.0/authorization/tweets/userlogin");
 		web.ignoring().antMatchers("/api/v1.0/authorization/tweets/register");
@@ -52,5 +58,4 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		auth.userDetailsService(detailsService);
 
 	}
-
 }

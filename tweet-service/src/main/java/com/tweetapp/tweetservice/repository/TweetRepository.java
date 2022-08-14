@@ -16,4 +16,6 @@ public interface TweetRepository extends MongoRepository<TweetEntity, String>, T
 	List<TweetEntity> getExportData(@Param("username") String username);
 
 	List<TweetEntity> findAllByOrderById();
+
+	void deleteByRepliedToTweet(String tweetId);
 }

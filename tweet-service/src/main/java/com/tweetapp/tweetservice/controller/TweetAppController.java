@@ -228,7 +228,7 @@ public class TweetAppController {
 
 	@GetMapping("/search")
 	public ResponseEntity<TweetResponseDto> searchTweets(@RequestHeader("Authorization") String token,
-			@RequestParam(required = false) String tweetMessage, @RequestParam(required = false) String tweetTopic,
+			@RequestParam(required = false) String tweetMessage,
 			@RequestParam(required = false) String createdBy, @RequestParam(required = false) String startDateTime,
 			@RequestParam(required = false) String endDateTime, @RequestParam(required = false) Set<String> tag,
 			@RequestParam(required = false) String repliedToTweet, @RequestParam(required = false) Set<String> likedBy,
@@ -239,7 +239,7 @@ public class TweetAppController {
 
 		try {
 			log.info("Start - searchTweets");
-			TweetSearchDto tweetSearchDto = TweetSearchDto.builder().tweetMessage(tweetMessage).tweetTopic(tweetTopic)
+			TweetSearchDto tweetSearchDto = TweetSearchDto.builder().tweetMessage(tweetMessage)
 					.createdBy(createdBy).startDateTime(DateUtils.processDateTime(startDateTime))
 					.endDateTime(DateUtils.processDateTime(endDateTime)).tag(tag).repliedToTweet(repliedToTweet)
 					.likedBy(likedBy).sortField(sortField).sortOrder(sortOrder).build();
@@ -413,6 +413,7 @@ public class TweetAppController {
 		}
 	}
 
+	@CrossOrigin(value = "*", exposedHeaders = {"Content-Disposition"})
 	@GetMapping("/{username}/export")
 	public void exportCSV(@RequestHeader("Authorization") String token, HttpServletResponse response,
 			@PathVariable("username") String username) throws IOException {

@@ -27,9 +27,6 @@ public class TweetDto {
 	@Size(max = 144, message = "Message cannot exceed 144 characters")
 	private String tweetMessage;
 
-	@NotBlank(message = "Tweet Topic cannot be empty")
-	private String tweetTopic;
-
 	@NotBlank(message = "Created By cannot be empty")
 	private String createdBy;
 

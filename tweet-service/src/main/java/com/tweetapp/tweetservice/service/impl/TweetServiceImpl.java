@@ -304,7 +304,7 @@ public class TweetServiceImpl implements TweetService {
 
 					}
 					tweetExportList.add(TweetExportDto.builder().tweetMessage(tweetEntity.getTweetMessage())
-							.tweetTopic(tweetEntity.getTweetTopic()).createdDateTime(tweetEntity.getCreatedDateTime())
+							.createdDateTime(tweetEntity.getCreatedDateTime())
 							.lastModifiedDateTime(tweetEntity.getLastModifiedDateTime()).likedBy(likedBy)
 							.repliedToTweetMsg(repliedToTweetMsg).repliedToTweetUser(repliedToTweetUser).build());
 

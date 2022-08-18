@@ -20,8 +20,6 @@ public class TweetSearchDto {
 
 	private String tweetMessage;
 
-	private String tweetTopic;
-
 	private String createdBy;
 
 	private LocalDateTime startDateTime;

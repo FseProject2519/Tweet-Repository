@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.GroupOperation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
@@ -88,10 +89,11 @@ public class TweetCriteriaRepositoryImpl implements TweetCriteriaRepository {
 					.gte(DateUtils.getDate(tweetSearchDto.getStartDateTime()));
 
 		MatchOperation matchOperation = Aggregation.match(criteria);
-		GroupOperation groupOperation = Aggregation.group("tweet_topic").count().as(COUNT);
-		ProjectionOperation projectionOperation = Aggregation.project(COUNT).and("tweetTopic").previousOperation();
+		AggregationOperation unwind = Aggregation.unwind("hashtags");
+		GroupOperation groupOperation = Aggregation.group("hashtags").count().as(COUNT);
+		ProjectionOperation projectionOperation = Aggregation.project(COUNT).and("hashtags").previousOperation();
 		SortOperation sortOperation = Aggregation.sort(Sort.by(Sort.Direction.DESC, COUNT));
-		Aggregation aggregation = Aggregation.newAggregation(matchOperation, groupOperation, projectionOperation,
+		Aggregation aggregation = Aggregation.newAggregation(matchOperation, unwind, groupOperation, projectionOperation,
 				sortOperation);
 		AggregationResults<TweetTrendEntity> result = mongoTemplate.aggregate(aggregation, "TweetCollection",
 				TweetTrendEntity.class);
@@ -115,9 +117,6 @@ public class TweetCriteriaRepositoryImpl implements TweetCriteriaRepository {
 
 		if (StringUtils.hasLength(tweetSearchDto.getTweetMessage()))
 			criteria.add(Criteria.where("tweetMessage").regex(tweetSearchDto.getTweetMessage(), "i"));
-
-		if (StringUtils.hasLength(tweetSearchDto.getTweetTopic()))
-			criteria.add(Criteria.where("tweetTopic").regex(tweetSearchDto.getTweetTopic(), "i"));
 
 		if (tweetSearchDto.getTag() != null && !tweetSearchDto.getTag().isEmpty())
 			criteria.add(Criteria.where("hashtags").all(tweetSearchDto.getTag()));

@@ -92,7 +92,7 @@ public class TweetCriteriaRepositoryImpl implements TweetCriteriaRepository {
 		AggregationOperation unwind = Aggregation.unwind("hashtags");
 		GroupOperation groupOperation = Aggregation.group("hashtags").count().as(COUNT);
 		ProjectionOperation projectionOperation = Aggregation.project(COUNT).and("hashtags").previousOperation();
-		SortOperation sortOperation = Aggregation.sort(Sort.by(Sort.Direction.DESC, COUNT));
+		SortOperation sortOperation = Aggregation.sort(Sort.by(Sort.Direction.DESC, COUNT)).and(Sort.Direction.ASC,"hashtags");
 		Aggregation aggregation = Aggregation.newAggregation(matchOperation, unwind, groupOperation, projectionOperation,
 				sortOperation);
 		AggregationResults<TweetTrendEntity> result = mongoTemplate.aggregate(aggregation, "TweetCollection",

@@ -35,5 +35,7 @@ public class TweetSearchDto {
 	private String sortField;
 
 	private String sortOrder;
+	
+	private boolean withComments;
 
 }

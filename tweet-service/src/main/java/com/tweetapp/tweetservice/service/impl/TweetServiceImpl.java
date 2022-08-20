@@ -229,12 +229,50 @@ public class TweetServiceImpl implements TweetService {
 		try {
 
 			log.info("Finding Tweet With The Criteria - {}", tweetSearchDto);
-
-			return tweetRepository.searchTweets(tweetSearchDto);
+			List<TweetEntity> tweetList = tweetRepository.searchTweets(tweetSearchDto);
+			tweetList = populateMainTweet(tweetList);
+			return !tweetSearchDto.isWithComments() ? tweetList : populateComments(tweetList);
 		} catch (Exception e) {
 			throw new TweetServiceException(e.getMessage());
 
 		}
+	}
+
+	private List<TweetEntity> populateMainTweet(List<TweetEntity> tweetList) {
+		List<TweetEntity> tweetsWithMain = new ArrayList<>();
+		tweetsWithMain.addAll(tweetList);
+		for (TweetEntity tweet : tweetList) {
+			if (!StringUtils.isEmpty(tweet.getRepliedToTweet())) {
+				List<TweetEntity> mainTweetList = tweetRepository.getMainTweet(tweet.getRepliedToTweet());
+				tweetsWithMain.addAll(mainTweetList);
+			}
+		}
+		return tweetsWithMain;
+	}
+
+	private List<TweetEntity> populateComments(List<TweetEntity> tweetList) {
+		List<TweetEntity> tweetsWithComments = new ArrayList<>();
+		tweetsWithComments.addAll(tweetList);
+
+		boolean isPresent = false;
+
+		for (TweetEntity tweet : tweetList) {
+			List<TweetEntity> commentsList = tweetRepository.getComments(tweet.getId());
+			for (TweetEntity comment : commentsList) {
+				for (TweetEntity tweets : tweetList) {
+					if (tweets.getId().equalsIgnoreCase(comment.getId())) {
+						isPresent = true;
+						break;
+					}
+				}
+
+				if (!isPresent)
+					tweetsWithComments.add(comment);
+				else
+					isPresent = false;
+			}
+		}
+		return tweetsWithComments;
 	}
 
 	@Override

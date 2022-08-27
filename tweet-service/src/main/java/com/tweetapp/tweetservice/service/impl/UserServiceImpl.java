@@ -2,6 +2,7 @@ package com.tweetapp.tweetservice.service.impl;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,8 +12,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.tweetapp.tweetservice.dto.UserSearchDto;
+import com.tweetapp.tweetservice.entity.TweetEntity;
 import com.tweetapp.tweetservice.entity.UserEntity;
 import com.tweetapp.tweetservice.exception.TweetServiceException;
+import com.tweetapp.tweetservice.repository.TweetRepository;
 import com.tweetapp.tweetservice.repository.UserRepository;
 import com.tweetapp.tweetservice.service.UserService;
 
@@ -24,7 +27,10 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
-
+	
+	@Autowired
+	private TweetRepository tweetRepository;
+	
 	@Override
 	public Page<UserEntity> getAllUsersPaged(UserSearchDto userSearchDto, Integer page, Integer size)
 			throws TweetServiceException {
@@ -119,4 +125,28 @@ public class UserServiceImpl implements UserService {
 
 		}
 	}
+
+	@Override
+	public String deleteUser(String username) throws TweetServiceException {
+		try {
+			Optional<UserEntity> user = userRepository.findByUserId(username);
+			if (user.isPresent()) {
+
+				log.info("Deleting User With Id - {}", username);
+				userRepository.deleteByUserId(username);
+				List<TweetEntity> userTweets =  tweetRepository.findByCreatedBy(username);
+				for(TweetEntity userTweet : userTweets) {
+					tweetRepository.deleteByRepliedToTweet(userTweet.getId());
+				}
+				tweetRepository.deleteByCreatedBy(username);
+				return "User Deleted Successfully";
+			} else {
+				return "User Not Found";
+			}
+
+		} catch (Exception e) {
+			throw new TweetServiceException(e.getMessage());
+		}
+	}
+	
 }

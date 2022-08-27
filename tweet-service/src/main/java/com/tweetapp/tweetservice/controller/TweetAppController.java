@@ -45,7 +45,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("api/v1.0/tweets")
 @RestController
 @Slf4j
-@CrossOrigin(origins="*")
+@CrossOrigin(origins = "*")
 public class TweetAppController {
 
 	@Autowired
@@ -201,15 +201,16 @@ public class TweetAppController {
 	public ResponseEntity<TweetResponseDto> getUserTweets(@RequestHeader("Authorization") String token,
 			@PathVariable("username") String createdBy, @RequestParam(required = false) String sortField,
 			@RequestParam(required = false) String sortOrder, @RequestParam(required = false) Integer page,
-			@RequestParam(required = false) Integer size, @RequestParam(required = false) boolean isPaged) {
+			@RequestParam(required = false) Integer size, @RequestParam(required = false) boolean isPaged,
+			@RequestParam(required = false) boolean withComments) {
 
 		TweetResponseDto tweetResponseDto = new TweetResponseDto();
 
 		try {
 
 			log.info("Start - getUserTweets");
-			TweetSearchDto tweetSearchDto = TweetSearchDto.builder().createdBy(createdBy).sortField(sortField)
-					.sortOrder(sortOrder).build();
+			TweetSearchDto tweetSearchDto = TweetSearchDto.builder().createdBy(createdBy).withComments(withComments)
+					.sortField(sortField).sortOrder(sortOrder).build();
 			if (isPaged) {
 				tweetResponseDto.setTweetsPaged(tweetService.searchTweetsPaged(tweetSearchDto, page, size));
 			} else {
@@ -228,21 +229,21 @@ public class TweetAppController {
 
 	@GetMapping("/search")
 	public ResponseEntity<TweetResponseDto> searchTweets(@RequestHeader("Authorization") String token,
-			@RequestParam(required = false) String tweetMessage, @RequestParam(required = false) String tweetTopic,
-			@RequestParam(required = false) String createdBy, @RequestParam(required = false) String startDateTime,
-			@RequestParam(required = false) String endDateTime, @RequestParam(required = false) Set<String> tag,
-			@RequestParam(required = false) String repliedToTweet, @RequestParam(required = false) Set<String> likedBy,
-			@RequestParam(required = false) String sortField, @RequestParam(required = false) String sortOrder,
-			@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size,
-			@RequestParam(required = false) boolean isPaged) {
+			@RequestParam(required = false) String tweetMessage, @RequestParam(required = false) String createdBy,
+			@RequestParam(required = false) String startDateTime, @RequestParam(required = false) String endDateTime,
+			@RequestParam(required = false) Set<String> tag, @RequestParam(required = false) String repliedToTweet,
+			@RequestParam(required = false) Set<String> likedBy, @RequestParam(required = false) String sortField,
+			@RequestParam(required = false) String sortOrder, @RequestParam(required = false) Integer page,
+			@RequestParam(required = false) Integer size, @RequestParam(required = false) boolean isPaged,
+			@RequestParam(required = false) boolean withComments) {
 		TweetResponseDto tweetResponseDto = new TweetResponseDto();
 
 		try {
 			log.info("Start - searchTweets");
-			TweetSearchDto tweetSearchDto = TweetSearchDto.builder().tweetMessage(tweetMessage).tweetTopic(tweetTopic)
-					.createdBy(createdBy).startDateTime(DateUtils.processDateTime(startDateTime))
+			TweetSearchDto tweetSearchDto = TweetSearchDto.builder().tweetMessage(tweetMessage).createdBy(createdBy)
+					.startDateTime(DateUtils.processDateTime(startDateTime))
 					.endDateTime(DateUtils.processDateTime(endDateTime)).tag(tag).repliedToTweet(repliedToTweet)
-					.likedBy(likedBy).sortField(sortField).sortOrder(sortOrder).build();
+					.likedBy(likedBy).withComments(withComments).sortField(sortField).sortOrder(sortOrder).build();
 			if (isPaged) {
 				tweetResponseDto.setTweetsPaged(tweetService.searchTweetsPaged(tweetSearchDto, page, size));
 			} else {
@@ -413,6 +414,7 @@ public class TweetAppController {
 		}
 	}
 
+	@CrossOrigin(value = "*", exposedHeaders = { "Content-Disposition" })
 	@GetMapping("/{username}/export")
 	public void exportCSV(@RequestHeader("Authorization") String token, HttpServletResponse response,
 			@PathVariable("username") String username) throws IOException {

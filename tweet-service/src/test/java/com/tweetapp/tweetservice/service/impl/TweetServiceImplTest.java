@@ -50,14 +50,14 @@ class TweetServiceImplTest {
 
 	private List<TweetTrendEntity> getTrendingTopics() {
 		List<TweetTrendEntity> trendingTopicsList = new ArrayList<>();
-		trendingTopicsList.add(TweetTrendEntity.builder().tweetTopic("TEST1").count(10L).build());
-		trendingTopicsList.add(TweetTrendEntity.builder().tweetTopic("TEST2").count(2L).build());
+		trendingTopicsList.add(TweetTrendEntity.builder().hashtags("TEST2").count(10L).build());
+		trendingTopicsList.add(TweetTrendEntity.builder().hashtags(TEST).count(2L).build());
 		return trendingTopicsList;
 	}
 
 	private TweetDto getTweetDto() {
 		return TweetDto.builder().createdBy(TEST).tweetMessage(TEST).createdDateTime(LocalDateTime.now())
-				.likedBy(new HashSet<>()).tweetTopic(TEST).build();
+				.likedBy(new HashSet<>()).build();
 
 	}
 
@@ -71,14 +71,14 @@ class TweetServiceImplTest {
 		Set<String> likedBy = new HashSet<>();
 		likedBy.add(TEST);
 		TweetEntity tweetEntity = TweetEntity.builder().id(TEST).createdBy(TEST).tweetMessage(VALID_TWEET_MESSAGE)
-				.repliedToTweet(TEST).createdDateTime(LocalDateTime.now()).likedBy(likedBy).tweetTopic(TEST).build();
+				.repliedToTweet(TEST).createdDateTime(LocalDateTime.now()).likedBy(likedBy).build();
 		return tweetEntity;
 	}
 
 	private TweetSearchDto buildTweetSearchDto(String sortField, String sortOrder) {
 		return TweetSearchDto.builder().createdBy(TEST).tweetMessage(TEST).startDateTime(LocalDateTime.now())
 				.endDateTime(LocalDateTime.now()).likedBy(new HashSet<>()).sortField(sortField).sortOrder(sortOrder)
-				.tweetTopic(TEST).build();
+				.build();
 
 	}
 
@@ -420,10 +420,10 @@ class TweetServiceImplTest {
 
 		when(tweetRepository.getTrendingTopics(any())).thenReturn(getTrendingTopics());
 
-		assertEquals("TEST2", tweetServiceImpl.getTrendingTopics(new TweetSearchDto()).get(1).getTweetTopic());
+		assertEquals("TEST2", tweetServiceImpl.getTrendingTopics(new TweetSearchDto()).get(0).getHashtags());
 
 	}
-
+	
 	@Test
 	void testGetTrendingTopicsException() throws TweetServiceException {
 

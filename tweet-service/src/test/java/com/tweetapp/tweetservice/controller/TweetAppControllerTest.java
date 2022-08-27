@@ -118,7 +118,7 @@ class TweetAppControllerTest {
 
 	private List<TweetTrendEntity> getTrendingTopics() {
 		List<TweetTrendEntity> trendingTopicsList = new ArrayList<>();
-		trendingTopicsList.add(TweetTrendEntity.builder().tweetTopic(TEST).count(10L).build());
+		trendingTopicsList.add(TweetTrendEntity.builder().hashtags(TEST).count(10L).build());
 		return trendingTopicsList;
 	}
 
@@ -132,14 +132,14 @@ class TweetAppControllerTest {
 		Set<String> likedBy = new HashSet<>();
 		likedBy.add(TEST);
 		TweetEntity tweetEntity = TweetEntity.builder().id(TEST).createdBy(TEST).tweetMessage(VALID_TWEET_MESSAGE)
-				.repliedToTweet(TEST).createdDateTime(LocalDateTime.now()).likedBy(likedBy).tweetTopic(TEST).build();
+				.repliedToTweet(TEST).createdDateTime(LocalDateTime.now()).likedBy(likedBy).build();
 		return tweetEntity;
 	}
 
 	private TweetSearchDto buildTweetSearchDto(String sortField, String sortOrder) {
 		return TweetSearchDto.builder().createdBy(TEST).tweetMessage(TEST).startDateTime(LocalDateTime.now())
 				.endDateTime(LocalDateTime.now()).likedBy(new HashSet<>()).sortField(sortField).sortOrder(sortOrder)
-				.tweetTopic(TEST).build();
+				.build();
 
 	}
 
@@ -154,7 +154,7 @@ class TweetAppControllerTest {
 		Set<String> likedBy = new HashSet<>();
 		likedBy.add(TEST);
 		TweetDto tweetDto = TweetDto.builder().createdBy(TEST).tweetMessage(VALID_TWEET_MESSAGE).repliedToTweet(TEST)
-				.createdDateTime(LocalDateTime.now()).likedBy(likedBy).tweetTopic(TEST).build();
+				.createdDateTime(LocalDateTime.now()).likedBy(likedBy).build();
 		return tweetDto;
 	}
 

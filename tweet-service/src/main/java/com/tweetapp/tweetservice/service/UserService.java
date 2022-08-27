@@ -24,4 +24,6 @@ public interface UserService {
 
 	List<String> getUsertags() throws TweetServiceException;
 
+	String deleteUser(String username) throws TweetServiceException;
+
 }

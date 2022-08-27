@@ -413,6 +413,26 @@ public class TweetAppController {
 			return sendExceptionResponse(userResponseDto, e);
 		}
 	}
+	
+	@DeleteMapping("/users/delete/{username}")
+	public ResponseEntity<TweetResponseDto> deleteUser(@RequestHeader("Authorization") String token,
+			@PathVariable String username) {
+
+		TweetResponseDto tweetResponseDto = new TweetResponseDto();
+
+		try {
+			log.info("Start - deleteUser");
+
+			tweetResponseDto.setResponseMessage(userService.deleteUser(username));
+			return new ResponseEntity<>(tweetResponseDto, HttpStatus.OK);
+		} catch (TweetServiceException e) {
+			log.info(TweetAppConstants.EXCEPTION, e.getMessage());
+
+			tweetResponseDto.setResponseMessage(e.getMessage());
+			return new ResponseEntity<>(tweetResponseDto, HttpStatus.INTERNAL_SERVER_ERROR);
+
+		}
+	}
 
 	@CrossOrigin(value = "*", exposedHeaders = { "Content-Disposition" })
 	@GetMapping("/{username}/export")

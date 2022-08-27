@@ -24,4 +24,8 @@ public interface TweetRepository extends MongoRepository<TweetEntity, String>, T
 	
 	@Query("{'id' : :#{#repliedToTweet}}")
 	List<TweetEntity> getMainTweet(@Param("repliedToTweet") String repliedToTweet);
+
+	void deleteByCreatedBy(String username);
+
+	List<TweetEntity> findByCreatedBy(String username);
 }

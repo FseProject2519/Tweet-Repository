@@ -1,5 +1,13 @@
 package com.tweetapp.authorization.service.impl;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+import org.apache.commons.lang3.StringUtils;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.internal.bytebuddy.utility.RandomString;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,15 +24,6 @@ import com.tweetapp.authorization.exception.TweetServiceException;
 import com.tweetapp.authorization.repository.UserRepository;
 import com.tweetapp.authorization.service.RegisterService;
 import com.tweetapp.authorization.util.LoggedOutJwtTokenCache;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
-
-import org.apache.commons.lang3.StringUtils;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.internal.bytebuddy.utility.RandomString;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Component
 public class RegisterServiceImpl implements RegisterService{

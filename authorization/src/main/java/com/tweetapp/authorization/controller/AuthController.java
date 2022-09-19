@@ -15,9 +15,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +28,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tweetapp.authorization.dto.AuthResponse;
 import com.tweetapp.authorization.dto.OtpDto;
 import com.tweetapp.authorization.dto.PasswordDto;
+import com.tweetapp.authorization.dto.Register;
+import com.tweetapp.authorization.dto.Update;
 import com.tweetapp.authorization.dto.UserCredentials;
 import com.tweetapp.authorization.dto.UserDetailsErrors;
 import com.tweetapp.authorization.dto.UserDto;
@@ -53,7 +57,8 @@ public class AuthController {
 	private PasswordEncoder passwordEncoder;
 
 	@PostMapping("/register")
-	public ResponseEntity<?> registerUser(@RequestBody @Valid UserDto userDto, BindingResult bindingResult) {
+	public ResponseEntity<?> registerUser(@RequestBody @Validated(Register.class) UserDto userDto,
+			BindingResult bindingResult) {
 
 		LOGGER.info("Start- User Registration");
 		try {
@@ -65,6 +70,24 @@ public class AuthController {
 
 		} catch (TweetServiceException e) {
 			LOGGER.info("Exception encountered in user registeration:{}", e.getMessage());
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PutMapping("/{userId}/update")
+	public ResponseEntity<?> updateUser(@PathVariable("userId") String userId,
+			@RequestBody @Validated(Update.class) UserDto userDto, BindingResult bindingResult) {
+
+		LOGGER.info("Start- User Update");
+		try {
+			if (bindingResult.hasErrors()) {
+				LOGGER.info("Validation errors encountered when updating user");
+				return new ResponseEntity<>(extractErrors(bindingResult), HttpStatus.BAD_REQUEST);
+			}
+			return new ResponseEntity<>(registerService.updateUser(userId, userDto), HttpStatus.CREATED);
+
+		} catch (TweetServiceException e) {
+			LOGGER.info("Exception encountered in user updation:{}", e.getMessage());
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -120,7 +143,7 @@ public class AuthController {
 	}
 
 	@PostMapping("/{username}/resetpassword")
-	public ResponseEntity<?> resetPassword(@PathVariable("username") String username, @RequestBody PasswordDto password,
+	public ResponseEntity<?> resetPassword(@PathVariable("username") String username, @RequestBody @Valid PasswordDto password,
 			BindingResult bindingResult) {
 
 		try {

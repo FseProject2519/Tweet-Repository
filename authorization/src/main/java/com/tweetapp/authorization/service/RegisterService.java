@@ -21,6 +21,8 @@ public interface RegisterService {
 	void userLogout(OnUserLogoutSuccess onUserLogoutSuccess);
 	
 	public  boolean validateTokenIsNotForALoggedOut(String authToken);
+
+	String updateUser(String userId, UserDto userDto) throws TweetServiceException;
 	
 	
 }

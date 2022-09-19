@@ -18,4 +18,14 @@ public interface TweetRepository extends MongoRepository<TweetEntity, String>, T
 	List<TweetEntity> findAllByOrderById();
 
 	void deleteByRepliedToTweet(String tweetId);
+	
+	@Query("{'replied_to_tweet' : :#{#id}}")
+	List<TweetEntity> getComments(@Param("id") String id);
+	
+	@Query("{'id' : :#{#repliedToTweet}}")
+	List<TweetEntity> getMainTweet(@Param("repliedToTweet") String repliedToTweet);
+
+	void deleteByCreatedBy(String username);
+
+	List<TweetEntity> findByCreatedBy(String username);
 }

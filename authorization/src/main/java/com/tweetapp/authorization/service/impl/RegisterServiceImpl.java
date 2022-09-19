@@ -1,5 +1,13 @@
 package com.tweetapp.authorization.service.impl;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+import org.apache.commons.lang3.StringUtils;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.internal.bytebuddy.utility.RandomString;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,54 +25,85 @@ import com.tweetapp.authorization.repository.UserRepository;
 import com.tweetapp.authorization.service.RegisterService;
 import com.tweetapp.authorization.util.LoggedOutJwtTokenCache;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 
-import org.apache.commons.lang3.StringUtils;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.internal.bytebuddy.utility.RandomString;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+@Slf4j
 @Component
-public class RegisterServiceImpl implements RegisterService{
-	
+public class RegisterServiceImpl implements RegisterService {
+
 	@Autowired
 	ModelMapper modelMapper;
-	
+
 	@Autowired
 	UserRepository userRepository;
-	
+
 	@Value("${queue.name}")
 	private String notificationDetailsQueue;
-	
+
 	@Autowired
 	private RabbitTemplate messageTemplate;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	@Autowired
 	private LoggedOutJwtTokenCache tokenCache;
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(RegisterServiceImpl.class);
 
 	@Override
 	public String registerUser(UserDto userDto) throws TweetServiceException {
-		
+
 		try {
-			String encodedPwd=passwordEncoder.encode(userDto.getPassword());
+			String encodedPwd = passwordEncoder.encode(userDto.getPassword());
 			userDto.setPassword(encodedPwd);
 			userDto.setConfirmPassword(encodedPwd);
-			UserEntity user=modelMapper.map(userDto, UserEntity.class);
+			UserEntity user = modelMapper.map(userDto, UserEntity.class);
 			user.setLastModifiedDate(LocalDateTime.now());
 			user.setValidOtp(false);
-			return userRepository.save(user).getId()!=null?"User Registered Successfully":"User Registration Failed";
-		}
-		catch(Exception e){
+			return userRepository.save(user).getId() != null ? "User Registered Successfully"
+					: "User Registration Failed";
+		} catch (Exception e) {
 			throw new TweetServiceException(e.getMessage());
 		}
-		
+
+	}
+
+	@Override
+	public String updateUser(String userId, UserDto userDto) throws TweetServiceException {
+
+		try {
+			if (!StringUtils.isEmpty(userDto.getUpdatePassword())) {
+				String encodedPwd = passwordEncoder.encode(userDto.getUpdatePassword());
+				userDto.setPassword(encodedPwd);
+				userDto.setConfirmPassword(encodedPwd);
+			}
+			UserEntity user = modelMapper.map(userDto, UserEntity.class);
+			Optional<UserEntity> existingUserOptional = userRepository.findByUserId(userId);
+
+			if (existingUserOptional.isPresent()) {
+				UserEntity existingUserEntity = existingUserOptional.get();
+				existingUserEntity.setContactNumber(user.getContactNumber());
+				existingUserEntity.setEmail(user.getEmail());
+				existingUserEntity.setFirstName(user.getFirstName());
+				existingUserEntity.setLastName(user.getLastName());
+				if (!StringUtils.isEmpty(user.getPassword())) {
+					existingUserEntity.setPassword(user.getPassword());
+				}
+				existingUserEntity.setLastModifiedDate(LocalDateTime.now());
+				log.info("Updating User - {}", existingUserEntity);
+
+				return userRepository.save(existingUserEntity).getId() != null ? "User Updated Successfully"
+						: "User Updation Failed";
+
+			} else {
+				return "User Not Found";
+			}
+
+		} catch (Exception e) {
+			throw new TweetServiceException(e.getMessage());
+		}
+
 	}
 
 	@Override
@@ -74,29 +113,27 @@ public class RegisterServiceImpl implements RegisterService{
 			if (user.isPresent()) {
 				String email = user.get().getEmail();
 				if (StringUtils.isNotEmpty(email)) {
-					String otp=RandomString.make(8);
-					String encodedOtp=passwordEncoder.encode(otp);
+					String otp = RandomString.make(8);
+					String encodedOtp = passwordEncoder.encode(otp);
 					user.get().setForgotPwdOtp(encodedOtp);
 					user.get().setLastModifiedDate(LocalDateTime.now());
 					userRepository.save(user.get());
 					NotificationEvent notificationEvent = NotificationEvent.builder()
 							.firstName(user.get().getFirstName()).lastName(user.get().getLastName())
 							.email(user.get().getEmail()).otp(otp).build();
-					LOGGER.info("Sending message [{}] to queue [{}]",notificationEvent,notificationDetailsQueue);
+					LOGGER.info("Sending message [{}] to queue [{}]", notificationEvent, notificationDetailsQueue);
 					messageTemplate.convertAndSend(notificationDetailsQueue, notificationEvent);
 					int index = email.indexOf("@");
 					StringBuilder secureEmail = new StringBuilder(email.substring(0, 2));
 					String substringEmail = email.substring(2, index - 2).replaceAll(".", "*");
-					secureEmail.append(substringEmail).append(email.substring(index-2));
+					secureEmail.append(substringEmail).append(email.substring(index - 2));
 					return "Token  to reset your password has been sent to your registered email "
 							+ secureEmail.toString();
 
-				}
-				else {
+				} else {
 					return "No valid email id found for the user";
 				}
-			}
-			else {
+			} else {
 				return "Not a Valid Username";
 			}
 		} catch (Exception e) {
@@ -143,27 +180,25 @@ public class RegisterServiceImpl implements RegisterService{
 	@Override
 	public String resetPassword(String username, PasswordDto password) throws TweetServiceException {
 		try {
-			String encodedPwd=passwordEncoder.encode(password.getPassword());
+			String encodedPwd = passwordEncoder.encode(password.getPassword());
 			Optional<UserEntity> user = userRepository.findByUserId(username);
-			
+
 			if (user.isPresent()) {
-				if(user.get().getValidOtp()) {
-				user.get().setPassword(encodedPwd);
-				user.get().setLastModifiedDate(LocalDateTime.now());
-				user.get().setValidOtp(false);
-				userRepository.save(user.get());
-				return "Password resetted Successfully";
-				}
-				else {
+				if (user.get().getValidOtp()) {
+					user.get().setPassword(encodedPwd);
+					user.get().setLastModifiedDate(LocalDateTime.now());
+					user.get().setValidOtp(false);
+					userRepository.save(user.get());
+					return "Password resetted Successfully";
+				} else {
 					return "Unauthorised Request";
 				}
 			}
-				
+
 			else {
 				return "User Not found";
 			}
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			throw new TweetServiceException(e.getMessage());
 		}
 	}
@@ -172,24 +207,23 @@ public class RegisterServiceImpl implements RegisterService{
 	public void userLogout(OnUserLogoutSuccess onUserLogoutSuccess) {
 		LOGGER.info("Invalidating the token for user logout");
 		tokenCache.markLogoutEventForToken(onUserLogoutSuccess);
-		 
+
 	}
-	
+
 	@Override
-	public  boolean validateTokenIsNotForALoggedOut(String authToken) {
-		 LOGGER.info("validateTokenIsNotForALoggedOut checking...");
-	    OnUserLogoutSuccess previouslyLoggedOutEvent = tokenCache.getLogoutEventForToken(authToken);
-	    if (previouslyLoggedOutEvent != null) {
-	        String userName = previouslyLoggedOutEvent.getUserName();
-	        String errorMessage = String.format("Token corresponds to an already logged out user [%s]. Please login again", userName);
-	        LOGGER.info(errorMessage);
-	        return false;
-	    }
-	    else {
-	    	return true;
-	    }
-	
+	public boolean validateTokenIsNotForALoggedOut(String authToken) {
+		LOGGER.info("validateTokenIsNotForALoggedOut checking...");
+		OnUserLogoutSuccess previouslyLoggedOutEvent = tokenCache.getLogoutEventForToken(authToken);
+		if (previouslyLoggedOutEvent != null) {
+			String userName = previouslyLoggedOutEvent.getUserName();
+			String errorMessage = String
+					.format("Token corresponds to an already logged out user [%s]. Please login again", userName);
+			LOGGER.info(errorMessage);
+			return false;
+		} else {
+			return true;
+		}
+
 	}
-	
 
 }

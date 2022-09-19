@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.tweetapp.tweetservice.dto.TweetDto;
+import com.tweetapp.tweetservice.dto.TweetExportDto;
 import com.tweetapp.tweetservice.dto.TweetSearchDto;
 import com.tweetapp.tweetservice.entity.TweetEntity;
 import com.tweetapp.tweetservice.entity.TweetTrendEntity;
@@ -24,12 +25,20 @@ public interface TweetService {
 
 	String replyToTweet(String username, TweetDto tweetDto, String tweedId) throws TweetServiceException;
 
-	Page<TweetEntity> getAllTweets(TweetSearchDto tweetSearchDto, Integer page, Integer size)
+	Page<TweetEntity> getAllTweetsPaged(TweetSearchDto tweetSearchDto, Integer page, Integer size)
 			throws TweetServiceException;
 
-	Page<TweetEntity> searchTweets(TweetSearchDto tweetSearchDto, Integer page, Integer size)
+	List<TweetEntity> getAllTweets() throws TweetServiceException;
+
+	Page<TweetEntity> searchTweetsPaged(TweetSearchDto tweetSearchDto, Integer page, Integer size)
 			throws TweetServiceException;
 
 	List<TweetTrendEntity> getTrendingTopics(TweetSearchDto tweetSearchDto) throws TweetServiceException;
+
+	List<TweetExportDto> getExportData(String username) throws TweetServiceException;
+
+	List<String> getHashtags() throws TweetServiceException;
+
+	List<TweetEntity> searchTweets(TweetSearchDto tweetSearchDto) throws TweetServiceException;
 
 }

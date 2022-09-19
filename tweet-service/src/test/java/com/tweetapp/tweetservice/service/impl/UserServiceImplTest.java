@@ -24,7 +24,7 @@ import com.tweetapp.tweetservice.exception.TweetServiceException;
 import com.tweetapp.tweetservice.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceImplTest {
+class UserServiceImplTest {
 
 	@InjectMocks
 	UserServiceImpl userServiceImpl;
@@ -33,69 +33,136 @@ public class UserServiceImplTest {
 	UserRepository userRepository;
 
 	@Test
-	public void testGetAllUsersSuccess() throws TweetServiceException {
+	void testGetAllUsersPagedSuccess() throws TweetServiceException {
 		UserSearchDto userSearchDto = buildUserSearchDto("firstName", "asc");
-		when(userRepository.findAll(isA(Pageable.class))).thenReturn(getUserEntity());
-		assertEquals("TEST", userServiceImpl.getAllUsers(userSearchDto, 0, 1).getContent().get(0).getUserId());
+		when(userRepository.findAll(isA(Pageable.class))).thenReturn(getPagedUserEntity());
+		assertEquals("TEST", userServiceImpl.getAllUsersPaged(userSearchDto, 0, 1).getContent().get(0).getUserId());
 
 	}
 
 	@Test
-	public void testGetAllUsersSuccessWithNullSortParams() throws TweetServiceException {
+	void testGetAllUsersPagedSuccessWithNullSortParams() throws TweetServiceException {
 		UserSearchDto userSearchDto = buildUserSearchDto(null, null);
-		when(userRepository.findAll(isA(Pageable.class))).thenReturn(getUserEntity());
-		assertEquals("TEST", userServiceImpl.getAllUsers(userSearchDto, null, null).getContent().get(0).getUserId());
+		when(userRepository.findAll(isA(Pageable.class))).thenReturn(getPagedUserEntity());
+		assertEquals("TEST",
+				userServiceImpl.getAllUsersPaged(userSearchDto, null, null).getContent().get(0).getUserId());
 
 	}
 
 	@Test
-	public void testGetAllUsersException() throws TweetServiceException {
+	void testGetAllUsersPagedException() throws TweetServiceException {
 		UserSearchDto userSearchDto = null;
 		assertThrows(TweetServiceException.class, () -> {
-			userServiceImpl.getAllUsers(userSearchDto, null, null);
+			userServiceImpl.getAllUsersPaged(userSearchDto, null, null);
 		});
 	}
 
 	@Test
-	public void testSearchUsersSuccess() throws TweetServiceException {
+	void testGetAllUsersSuccess() throws TweetServiceException {
+		when(userRepository.findAllByOrderByUserId()).thenReturn(getUserEntityList());
+		assertEquals("TEST", userServiceImpl.getAllUsers().get(0).getUserId());
+
+	}
+
+	@Test
+	void testGetAllUsersException() throws TweetServiceException {
+		when(userRepository.findAllByOrderByUserId()).thenThrow(new RuntimeException());
+		assertThrows(TweetServiceException.class, () -> {
+			userServiceImpl.getAllUsers();
+		});
+	}
+
+	@Test
+	void testSearchUsersPagedSuccess() throws TweetServiceException {
 		UserSearchDto userSearchDto = buildUserSearchDto("createdBy", "desc");
-		when(userRepository.searchUsers(any(), isA(Pageable.class))).thenReturn(getUserEntity());
-		assertEquals("TEST", userServiceImpl.searchUsers(userSearchDto, 0, 1).getContent().get(0).getUserId());
+		when(userRepository.searchUsersPaged(any(), isA(Pageable.class))).thenReturn(getPagedUserEntity());
+		assertEquals("TEST", userServiceImpl.searchUsersPaged(userSearchDto, 0, 1).getContent().get(0).getUserId());
 
 	}
 
 	@Test
-	public void testSearchUsersSuccessWithNullSortField() throws TweetServiceException {
+	void testSearchUsersPagedSuccessWithNullSortField() throws TweetServiceException {
 		UserSearchDto userSearchDto = buildUserSearchDto(null, "desc");
-		when(userRepository.searchUsers(any(), isA(Pageable.class))).thenReturn(getUserEntity());
-		assertEquals("TEST", userServiceImpl.searchUsers(userSearchDto, 0, 1).getContent().get(0).getUserId());
+		when(userRepository.searchUsersPaged(any(), isA(Pageable.class))).thenReturn(getPagedUserEntity());
+		assertEquals("TEST", userServiceImpl.searchUsersPaged(userSearchDto, 0, 1).getContent().get(0).getUserId());
 
 	}
 
 	@Test
-	public void testSearchUsersSuccessWithNullSortOrder() throws TweetServiceException {
+	void testSearchUsersPagedSuccessWithNullSortOrder() throws TweetServiceException {
 		UserSearchDto userSearchDto = buildUserSearchDto("firstName", null);
-		when(userRepository.searchUsers(any(), isA(Pageable.class))).thenReturn(getUserEntity());
-		assertEquals("TEST", userServiceImpl.searchUsers(userSearchDto, null, null).getContent().get(0).getUserId());
+		when(userRepository.searchUsersPaged(any(), isA(Pageable.class))).thenReturn(getPagedUserEntity());
+		assertEquals("TEST",
+				userServiceImpl.searchUsersPaged(userSearchDto, null, null).getContent().get(0).getUserId());
 
 	}
 
 	@Test
-	public void testSearchUsersException() throws TweetServiceException {
+	void testSearchUsersPagedException() throws TweetServiceException {
 		UserSearchDto userSearchDto = null;
 		assertThrows(TweetServiceException.class, () -> {
-			userServiceImpl.searchUsers(userSearchDto, null, null);
+			userServiceImpl.searchUsersPaged(userSearchDto, null, null);
 		});
 	}
 
-	private Page<UserEntity> getUserEntity() {
+	@Test
+	void testSearchUsersSuccess() throws TweetServiceException {
+		UserSearchDto userSearchDto = buildUserSearchDto("createdBy", "desc");
+		when(userRepository.searchUsers(any())).thenReturn(getUserEntityList());
+		assertEquals("TEST", userServiceImpl.searchUsers(userSearchDto).get(0).getUserId());
+
+	}
+
+	@Test
+	void testSearchUsersException() throws TweetServiceException {
+		UserSearchDto userSearchDto = null;
+		when(userRepository.searchUsers(any())).thenThrow(new RuntimeException());
+		assertThrows(TweetServiceException.class, () -> {
+			userServiceImpl.searchUsers(userSearchDto);
+		});
+	}
+
+	@Test
+	void testGetUsertagsSuccess() throws TweetServiceException {
+
+		List<String> usertags = getUsertags();
+		when(userRepository.getUserIds()).thenReturn(usertags);
+		assertEquals("TEST", userServiceImpl.getUsertags().get(0));
+
+	}
+
+	private List<String> getUsertags() {
+		List<String> usertags = new ArrayList<>();
+		usertags.add("TEST");
+		return usertags;
+	}
+
+	@Test
+	void testGetUsertagsException() throws TweetServiceException {
+
+		List<String> usertags = getUsertags();
+		when(userRepository.getUserIds()).thenThrow(new RuntimeException());
+		assertThrows(TweetServiceException.class, () -> {
+			userServiceImpl.getUsertags();
+		});
+
+	}
+
+	private Page<UserEntity> getPagedUserEntity() {
+		return new PageImpl<>(getUserEntityList());
+
+	}
+
+	private List<UserEntity> getUserEntityList() {
+		List<UserEntity> userEntityList = new ArrayList<>();
+		userEntityList.add(getUserEntity());
+		return userEntityList;
+	}
+
+	private UserEntity getUserEntity() {
 		UserEntity userEntity = UserEntity.builder().userId("TEST").firstName("TEST").lastName("TEST").email("TEST")
 				.contactNumber("1234567890").build();
-
-		List<UserEntity> userEntityList = new ArrayList<>();
-		userEntityList.add(userEntity);
-		return new PageImpl<>(userEntityList);
-
+		return userEntity;
 	}
 
 	private UserSearchDto buildUserSearchDto(String sortField, String sortOrder) {

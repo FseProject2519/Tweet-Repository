@@ -27,9 +27,6 @@ public class TweetDto {
 	@Size(max = 144, message = "Message cannot exceed 144 characters")
 	private String tweetMessage;
 
-	@NotBlank(message = "Tweet Topic cannot be empty")
-	private String tweetTopic;
-
 	@NotBlank(message = "Created By cannot be empty")
 	private String createdBy;
 
@@ -39,8 +36,7 @@ public class TweetDto {
 
 	private String repliedToTweet;
 
-	@Size(max = 50, message = "Tag cannot exceed 50 characters")
-	private String tag;
+	private Set<@Size(max = 50, message = "Tag cannot exceed 50 characters") String> tag;
 
 	private Set<String> likedBy;
 }

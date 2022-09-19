@@ -2,6 +2,7 @@ package com.tweetapp.tweetservice.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,8 +23,42 @@ public class UserCriteriaRepositoryImpl implements UserCriteriaRepository {
 	}
 
 	@Override
-	public Page<UserEntity> searchUsers(UserSearchDto userSearchDto, Pageable pageable) {
+	public Page<UserEntity> searchUsersPaged(UserSearchDto userSearchDto, Pageable pageable) {
 		Query query = new Query().with(pageable);
+		buildCriteria(userSearchDto, query);
+
+		return PageableExecutionUtils.getPage(mongoTemplate.find(query, UserEntity.class), pageable,
+				() -> mongoTemplate.count(query.skip(0).limit(0), UserEntity.class));
+
+	}
+
+	@Override
+	public List<UserEntity> searchUsers(UserSearchDto userSearchDto) {
+		Query query = new Query();
+		buildCriteria(userSearchDto, query);
+
+		return mongoTemplate.find(query, UserEntity.class);
+
+	}
+
+	@Override
+	public Page<UserEntity> findAll(Pageable pageable) {
+		Query query = new Query().with(pageable);
+
+		return PageableExecutionUtils.getPage(mongoTemplate.find(query, UserEntity.class), pageable,
+				() -> mongoTemplate.count(query.skip(0).limit(0), UserEntity.class));
+
+	}
+
+	@Override
+	public List<String> getUserIds() {
+		Query query = new Query();
+
+		List<UserEntity> resultList = mongoTemplate.find(query, UserEntity.class);
+		return resultList.stream().map(result -> result.getUserId()).collect(Collectors.toList());
+	}
+
+	private void buildCriteria(UserSearchDto userSearchDto, Query query) {
 		final List<Criteria> criteria = new ArrayList<>();
 
 		if (StringUtils.hasLength(userSearchDto.getUserId()))
@@ -37,18 +72,6 @@ public class UserCriteriaRepositoryImpl implements UserCriteriaRepository {
 		if (!criteria.isEmpty()) {
 			query.addCriteria(new Criteria().andOperator(criteria.toArray(new Criteria[0])));
 		}
-
-		return PageableExecutionUtils.getPage(mongoTemplate.find(query, UserEntity.class), pageable,
-				() -> mongoTemplate.count(query.skip(0).limit(0), UserEntity.class));
-
 	}
 
-	@Override
-	public Page<UserEntity> findAll(Pageable pageable) {
-		Query query = new Query().with(pageable);
-
-		return PageableExecutionUtils.getPage(mongoTemplate.find(query, UserEntity.class), pageable,
-				() -> mongoTemplate.count(query.skip(0).limit(0), UserEntity.class));
-
-	}
 }

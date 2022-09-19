@@ -20,8 +20,6 @@ public class TweetSearchDto {
 
 	private String tweetMessage;
 
-	private String tweetTopic;
-
 	private String createdBy;
 
 	private LocalDateTime startDateTime;
@@ -30,12 +28,14 @@ public class TweetSearchDto {
 
 	private String repliedToTweet;
 
-	private String tag;
+	private Set<String> tag;
 
 	private Set<String> likedBy;
 
 	private String sortField;
 
 	private String sortOrder;
+	
+	private boolean withComments;
 
 }

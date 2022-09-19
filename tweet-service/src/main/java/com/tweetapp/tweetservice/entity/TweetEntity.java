@@ -35,9 +35,6 @@ public class TweetEntity {
 	@Field(name = "tweet_message")
 	private String tweetMessage;
 
-	@Field(name = "tweet_topic")
-	private String tweetTopic;
-
 	@Field(name = "created_by")
 	private String createdBy;
 

@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class TweetTrendEntity {
 
-	private String tweetTopic;
+	private String hashtags;
 	private Long count;
 
 }

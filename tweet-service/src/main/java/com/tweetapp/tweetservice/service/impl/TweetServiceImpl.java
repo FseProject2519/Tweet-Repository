@@ -229,12 +229,59 @@ public class TweetServiceImpl implements TweetService {
 		try {
 
 			log.info("Finding Tweet With The Criteria - {}", tweetSearchDto);
-
-			return tweetRepository.searchTweets(tweetSearchDto);
+			List<TweetEntity> tweetList = tweetRepository.searchTweets(tweetSearchDto);
+			tweetList = populateMainTweet(tweetList);
+			return !tweetSearchDto.isWithComments() ? tweetList : populateComments(tweetList);
 		} catch (Exception e) {
 			throw new TweetServiceException(e.getMessage());
 
 		}
+	}
+
+	private List<TweetEntity> populateMainTweet(List<TweetEntity> tweetList) {
+		List<TweetEntity> tweetsWithMain = new ArrayList<>();
+		tweetsWithMain.addAll(tweetList);
+		for (TweetEntity tweet : tweetList) {
+			if (!StringUtils.isEmpty(tweet.getRepliedToTweet())) {
+				boolean isPresent = false;
+				for (TweetEntity presentTweet : tweetList) {
+					if (presentTweet.getId().equalsIgnoreCase(tweet.getRepliedToTweet())) {
+						isPresent = true;
+						break;
+					}
+				}
+				if (!isPresent) {
+					List<TweetEntity> mainTweetList = tweetRepository.getMainTweet(tweet.getRepliedToTweet());
+					tweetsWithMain.addAll(mainTweetList);
+				}
+			}
+		}
+		return tweetsWithMain;
+	}
+
+	private List<TweetEntity> populateComments(List<TweetEntity> tweetList) {
+		List<TweetEntity> tweetsWithComments = new ArrayList<>();
+		tweetsWithComments.addAll(tweetList);
+
+		boolean isPresent = false;
+
+		for (TweetEntity tweet : tweetList) {
+			List<TweetEntity> commentsList = tweetRepository.getComments(tweet.getId());
+			for (TweetEntity comment : commentsList) {
+				for (TweetEntity tweets : tweetList) {
+					if (tweets.getId().equalsIgnoreCase(comment.getId())) {
+						isPresent = true;
+						break;
+					}
+				}
+
+				if (!isPresent)
+					tweetsWithComments.add(comment);
+				else
+					isPresent = false;
+			}
+		}
+		return tweetsWithComments;
 	}
 
 	@Override
@@ -304,7 +351,7 @@ public class TweetServiceImpl implements TweetService {
 
 					}
 					tweetExportList.add(TweetExportDto.builder().tweetMessage(tweetEntity.getTweetMessage())
-							.tweetTopic(tweetEntity.getTweetTopic()).createdDateTime(tweetEntity.getCreatedDateTime())
+							.createdDateTime(tweetEntity.getCreatedDateTime())
 							.lastModifiedDateTime(tweetEntity.getLastModifiedDateTime()).likedBy(likedBy)
 							.repliedToTweetMsg(repliedToTweetMsg).repliedToTweetUser(repliedToTweetUser).build());
 

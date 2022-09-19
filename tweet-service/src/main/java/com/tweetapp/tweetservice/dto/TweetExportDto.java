@@ -19,8 +19,6 @@ public class TweetExportDto {
 
 	private String tweetMessage;
 
-	private String tweetTopic;
-
 	private String repliedToTweetMsg;
 
 	private String repliedToTweetUser;

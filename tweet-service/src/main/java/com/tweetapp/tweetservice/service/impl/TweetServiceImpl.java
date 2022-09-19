@@ -243,8 +243,17 @@ public class TweetServiceImpl implements TweetService {
 		tweetsWithMain.addAll(tweetList);
 		for (TweetEntity tweet : tweetList) {
 			if (!StringUtils.isEmpty(tweet.getRepliedToTweet())) {
-				List<TweetEntity> mainTweetList = tweetRepository.getMainTweet(tweet.getRepliedToTweet());
-				tweetsWithMain.addAll(mainTweetList);
+				boolean isPresent = false;
+				for (TweetEntity presentTweet : tweetList) {
+					if (presentTweet.getId().equalsIgnoreCase(tweet.getRepliedToTweet())) {
+						isPresent = true;
+						break;
+					}
+				}
+				if (!isPresent) {
+					List<TweetEntity> mainTweetList = tweetRepository.getMainTweet(tweet.getRepliedToTweet());
+					tweetsWithMain.addAll(mainTweetList);
+				}
 			}
 		}
 		return tweetsWithMain;

@@ -3,6 +3,8 @@ package com.tweetapp.authorization.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -141,7 +143,7 @@ public class AuthController {
 	}
 
 	@PostMapping("/{username}/resetpassword")
-	public ResponseEntity<?> resetPassword(@PathVariable("username") String username, @RequestBody PasswordDto password,
+	public ResponseEntity<?> resetPassword(@PathVariable("username") String username, @RequestBody @Valid PasswordDto password,
 			BindingResult bindingResult) {
 
 		try {

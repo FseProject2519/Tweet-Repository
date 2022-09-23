@@ -27,10 +27,10 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private TweetRepository tweetRepository;
-	
+
 	@Override
 	public Page<UserEntity> getAllUsersPaged(UserSearchDto userSearchDto, Integer page, Integer size)
 			throws TweetServiceException {
@@ -134,8 +134,8 @@ public class UserServiceImpl implements UserService {
 
 				log.info("Deleting User With Id - {}", username);
 				userRepository.deleteByUserId(username);
-				List<TweetEntity> userTweets =  tweetRepository.findByCreatedBy(username);
-				for(TweetEntity userTweet : userTweets) {
+				List<TweetEntity> userTweets = tweetRepository.findByCreatedBy(username);
+				for (TweetEntity userTweet : userTweets) {
 					tweetRepository.deleteByRepliedToTweet(userTweet.getId());
 				}
 				tweetRepository.deleteByCreatedBy(username);
@@ -148,5 +148,5 @@ public class UserServiceImpl implements UserService {
 			throw new TweetServiceException(e.getMessage());
 		}
 	}
-	
+
 }

@@ -42,6 +42,8 @@ import com.tweetapp.authorization.service.RegisterService;
 @RestController
 @RequestMapping("api/v1.0/authorization/tweets")
 public class AuthController {
+	private static final String NOT_ACCESIBLE = "Invalid Credentials";
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(AuthController.class);
 
 	@Autowired
@@ -120,7 +122,7 @@ public class AuthController {
 			return new ResponseEntity<>(registerService.forgotPassword(username), HttpStatus.OK);
 
 		} catch (TweetServiceException e) {
-			LOGGER.info("Exception occurred when resetting password", e.getMessage());
+			LOGGER.info("Exception occurred when resetting password - {}", e.getMessage());
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 
 		}
@@ -135,7 +137,7 @@ public class AuthController {
 			return new ResponseEntity<>(registerService.verifyOtp(username, otp), HttpStatus.OK);
 
 		} catch (TweetServiceException e) {
-			LOGGER.info("Exception occurred when verifying Otp", e.getMessage());
+			LOGGER.info("Exception occurred when verifying Otp - {}", e.getMessage());
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 
 		}
@@ -143,8 +145,8 @@ public class AuthController {
 	}
 
 	@PostMapping("/{username}/resetpassword")
-	public ResponseEntity<?> resetPassword(@PathVariable("username") String username, @RequestBody @Valid PasswordDto password,
-			BindingResult bindingResult) {
+	public ResponseEntity<?> resetPassword(@PathVariable("username") String username,
+			@RequestBody @Valid PasswordDto password, BindingResult bindingResult) {
 
 		try {
 			LOGGER.info("Start- Password Reset");
@@ -155,7 +157,7 @@ public class AuthController {
 			return new ResponseEntity<>(registerService.resetPassword(username, password), HttpStatus.OK);
 
 		} catch (TweetServiceException e) {
-			LOGGER.info("Exception occurred when resetting password", e.getMessage());
+			LOGGER.info("Exception occurred when resetting password - {}", e.getMessage());
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 
 		}
@@ -178,12 +180,12 @@ public class AuthController {
 				return new ResponseEntity<>(new UserCredentials(uname, null, generateToken), HttpStatus.OK);
 			}
 			LOGGER.info("End - userlogin - Wrong Credentials");
-			return new ResponseEntity<>("Not Accesible", HttpStatus.FORBIDDEN);
+			return new ResponseEntity<>(NOT_ACCESIBLE, HttpStatus.FORBIDDEN);
 
 		} catch (Exception e) {
 			LOGGER.info("End - userlogin - Username Not Found");
 
-			return new ResponseEntity<>("Not Accesible", HttpStatus.FORBIDDEN);
+			return new ResponseEntity<>(NOT_ACCESIBLE, HttpStatus.FORBIDDEN);
 
 		}
 	}
@@ -228,8 +230,7 @@ public class AuthController {
 					.userName(jwtutil.extractUsername(token.substring(7))).build();
 
 			registerService.userLogout(onUserLogoutSuccess);
-			LOGGER.info(
-					String.format("Log out success event received for user [%s] ", onUserLogoutSuccess.getUserName()));
+			LOGGER.info("Log out success event received for user - {} ", onUserLogoutSuccess.getUserName());
 
 			LOGGER.info("End - logoutUser - Successful");
 			res.setName(onUserLogoutSuccess.getUserName());
@@ -238,7 +239,7 @@ public class AuthController {
 		} catch (Exception e) {
 			LOGGER.info("End - logoutUser - Exception");
 
-			return new ResponseEntity<>("Not Accesible", HttpStatus.FORBIDDEN);
+			return new ResponseEntity<>(NOT_ACCESIBLE, HttpStatus.FORBIDDEN);
 		}
 
 	}

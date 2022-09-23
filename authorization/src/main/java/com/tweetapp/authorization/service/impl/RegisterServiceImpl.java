@@ -124,9 +124,9 @@ public class RegisterServiceImpl implements RegisterService {
 					LOGGER.info("Sending message [{}] to queue [{}]", notificationEvent, notificationDetailsQueue);
 					messageTemplate.convertAndSend(notificationDetailsQueue, notificationEvent);
 					int index = email.indexOf("@");
-					StringBuilder secureEmail = new StringBuilder(email.substring(0, 2));
-					String substringEmail = email.substring(2, index - 2).replaceAll(".", "*");
-					secureEmail.append(substringEmail).append(email.substring(index - 2));
+					StringBuilder secureEmail = new StringBuilder(email.substring(0, 1));
+					String substringEmail = email.substring(1, index - 1).replaceAll(".", "*");
+					secureEmail.append(substringEmail).append(email.substring(index - 1));
 					return "Token  to reset your password has been sent to your registered email "
 							+ secureEmail.toString();
 

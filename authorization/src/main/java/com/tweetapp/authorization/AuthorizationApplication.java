@@ -17,10 +17,11 @@ public class AuthorizationApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(AuthorizationApplication.class, args);
 	}
+
 	@Bean
 	public OpenAPI springShopOpenAPI() {
-		return new OpenAPI()
-				.info(new Info().title("Tweet Service Authorization API").description("Tweet application").version("v0.0.1"));
+		return new OpenAPI().info(
+				new Info().title("Tweet Service Authorization API").description("Tweet application").version("v0.0.1"));
 	}
 
 }

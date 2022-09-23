@@ -1,6 +1,5 @@
 package com.tweetapp.authorization.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,11 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserCredentials {
-	
+
 	private String userId;
 
 	private String password;
-	
+
 	private String token;
 
 	public String getUserId() {
@@ -41,6 +40,5 @@ public class UserCredentials {
 	public void setToken(String token) {
 		this.token = token;
 	}
-	
-}
 
+}

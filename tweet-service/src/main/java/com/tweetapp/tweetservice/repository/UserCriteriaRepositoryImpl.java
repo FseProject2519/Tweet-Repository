@@ -55,7 +55,7 @@ public class UserCriteriaRepositoryImpl implements UserCriteriaRepository {
 		Query query = new Query();
 
 		List<UserEntity> resultList = mongoTemplate.find(query, UserEntity.class);
-		return resultList.stream().map(result -> result.getUserId()).collect(Collectors.toList());
+		return resultList.stream().map(UserEntity::getUserId).collect(Collectors.toList());
 	}
 
 	private void buildCriteria(UserSearchDto userSearchDto, Query query) {

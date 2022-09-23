@@ -15,7 +15,7 @@ import com.tweetapp.notification.service.NotificationService;
 
 @Component
 public class NotificationEventListener {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(NotificationEventListener.class);
 
 	@Autowired
@@ -24,10 +24,11 @@ public class NotificationEventListener {
 	public NotificationEventListener() {
 		super();
 	}
-	
-	@RabbitListener(queues="${queue.name}")
-	public void notificationDetailsQueue(NotificationEvent event) throws UnsupportedEncodingException, MessagingException {
-		LOGGER.info("Event {}",event);
+
+	@RabbitListener(queues = "${queue.name}")
+	public void notificationDetailsQueue(NotificationEvent event)
+			throws UnsupportedEncodingException, MessagingException {
+		LOGGER.info("Event {}", event);
 		notificationService.sendEmail(event);
 	}
 }

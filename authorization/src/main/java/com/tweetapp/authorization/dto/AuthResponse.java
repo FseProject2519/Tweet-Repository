@@ -13,6 +13,7 @@ public class AuthResponse {
 
 	private String name;
 	private boolean isValid;
+
 	public String getName() {
 		return name;
 	}
@@ -28,5 +29,5 @@ public class AuthResponse {
 	public void setValid(boolean isValid) {
 		this.isValid = isValid;
 	}
-	
+
 }

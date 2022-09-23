@@ -11,21 +11,15 @@ import com.tweetapp.authorization.entity.UserEntity;
 import com.tweetapp.authorization.repository.UserRepository;
 import com.tweetapp.authorization.util.UserIdConstraint;
 
-public class UserIdValidator implements ConstraintValidator<UserIdConstraint,String>{
-	
+public class UserIdValidator implements ConstraintValidator<UserIdConstraint, String> {
+
 	@Autowired
 	UserRepository userRepository;
 
 	@Override
 	public boolean isValid(String userId, ConstraintValidatorContext context) {
-		Optional<UserEntity> user=userRepository.findByUserId(userId);
-		if(user.isPresent()) {
-			return false;
-		}
-		else {
-			return true;
-		}
-		
+		Optional<UserEntity> user = userRepository.findByUserId(userId);
+		return !user.isPresent();
 	}
 
 }

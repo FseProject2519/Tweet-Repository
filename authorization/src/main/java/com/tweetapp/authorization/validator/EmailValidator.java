@@ -11,19 +11,17 @@ import com.tweetapp.authorization.entity.UserEntity;
 import com.tweetapp.authorization.repository.UserRepository;
 import com.tweetapp.authorization.util.EmailConstraint;
 
+public class EmailValidator implements ConstraintValidator<EmailConstraint, String> {
 
-public class EmailValidator implements ConstraintValidator<EmailConstraint,String>{
-	
 	@Autowired
 	UserRepository userRepository;
-	
+
 	@Override
 	public boolean isValid(String email, ConstraintValidatorContext context) {
-		Optional<UserEntity> user=userRepository.findByEmail(email);
-		if(user.isPresent()) {
+		Optional<UserEntity> user = userRepository.findByEmail(email);
+		if (user.isPresent()) {
 			return false;
-		}
-		else {
+		} else {
 			return true;
 		}
 	}

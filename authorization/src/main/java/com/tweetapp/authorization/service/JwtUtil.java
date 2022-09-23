@@ -73,7 +73,7 @@ public class JwtUtil {
 		return compact;
 	}
 
-	public Boolean validateToken(String token) {
+	public boolean validateToken(String token) {
 		LOGGER.info("Start - validateToken");
 
 		try {

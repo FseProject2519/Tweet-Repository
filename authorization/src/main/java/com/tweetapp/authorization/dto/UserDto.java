@@ -10,26 +10,23 @@ import com.tweetapp.authorization.util.UpdatePasswordConstraint;
 import com.tweetapp.authorization.util.UserIdConstraint;
 
 @PasswordMatchConstraint.List({
-		@PasswordMatchConstraint(password = "password", confirmPassword = "confirmPassword", message = "Password and Cofirmed password do not match",groups = { Register.class })})
+		@PasswordMatchConstraint(password = "password", confirmPassword = "confirmPassword", message = "Password and Confirmed password do not match", groups = {
+				Register.class }) })
 public class UserDto {
 
 	private String id;
 
 	@NotBlank(message = "Username is mandatory, please provide a valid username", groups = { Register.class })
 	@Size(min = 5, max = 20, message = "Username should be of  5 to 20 characters", groups = Register.class)
-	@Pattern(regexp = "^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]",
-	message = "Username should contain alphanumeric characters, lowercase, or uppercase, dot (.), underscore (_), and hyphen (-).?Username cannot start or end with dot (.), underscore (_), or hyphen (-).?Username cannot have the dot (.), underscore (_), or hyphen (-) appear consecutively, e.g., james..bond"
-			, groups = Register.class)
+	@Pattern(regexp = "^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]", message = "Username should contain alphanumeric characters, lowercase, or uppercase, dot (.), underscore (_), and hyphen (-).?Username cannot start or end with dot (.), underscore (_), or hyphen (-).?Username cannot have the dot (.), underscore (_), or hyphen (-) appear consecutively, e.g., james..bond", groups = Register.class)
 	@UserIdConstraint(groups = Register.class)
 	private String userId;
 
 	@NotBlank(message = "Password is mandatory, please provide a valid password", groups = { Register.class })
 	@Size(min = 8, max = 20, message = "Password should be of  8 to 20 characters", groups = { Register.class })
-	@Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}", 
-	message = "Password should contain at least one digit,atleast one upper case alphabet, at least one lower case alphabet."
+	@Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}", message = "Password should contain at least one digit,atleast one upper case alphabet, at least one lower case alphabet."
 			+ "?Password should contain at least one special character which includes !@#$%&*()-+=^."
-			+ "?Password cannot contain any white space.", groups = {
-			Register.class })
+			+ "?Password cannot contain any white space.", groups = { Register.class })
 	private String password;
 
 	@UpdatePasswordConstraint(groups = Update.class)
@@ -56,7 +53,7 @@ public class UserDto {
 	@NotBlank(message = "Email is mandatory, please provide a valid email", groups = { Register.class, Update.class })
 	@Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}", message = "Enter a valid email id", groups = {
 			Register.class, Update.class })
-	@EmailConstraint(groups = { Register.class})
+	@EmailConstraint(groups = { Register.class })
 	private String email;
 
 	@NotBlank(message = "Contact number is mandatory, please provide a valid contact number", groups = { Register.class,

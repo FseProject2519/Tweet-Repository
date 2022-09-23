@@ -11,14 +11,15 @@ import javax.validation.Payload;
 
 import com.tweetapp.authorization.validator.EmailValidator;
 
-
 @Documented
 @Constraint(validatedBy = EmailValidator.class)
-@Target( { ElementType.METHOD, ElementType.FIELD })
+@Target({ ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface EmailConstraint {
 	String message() default "Email Id already exists";
-    Class<?>[] groups() default {};
-    Class<? extends Payload>[] payload() default {};
+
+	Class<?>[] groups() default {};
+
+	Class<? extends Payload>[] payload() default {};
 
 }

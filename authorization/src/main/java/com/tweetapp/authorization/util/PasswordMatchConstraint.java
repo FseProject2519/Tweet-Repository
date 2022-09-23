@@ -10,18 +10,22 @@ import javax.validation.Constraint;
 import com.tweetapp.authorization.validator.PasswordMatchValidator;
 
 @Constraint(validatedBy = PasswordMatchValidator.class)
-@Target( { ElementType.METHOD, ElementType.FIELD })
+@Target({ ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PasswordMatchConstraint {
 	String message() default "Password and confirmed password do not match";
-	 Class<?>[] groups() default {};
-	   Class<?>[] payload() default {};
+
+	Class<?>[] groups() default {};
+
+	Class<?>[] payload() default {};
+
 	String password();
+
 	String confirmPassword();
-	 @Target({ ElementType.TYPE })
-	    @Retention(RetentionPolicy.RUNTIME)
-	    @interface List {
-		 PasswordMatchConstraint[] value();
-	    }
+
+	@Target({ ElementType.TYPE })
+	@Retention(RetentionPolicy.RUNTIME)
+	@interface List {
+		PasswordMatchConstraint[] value();
+	}
 }
-    

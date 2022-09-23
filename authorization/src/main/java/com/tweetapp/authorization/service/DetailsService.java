@@ -17,12 +17,11 @@ import com.tweetapp.authorization.entity.UserEntity;
 import com.tweetapp.authorization.repository.UserRepository;
 
 @Service
-public class DetailsService implements UserDetailsService{
+public class DetailsService implements UserDetailsService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DetailsService.class);
-	
+
 	@Autowired
 	private UserRepository userRepository;
-	
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -31,9 +30,9 @@ public class DetailsService implements UserDetailsService{
 			UserEntity userData = userRepository.findByUserId(username).orElse(null);
 			if (userData != null) {
 				userData.getUserId();
-				List<GrantedAuthority> list = new ArrayList<GrantedAuthority>();
+				List<GrantedAuthority> list = new ArrayList<>();
 				LOGGER.info("End - loadUserByUsername - Successful");
-				return new User(userData.getUserId(), userData.getPassword(),list);
+				return new User(userData.getUserId(), userData.getPassword(), list);
 			} else {
 				LOGGER.info("End - loadUserByUsername - Username Not Found");
 

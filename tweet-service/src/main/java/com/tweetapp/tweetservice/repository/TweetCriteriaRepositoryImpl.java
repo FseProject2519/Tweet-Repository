@@ -26,6 +26,7 @@ import com.tweetapp.tweetservice.entity.TweetTrendEntity;
 import com.tweetapp.tweetservice.utility.DateUtils;
 
 public class TweetCriteriaRepositoryImpl implements TweetCriteriaRepository {
+	private static final String HASHTAGS = "hashtags";
 	private static final String CREATED_DATE_TIME_SPACED = "created_date_time";
 	private static final String CREATED_DATE_TIME = "createdDateTime";
 	private static final String COUNT = "count";
@@ -89,12 +90,13 @@ public class TweetCriteriaRepositoryImpl implements TweetCriteriaRepository {
 					.gte(DateUtils.getDate(tweetSearchDto.getStartDateTime()));
 
 		MatchOperation matchOperation = Aggregation.match(criteria);
-		AggregationOperation unwind = Aggregation.unwind("hashtags");
-		GroupOperation groupOperation = Aggregation.group("hashtags").count().as(COUNT);
-		ProjectionOperation projectionOperation = Aggregation.project(COUNT).and("hashtags").previousOperation();
-		SortOperation sortOperation = Aggregation.sort(Sort.by(Sort.Direction.DESC, COUNT)).and(Sort.Direction.ASC,"hashtags");
-		Aggregation aggregation = Aggregation.newAggregation(matchOperation, unwind, groupOperation, projectionOperation,
-				sortOperation);
+		AggregationOperation unwind = Aggregation.unwind(HASHTAGS);
+		GroupOperation groupOperation = Aggregation.group(HASHTAGS).count().as(COUNT);
+		ProjectionOperation projectionOperation = Aggregation.project(COUNT).and(HASHTAGS).previousOperation();
+		SortOperation sortOperation = Aggregation.sort(Sort.by(Sort.Direction.DESC, COUNT)).and(Sort.Direction.ASC,
+				HASHTAGS);
+		Aggregation aggregation = Aggregation.newAggregation(matchOperation, unwind, groupOperation,
+				projectionOperation, sortOperation);
 		AggregationResults<TweetTrendEntity> result = mongoTemplate.aggregate(aggregation, "TweetCollection",
 				TweetTrendEntity.class);
 		return result.getMappedResults();
@@ -119,7 +121,7 @@ public class TweetCriteriaRepositoryImpl implements TweetCriteriaRepository {
 			criteria.add(Criteria.where("tweetMessage").regex(tweetSearchDto.getTweetMessage(), "i"));
 
 		if (tweetSearchDto.getTag() != null && !tweetSearchDto.getTag().isEmpty())
-			criteria.add(Criteria.where("hashtags").all(tweetSearchDto.getTag()));
+			criteria.add(Criteria.where(HASHTAGS).all(tweetSearchDto.getTag()));
 
 		if (tweetSearchDto.getStartDateTime() != null && tweetSearchDto.getEndDateTime() != null)
 			criteria.add(Criteria.where(CREATED_DATE_TIME).gte(tweetSearchDto.getStartDateTime())

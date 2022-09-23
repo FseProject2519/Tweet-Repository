@@ -413,7 +413,7 @@ public class TweetAppController {
 			return sendExceptionResponse(userResponseDto, e);
 		}
 	}
-	
+
 	@DeleteMapping("/users/delete/{username}")
 	public ResponseEntity<TweetResponseDto> deleteUser(@RequestHeader("Authorization") String token,
 			@PathVariable String username) {

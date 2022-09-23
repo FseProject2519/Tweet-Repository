@@ -13,9 +13,9 @@ public class TweetAppConfig {
 	public ModelMapper modelMapper() {
 		return new ModelMapper();
 	}
+
 	@Bean
-	public PasswordEncoder passwordEncoder()
-	{
-	    return new BCryptPasswordEncoder();
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 }

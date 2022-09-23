@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 public class NotificationEvent {
 
 	private String firstName;
-	
+
 	private String lastName;
-	
+
 	private String otp;
-	
+
 	private String email;
 }

@@ -16,7 +16,7 @@ import com.tweetapp.authorization.validator.UpdatePasswordValidator;
 @Target({ ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UpdatePasswordConstraint {
-	String message() default "Enter valid password";
+	String message() default "Password should contain at least one digit,atleast one upper case alphabet, at least one lower case alphabet.?Password should contain at least one special character which includes !@#$%&*()-+=^.?Password cannot contain any white space.";
 
 	Class<?>[] groups() default {};
 

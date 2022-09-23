@@ -10,6 +10,7 @@ import com.tweetapp.authorization.entity.UserEntity;
 @Repository
 public interface UserRepository extends MongoRepository<UserEntity, String> {
 	Optional<UserEntity> findByUserId(String userId);
+
 	Optional<UserEntity> findByEmail(String email);
 
 }

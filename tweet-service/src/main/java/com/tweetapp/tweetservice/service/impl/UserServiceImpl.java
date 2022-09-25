@@ -151,8 +151,8 @@ public class UserServiceImpl implements UserService {
 				for (TweetEntity userTweet : userTweets) {
 					tweetRepository.deleteByRepliedToTweet(userTweet.getId());
 				}
-				tweetRepository.deleteByCreatedBy(username);
 				deleteUserCloud(username);
+				tweetRepository.deleteByCreatedBy(username);
 				return "User Deleted Successfully";
 			} else {
 				return "User Not Found";
@@ -163,15 +163,15 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
-	private void deleteUserCloud(String username) throws TweetServiceException {
+	private void deleteUserCloud(String userId) throws TweetServiceException {
 		try {
-			URL url = new URL(AWS_USER_ENDPOINT + "/" + username);
+			URL url = new URL(AWS_USER_ENDPOINT + "/" + userId);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setRequestProperty("Content-Type", APPLICATION_JSON);
 			connection.setRequestMethod("DELETE");
 			connection.connect();
-
+			log.info("Response Code = {}", connection.getResponseCode());
 		} catch (Exception e) {
 			throw new TweetServiceException(e.getMessage());
 

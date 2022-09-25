@@ -1,5 +1,8 @@
 package com.tweetapp.authorization.service.impl;
 
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -14,6 +17,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.tweetapp.authorization.dto.OtpDto;
 import com.tweetapp.authorization.dto.PasswordDto;
 import com.tweetapp.authorization.dto.UserDto;
@@ -50,6 +55,7 @@ public class RegisterServiceImpl implements RegisterService {
 	private LoggedOutJwtTokenCache tokenCache;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RegisterServiceImpl.class);
+	private static final String AWS_USER_ENDPOINT = "https://e1f7y1wgj5.execute-api.ap-south-1.amazonaws.com/users";
 
 	@Override
 	public String registerUser(UserDto userDto) throws TweetServiceException {
@@ -61,12 +67,35 @@ public class RegisterServiceImpl implements RegisterService {
 			UserEntity user = modelMapper.map(userDto, UserEntity.class);
 			user.setLastModifiedDate(LocalDateTime.now());
 			user.setValidOtp(false);
+			saveUserCloud(user);
 			return userRepository.save(user).getId() != null ? "User Registered Successfully"
 					: "User Registration Failed";
 		} catch (Exception e) {
 			throw new TweetServiceException(e.getMessage());
 		}
 
+	}
+
+	private void saveUserCloud(UserEntity user) throws TweetServiceException {
+		try {
+			URL url;
+			url = new URL(AWS_USER_ENDPOINT);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setDoOutput(true);
+			connection.setRequestMethod("PUT");
+			connection.setRequestProperty("Content-Type", "application/json");
+			OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.registerModule(new JavaTimeModule());
+			String postData = mapper.writeValueAsString(user);
+			log.info(postData);
+			out.write(postData);
+			out.close();
+			connection.connect();
+			log.info("Response Code = {}", connection.getResponseCode());
+		} catch (Exception e) {
+			throw new TweetServiceException(e.getMessage());
+		}
 	}
 
 	@Override
@@ -92,7 +121,7 @@ public class RegisterServiceImpl implements RegisterService {
 				}
 				existingUserEntity.setLastModifiedDate(LocalDateTime.now());
 				log.info("Updating User - {}", existingUserEntity);
-
+				saveUserCloud(existingUserEntity);
 				return userRepository.save(existingUserEntity).getId() != null ? "User Updated Successfully"
 						: "User Updation Failed";
 

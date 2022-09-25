@@ -26,4 +26,8 @@ public interface UserService {
 
 	String deleteUser(String username) throws TweetServiceException;
 
+	List<UserEntity> searchUsersCloud(UserSearchDto userSearchDto) throws TweetServiceException;
+
+	List<UserEntity> getAllUsersCloud() throws TweetServiceException;
+
 }

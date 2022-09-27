@@ -1,9 +1,16 @@
 package com.tweetapp.tweetservice.service.impl;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,6 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tweetapp.tweetservice.dto.UserSearchDto;
 import com.tweetapp.tweetservice.entity.TweetEntity;
 import com.tweetapp.tweetservice.entity.UserEntity;
@@ -24,6 +33,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class UserServiceImpl implements UserService {
+
+	private static final String APPLICATION_JSON = "application/json";
+
+	private static final String AWS_USER_ENDPOINT = "https://e1f7y1wgj5.execute-api.ap-south-1.amazonaws.com/users";
 
 	@Autowired
 	private UserRepository userRepository;
@@ -138,6 +151,7 @@ public class UserServiceImpl implements UserService {
 				for (TweetEntity userTweet : userTweets) {
 					tweetRepository.deleteByRepliedToTweet(userTweet.getId());
 				}
+				deleteUserCloud(username);
 				tweetRepository.deleteByCreatedBy(username);
 				return "User Deleted Successfully";
 			} else {
@@ -146,6 +160,89 @@ public class UserServiceImpl implements UserService {
 
 		} catch (Exception e) {
 			throw new TweetServiceException(e.getMessage());
+		}
+	}
+
+	private void deleteUserCloud(String userId) throws TweetServiceException {
+		try {
+			URL url = new URL(AWS_USER_ENDPOINT + "/" + userId);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setDoOutput(true);
+			connection.setRequestProperty("Content-Type", APPLICATION_JSON);
+			connection.setRequestMethod("DELETE");
+			connection.connect();
+			log.info("Response Code = {}", connection.getResponseCode());
+		} catch (Exception e) {
+			throw new TweetServiceException(e.getMessage());
+
+		}
+
+	}
+
+	@Override
+	public List<UserEntity> searchUsersCloud(UserSearchDto userSearchDto) throws TweetServiceException {
+		try {
+			URL url = new URL(AWS_USER_ENDPOINT + "/" + userSearchDto.getUserId());
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+			connection.setRequestProperty("accept", APPLICATION_JSON);
+
+			BufferedReader br = null;
+			if (100 <= connection.getResponseCode() && connection.getResponseCode() <= 399) {
+				br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			} else {
+				br = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+			}
+			StringBuilder sb = new StringBuilder();
+			String output;
+			while ((output = br.readLine()) != null) {
+				sb.append(output);
+			}
+			String response = sb.toString();
+			JSONObject jsonObj = new JSONObject(response);
+			JSONObject responseItem = jsonObj.getJSONObject("Item");
+			ObjectMapper mapper = new ObjectMapper();
+			UserEntity userEntity = mapper.readValue(responseItem.toString(), UserEntity.class);
+
+			List<UserEntity> userList = new ArrayList<>();
+			userList.add(userEntity);
+
+			return userList;
+		} catch (Exception e) {
+			throw new TweetServiceException(e.getMessage());
+
+		}
+	}
+
+	@Override
+	public List<UserEntity> getAllUsersCloud() throws TweetServiceException {
+		try {
+			URL url = new URL(AWS_USER_ENDPOINT);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+			connection.setRequestProperty("accept", APPLICATION_JSON);
+
+			BufferedReader br = null;
+			if (100 <= connection.getResponseCode() && connection.getResponseCode() <= 399) {
+				br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			} else {
+				br = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+			}
+			StringBuilder sb = new StringBuilder();
+			String output;
+			while ((output = br.readLine()) != null) {
+				sb.append(output);
+			}
+			String response = sb.toString();
+			JSONObject jsonObj = new JSONObject(response);
+			JSONArray responseItems = jsonObj.getJSONArray("Items");
+			ObjectMapper mapper = new ObjectMapper();
+			return mapper.readValue(responseItems.toString(), new TypeReference<List<UserEntity>>() {
+			});
+
+		} catch (Exception e) {
+			throw new TweetServiceException(e.getMessage());
+
 		}
 	}
 

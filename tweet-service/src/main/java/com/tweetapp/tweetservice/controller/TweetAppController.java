@@ -320,18 +320,22 @@ public class TweetAppController {
 	public ResponseEntity<UserResponseDto> getAllUsers(@RequestHeader("Authorization") String token,
 			@RequestParam(required = false) String sortField, @RequestParam(required = false) String sortOrder,
 			@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size,
-			@RequestParam(required = false) boolean isPaged) throws TweetServiceException {
+			@RequestParam(required = false) boolean isPaged, @RequestParam(required = false) boolean isCloud)
+			throws TweetServiceException {
 
 		UserResponseDto userResponseDto = new UserResponseDto();
 		try {
 			log.info("Start - getAllUsers");
 
 			UserSearchDto userSearchDto = UserSearchDto.builder().sortField(sortField).sortOrder(sortOrder).build();
-
-			if (isPaged) {
-				userResponseDto.setUsersPaged(userService.getAllUsersPaged(userSearchDto, page, size));
+			if (isCloud) {
+				userResponseDto.setUsersList(userService.getAllUsersCloud());
 			} else {
-				userResponseDto.setUsersList(userService.getAllUsers());
+				if (isPaged) {
+					userResponseDto.setUsersPaged(userService.getAllUsersPaged(userSearchDto, page, size));
+				} else {
+					userResponseDto.setUsersList(userService.getAllUsers());
+				}
 			}
 			return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
 		} catch (TweetServiceException e) {
@@ -345,8 +349,8 @@ public class TweetAppController {
 	public ResponseEntity<UserResponseDto> getUser(@RequestHeader("Authorization") String token,
 			@PathVariable("username") String userId, @RequestParam(required = false) String sortField,
 			@RequestParam(required = false) String sortOrder, @RequestParam(required = false) Integer page,
-			@RequestParam(required = false) Integer size, @RequestParam(required = false) boolean isPaged)
-			throws TweetServiceException {
+			@RequestParam(required = false) Integer size, @RequestParam(required = false) boolean isPaged,
+			@RequestParam(required = false) boolean isCloud) throws TweetServiceException {
 
 		UserResponseDto userResponseDto = new UserResponseDto();
 
@@ -355,13 +359,15 @@ public class TweetAppController {
 
 			UserSearchDto userSearchDto = UserSearchDto.builder().userId(userId).sortField(sortField)
 					.sortOrder(sortOrder).build();
-
-			if (isPaged) {
-				userResponseDto.setUsersPaged(userService.searchUsersPaged(userSearchDto, page, size));
+			if (isCloud) {
+				userResponseDto.setUsersList(userService.searchUsersCloud(userSearchDto));
 			} else {
-				userResponseDto.setUsersList(userService.searchUsers(userSearchDto));
+				if (isPaged) {
+					userResponseDto.setUsersPaged(userService.searchUsersPaged(userSearchDto, page, size));
+				} else {
+					userResponseDto.setUsersList(userService.searchUsers(userSearchDto));
+				}
 			}
-
 			return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
 
 		} catch (TweetServiceException e) {

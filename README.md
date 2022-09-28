@@ -69,7 +69,7 @@ Github Link -  https://github.com/FseProject2519/Tweet-Repository
   
 ## SECTION G - Running Prometheus/Grafana:  
 PROMETHEUS:  
-1. Enter <Your IP address>:port in /tweet-service/src/main/resources/prometheus.yml  
+1. Enter [Your IP address]:port in /tweet-service/src/main/resources/prometheus.yml  
 2. Start the application in STS - SECTION C or through Docker - SECTION D (preferred)  
 3. Open http://localhost:8090/actuator/prometheus in a browser to verify if data is getting generated  
   ![image](https://user-images.githubusercontent.com/104539687/173221594-ab002ef9-c9e0-40a3-9be4-1b1dc756da79.png)  
@@ -88,7 +88,7 @@ GRAFANA:
 2. Open http://localhost:3000/login  
 3. Enter username = 'admin' and password = 'admin'  
 4. Go to: Configuration -> Data sources -> Add data source -> Prometheus  
-5. Enter URL: http://<Your IP address>:9090 and click 'Save & Test'    
+5. Enter URL: http://[Your IP address]:9090 and click 'Save & Test'    
 6. Go to: Create -> Import -> Enter 4701 (in Import via grafana.com text box) -> Click Load -> Select 'Prometheus' in the Prometheus drop down list -> Click Import  
 7. Wait for around 20 mins and perform some api calls to see the statistics in the Grafana dashboard  
 ![image](https://user-images.githubusercontent.com/104539687/173221548-0d68c973-bf5e-43d1-912f-9617303149ac.png)  

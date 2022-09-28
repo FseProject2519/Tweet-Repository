@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.tweetapp</groupId>
 	<artifactId>tweet-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<name>tweet-service</name>
 	<description>This is a project for FSE 1 done by Samyuktha S and Deeptha G</description>
 	<url>https://github.com/FseProject2519/Tweet-Repository</url>

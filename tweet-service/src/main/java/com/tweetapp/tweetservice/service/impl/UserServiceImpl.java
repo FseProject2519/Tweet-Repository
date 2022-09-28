@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
 
 	private static final String APPLICATION_JSON = "application/json";
 
-	private static final String AWS_USER_ENDPOINT = "https://e1f7y1wgj5.execute-api.ap-south-1.amazonaws.com/users";
+	private static final String AWS_USER_ENDPOINT = "https://5m6zq8a7zh.execute-api.ap-northeast-1.amazonaws.com/users";
 
 	@Autowired
 	private UserRepository userRepository;

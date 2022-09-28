@@ -55,7 +55,7 @@ public class RegisterServiceImpl implements RegisterService {
 	private LoggedOutJwtTokenCache tokenCache;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RegisterServiceImpl.class);
-	private static final String AWS_USER_ENDPOINT = "https://e1f7y1wgj5.execute-api.ap-south-1.amazonaws.com/users";
+	private static final String AWS_USER_ENDPOINT = "https://5m6zq8a7zh.execute-api.ap-northeast-1.amazonaws.com/users";
 
 	@Override
 	public String registerUser(UserDto userDto) throws TweetServiceException {
